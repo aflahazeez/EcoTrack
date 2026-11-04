@@ -1,0 +1,80 @@
+/* ==========================================================================
+   EcoTrack – Calculator Page Styles (Phase 3 Foundation)
+   ========================================================================== */
+
+/* Step wizard progress bar, input sliders, and metric display hooks */
+.calculator-wizard {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background: var(--card-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all var(--transition-normal);
+}
+
+.step-item.active .step-num {
+  background: var(--action-emerald);
+  color: var(--action-emerald-dark);
+  box-shadow: var(--glow-emerald);
+  border-color: var(--action-emerald);
+}
+
+.step-item.completed .step-num {
+  background: var(--card-surface-active);
+  color: var(--accent-lime);
+  border-color: var(--accent-lime);
+}
+
+/* Custom Styled Range Sliders */
+.eco-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--card-surface-hover);
+  outline: none;
+  transition: background var(--transition-fast);
+}
+
+.eco-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--action-emerald);
+  box-shadow: var(--glow-emerald);
+  cursor: pointer;
+  border: 2px solid var(--text-ivory);
+  transition: transform var(--transition-fast);
+}
+
+.eco-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}

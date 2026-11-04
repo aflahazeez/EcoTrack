@@ -1,0 +1,56 @@
+/* ==========================================================================
+   EcoTrack – Habits Page Styles (Phase 4 Foundation)
+   ========================================================================== */
+
+.habits-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Streak Counter Card */
+.streak-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(163, 230, 53, 0.08) 0%, rgba(15, 44, 34, 0.95) 100%);
+  border: 1px solid rgba(163, 230, 53, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.streak-flame {
+  width: 52px;
+  height: 52px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-amber);
+}
+
+/* Daily Checklist Item */
+.habit-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: var(--card-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.85rem;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.habit-item:hover {
+  background: var(--card-surface-hover);
+  border-color: var(--border-medium);
+}
+
+.habit-item.completed {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.06);
+}
