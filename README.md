@@ -34,8 +34,8 @@ EcoTrack is designed around a five-page multi-page architecture:
    The central entry point introducing the platform's mission, four core pillars (Calculator, Habit Tracker, Knowledge Hub, Dashboard), documented environmental benchmarks, and a three-step workflow overview.
 
 2. **Carbon Calculator (`calculator.html`)**  
-   *Current Status: Foundation Shell.*  
-   Houses the shared header, responsive navigation, and footer. The interactive multi-step assessment wizard (calculating annual $\text{CO}_2\text{e}$ across transport, household energy, diet, and consumption) is architected for Phase 3.
+   *Current Status: Completed (Phase 3).*  
+   Interactive multi-step carbon footprint assessment engine featuring dual calculation modes (Estimated and Precise Mode), three audited categories (Transportation, Household Energy [combining Electricity and LPG], and Household Waste), verified emission factors (CEA busbar generation and IPCC stoichiometric combustion), Chart.js doughnut chart with CSS fallback progress bars, and browser-local persistence.
 
 3. **Habit Tracker (`habits.html`)**  
    *Current Status: Foundation Shell.*  
@@ -55,19 +55,25 @@ EcoTrack is designed around a five-page multi-page architecture:
 
 To maintain transparency, the platform's features are categorized into currently functioning foundation modules and upcoming phase deliverables:
 
-### Implemented (Phase 1 Foundation)
+### Implemented (Phases 1–3)
 - **Dark Botanical Visual Identity:** Custom CSS design system using deep forest backgrounds (`#061610`), dark green surfaces (`#0F2C22`), emerald action buttons (`#10B981`), lime/sage data accents (`#A3E635`, `#6EE7B7`), and warm ivory text (`#FBF8EE`).
 - **Atmospheric Backgrounds:** Multi-layered radial gradient mesh avoiding flat, empty dark voids.
 - **Consistent Shared Navigation:** Uniform desktop header and responsive mobile drawer navigation across all five pages.
 - **Accessible Mobile Interactions:** Mobile navigation with synchronized `aria-expanded` attributes, Escape key dismissal with focus restoration, and outside-click drawer closing.
 - **Active Page Link Indication:** Automatic path-based highlighting for active navigation links.
 - **Accessibility Foundations:** Integrated skip-to-content accessibility link (`.skip-link`) and visible high-contrast keyboard focus indicators (`:focus-visible`). *Accessibility features are actively implemented and tested across components.*
+- **Landing Page Experience (`index.html`):** Completed landing page with hero introduction, dual Call-to-Actions, four core feature showcases, verified climate benchmarks, and responsive layout.
+- **Dual-Mode Carbon Calculator (`calculator.html`, `js/calculator.js`):**
+  - **Estimated Calculation Mode:** Qualitative lifestyle selections converted into documented representative midpoints for quick assessments.
+  - **Precise Calculation Mode:** Direct numerical measurements with validation for distance, electricity (kWh with state tariff converter helper), cylinder/kg LPG, and waste.
+  - **Three Focused Categories:** Transportation, Household Energy (combining Grid Electricity and Domestic LPG), and Household Waste.
+  - **Shared Calculation Engine:** Unified numerical pipeline and defensive validation preventing silent arbitrary replacement.
+  - **Visualizations:** Chart.js doughnut chart with pure-CSS fallback progress bars.
+  - **Scientific Disclosures Card:** Clear boundary disclosures distinguishing Scope 1, Scope 2, and Scope 3 boundaries and explaining why all-sector comparisons are omitted.
 - **Defensive Storage Engine (`js/storage.js`):** Centralized LocalStorage wrapper with corrupted JSON error handling, storage availability detection, and an in-memory session fallback (`_memoryFallback`) for restricted environments.
-- **Documented Emission Data Structure (`js/data.js`):** Structured baseline constants for transport, electricity, cooking gas, diet cohorts, and comparison benchmarks with detailed source annotations.
+- **Traceable Emission Factors (`js/data.js`):** Centralized CEA, IPCC, and empirical factors with detailed source citations, boundary definitions, and uncertainty disclosures.
 
 ### Planned for Upcoming Phases
-- [ ] **Interactive Carbon Calculation Wizard:** Step-by-step input sliders for transport km, monthly kWh bills, gas cylinders, and dietary choices (Phase 3).
-- [ ] **Chart.js Visualizations:** Donut chart breakdown for emissions and historical comparison bar charts (Phases 3 & 6).
 - [ ] **Dynamic Daily Habit Checklist:** Interactive checkboxes saving daily green actions to LocalStorage (Phase 4).
 - [ ] **Streak & Badge Engine:** Date-difference algorithms calculating consecutive-day streaks and unlocking achievement badges (Phase 4).
 - [ ] **Filterable & Searchable Knowledge Hub:** Dynamic client-side search and category filtering for eco-tips (Phase 5).
@@ -103,18 +109,28 @@ The emission factors and benchmarks configured in `js/data.js` are documented wi
 
 | Category | Indicator | Configured Value | Documented Source & Calculation Assumptions |
 | :--- | :--- | :--- | :--- |
-| **Electricity** | Indian Grid Average | $0.82\text{ kg CO}_2\text{e / kWh}$ | Central Electricity Authority (CEA) of India, *CO₂ Baseline Database for the Indian Power Sector* (Ver. 18, 2023). Busbar generation weighted average ($\approx 0.714\text{ kg/kWh}$) adjusted for an estimated $\approx 18\%$ transmission and distribution (T&D) loss to consumer end. |
-| **Cooking Gas** | Domestic LPG Cylinder | $42.4\text{ kg CO}_2\text{e / cylinder}$ | Stoichiometric combustion calculation for a standard Indian $14.2\text{ kg}$ LPG cylinder. Referenced from IPCC 2006 Guidelines for National Greenhouse Gas Inventories ($63.1\text{ g CO}_2\text{/MJ}$, $\text{NCV } 47.31\text{ MJ/kg} \rightarrow 2.985\text{ kg CO}_2\text{/kg LPG}$). |
-| **Transport** | Petrol Car | $0.1708\text{ kg CO}_2\text{e / km}$ | UK DESNZ / DEFRA 2023 Greenhouse Gas Conversion Factors (Average petrol passenger vehicle). |
-| **Transport** | Diesel Car | $0.1684\text{ kg CO}_2\text{e / km}$ | UK DESNZ / DEFRA 2023 Greenhouse Gas Conversion Factors (Average diesel passenger vehicle). |
-| **Transport** | Electric Vehicle | $0.115\text{ kg CO}_2\text{e / km}$ | Derived model calculation assuming an EV consumption of $0.16\text{ kWh/km}$ charged on the All-India electricity grid mix ($\approx 0.72\text{ kg CO}_2\text{/kWh}$). |
-| **Transport** | Motorcycle | $0.084\text{ kg CO}_2\text{e / km}$ | UK DESNZ / DEFRA 2023 Greenhouse Gas Conversion Factors (Medium motorbike). |
-| **Transport** | Rail / Train | $0.035\text{ kg CO}_2\text{e / pkm}$ | Indian Railways & CEA Electric Traction passenger average benchmark. |
-| **Diet** | Dietary Cohorts | $850\text{ to } 2,600\text{ kg / year}$ | Annualized adult benchmarks adapted from Scarborough et al. (*Nature Food* 2023) and Poore & Nemecek (*Science* 2018) spanning vegan ($850\text{ kg}$), vegetarian ($1,100\text{ kg}$), omnivore ($1,800\text{ kg}$), and heavy-meat ($2,600\text{ kg}$) cohorts. |
-| **Waste** | Lifestyle Scaling Multipliers | $0.85\times\text{ to } 1.25\times$ | *Heuristic model multipliers* adapted from consumer footprint methodologies (e.g., UC Berkeley CoolClimate Network, WWF calculators) representing low-waste, average, and high-packaging lifestyles. These are model parameters rather than empirical constants. |
-| **Benchmark** | India Per-Capita | $\approx 1.9\text{ tonnes / year}$ | Global Carbon Project (GCP) & Our World in Data (2022–2023). |
-| **Benchmark** | Global Per-Capita | $\approx 4.5\text{ tonnes / year}$ | International Energy Agency (IEA) & World Bank. |
-| **Benchmark** | Tree Absorption | $21.77\text{ kg CO}_2\text{ / year}$ | US EPA Greenhouse Gas Equivalencies & Arbor Day Foundation benchmark ($\approx 48\text{ lbs / mature tree / year}$). Actual absorption rates vary depending on tree species, age, and climate. |
+| **Household Electricity** | Indian Grid Average (Busbar) | $0.675\text{ kg CO}_2\text{e / kWh}$ | Central Electricity Authority (CEA) of India, *CO₂ Baseline Database for the Indian Power Sector, Version 22.0* (Published August 2026, for FY 2025–26; [official CEA database link](https://cea.nic.in/cdm-co2-baseline-view?lang=en&mappingId=234)). National weighted-average emission rate: $0.675\text{ t CO}_2\text{/MWh} = 0.675\text{ kg CO}_2\text{/kWh}$. Generation-based factor at power station busbar (Scope 2 direct stack $\text{CO}_2$). Transmission and distribution (T&D) losses are excluded. Represented as $\text{CO}_2\text{e}$ for its $\text{CO}_2$ component ($\text{GWP} = 1$). |
+| **Cooking Gas** | Domestic LPG Cylinder | $42.50\text{ kg CO}_2\text{e / cylinder}$ ($2.993\text{ kg CO}_2\text{e/kg}$) | Direct Scope 1 complete combustion calculation for standard Indian $14.2\text{ kg}$ LPG cylinder. Combines stoichiometric $\text{CO}_2$ ($63.1\text{ kg CO}_2\text{/GJ} \times \text{NCV } 0.04731\text{ GJ/kg} = 2.9853\text{ kg CO}_2\text{/kg LPG}$, IPCC 2006 Vol 2 Ch 2) with non-$\text{CO}_2$ emissions ($\text{CH}_4$: $0.005\text{ kg/GJ} \times 0.04731 \times 28 = 0.00662\text{ kg CO}_2\text{e/kg}$; $\text{N}_2\text{O}$: $0.0001\text{ kg/GJ} \times 0.04731 \times 265 = 0.00125\text{ kg CO}_2\text{e/kg}$, IPCC AR5 GWPs). Non-$\text{CO}_2$ contribution: $0.0079\text{ kg CO}_2\text{e/kg}$. Combined factor: $2.993\text{ kg CO}_2\text{e/kg LPG}$ ($42.50\text{ kg CO}_2\text{e}$ for $14.2\text{ kg}$; $14.97\text{ kg CO}_2\text{e}$ for $5.0\text{ kg}$; $56.87\text{ kg CO}_2\text{e}$ for $19.0\text{ kg}$). |
+| **Transport** | Petrol Car | $0.1708\text{ kg CO}_2\text{e / vkm}$ | UK DESNZ / DEFRA 2023 Greenhouse Gas Conversion Factors: Sheet *Passenger vehicles*, Column `Direct GHGs` (Tailpipe Scope 1), Row `Cars (by size) - Medium car - Petrol` ($0.17082\text{ kg CO}_2\text{e/vkm}$). International proxy for medium petrol passenger car (1.4–2.0L). Vehicle-kilometre ($\text{vkm}$). |
+| **Transport** | Diesel Car | $0.1684\text{ kg CO}_2\text{e / vkm}$ | UK DESNZ / DEFRA 2023 Greenhouse Gas Conversion Factors: Sheet *Passenger vehicles*, Column `Direct GHGs` (Tailpipe Scope 1), Row `Cars (by size) - Medium car - Diesel` ($0.16844\text{ kg CO}_2\text{e/vkm}$). International proxy for medium diesel passenger car. Vehicle-kilometre ($\text{vkm}$). |
+| **Transport** | CNG Car | $0.1380\text{ kg CO}_2\text{e / vkm}$ | UK DESNZ 2023 Greenhouse Gas Conversion Factors: Sheet *Passenger vehicles*, Column `Direct GHGs` (Tailpipe Scope 1), Row `Cars (by size) - Medium car - CNG` ($0.1380\text{ kg CO}_2\text{e/vkm}$). International proxy for medium CNG car. Vehicle-kilometre ($\text{vkm}$). |
+| **Transport** | Electric Car | $0.1046\text{ kg CO}_2\text{e / vkm}$ | Derived engineering estimate: Bureau of Energy Efficiency (BEE) / ARAI Indian passenger EV benchmark ($\approx 0.155\text{ kWh/vkm}$) $\times$ CEA Database Version 22.0 generation baseline ($0.675\text{ kg CO}_2\text{e/kWh}$). Boundary: Scope 2 operational grid charging direct stack emissions at busbar (excludes T&D losses and battery manufacture). Vehicle-kilometre ($\text{vkm}$). |
+| **Transport** | Small Scooter / Moped | $0.0440\text{ kg CO}_2\text{e / vkm}$ | Derived engineering estimate: ARAI certified test cycle benchmark for 100–110cc petrol scooters ($\approx 52\text{ km/L}$) $\times$ IPCC petrol combustion ($2.31\text{ kg CO}_2\text{/L}$ represented as $\text{CO}_2\text{e}$). Boundary: Scope 1 direct tailpipe combustion. Vehicle-kilometre ($\text{vkm}$). |
+| **Transport** | Medium Motorcycle | $0.0840\text{ kg CO}_2\text{e / vkm}$ | UK DESNZ / DEFRA 2023 Greenhouse Gas Conversion Factors: Sheet *Motorbikes*, Column `Direct GHGs` (Tailpipe Scope 1), Row `Medium motorbike (> 125cc to 500cc)` ($0.0840\text{ kg CO}_2\text{e/vkm}$). International proxy. Vehicle-kilometre ($\text{vkm}$). |
+| **Transport** | Electric Two-Wheeler | $0.0236\text{ kg CO}_2\text{e / vkm}$ | Derived engineering estimate: Indian electric two-wheeler benchmark ($\approx 0.035\text{ kWh/vkm}$) $\times$ CEA Database Version 22.0 generation factor ($0.675\text{ kg CO}_2\text{e/kWh}$). Boundary: Scope 2 operational grid charging direct stack emissions at busbar. Vehicle-kilometre ($\text{vkm}$). |
+| **Transport** | Public Transit Bus | $0.0450\text{ kg CO}_2\text{e / pkm}$ | Provisional transit proxy adapted from CIRT average urban transit bus occupancy benchmarks ($\approx 30\text{--}35$ passengers per bus) and UK DESNZ transit bus conversion factors (*Local bus* sheet, Direct GHGs). Passenger-kilometre allocation ($\text{pkm}$). |
+| **Transport** | Passenger Train / Metro | $0.0304\text{ kg CO}_2\text{e / pkm}$ | Derived estimate: Delhi Metro Rail Corporation (DMRC) & Indian Railways electric traction statistics ($\approx 0.045\text{ kWh/pkm}$) $\times$ CEA Database Version 22.0 generation factor ($0.675\text{ kg CO}_2\text{e/kWh}$). Boundary: Scope 2 traction power direct stack emissions at busbar. Passenger-kilometre allocation ($\text{pkm}$). |
+| **Transport** | Walking & Cycling | $0.0000\text{ kg CO}_2\text{e / km}$ | Zero direct operational emissions during active travel. |
+| **Household Waste** | Municipal Solid Waste | $0.08\text{ to } 0.45\text{ kg CO}_2\text{e / kg}$ | *Provisional heuristic model* adapted from Central Pollution Control Board (CPCB) solid waste characterization and IPCC 2006 Vol 5 Tier 1 first-order decay methane model. Scaling factors: $0.45\text{ kg CO}_2\text{e/kg}$ unsegregated landfill, $0.20\text{ kg CO}_2\text{e/kg}$ recycling, $0.08\text{ kg CO}_2\text{e/kg}$ organic composting. Disclosed as an indicative lifestyle scaling model rather than an exact physical measurement. |
+
+> **Internally Consistent Metric & Accounting Boundaries Notice (CO₂e Alignment):**  
+> Every category is now expressed consistently in **$\text{kg CO}_2\text{e}$** before calculating the overall annual footprint:
+> - **Electricity:** Generation at power station busbar based on CEA Version 22.0 ($0.675\text{ kg CO}_2\text{e/kWh}$). Direct stack $\text{CO}_2$ is represented as $\text{CO}_2\text{e}$ ($\text{GWP} = 1$). T&D losses are explicitly excluded.
+> - **Domestic LPG:** Complete Scope 1 combustion factor of $2.993\text{ kg CO}_2\text{e/kg}$ ($42.50\text{ kg CO}_2\text{e}$ per $14.2\text{ kg}$ cylinder), combining stoichiometric $\text{CO}_2$ ($2.9853\text{ kg}$) with IPCC AR5 100-year GWPs for fugitive/incomplete $\text{CH}_4$ ($\text{GWP} = 28$) and $\text{N}_2\text{O}$ ($\text{GWP} = 265$) adding $0.0079\text{ kg CO}_2\text{e/kg}$.
+> - **Transportation:** Expressed in direct Scope 1 tailpipe $\text{kg CO}_2\text{e}$ for UK DESNZ 2023 proxies (Sheet *Passenger vehicles* / *Motorbikes*, Column `Direct GHGs`, excluding Well-to-Tank [WTT] fuel lifecycle upstream) and empirical Indian combustion/traction derived benchmarks. Vehicle-km ($\text{vkm}$) is distinguished from passenger-km ($\text{pkm}$).
+> - **Household Waste:** Provisional heuristic model based on CPCB solid waste composition and IPCC methane generation potential, expressed in $\text{kg CO}_2\text{e}$.
+> - **National Baselines:** National all-sector comparisons (e.g. 1.9 t India, 4.5 t Global) are excluded because national figures encompass heavy industry, mining, power generation, freight, and agriculture; comparing household sub-scopes against national all-sector baselines is scientifically misleading.
+> - **Tree Equivalence Removal:** Unsupported mature tree absorption comparisons have been completely removed in accordance with scientific verification standards.
 
 ---
 
@@ -193,8 +209,13 @@ Then visit `http://localhost:8000` in your web browser.
   - JavaScript syntax-verified scripts.
 - **Phase 2: Home Page Landing Experience (Completed)**
   - Complete landing page with hero introduction, dual Call-to-Actions, four core feature showcases, verified climate benchmarks, and responsive layout.
-- **Phase 3: Carbon Calculator Engine (Planned)**
-  - 4-step interactive wizard, category emission breakdowns, and Chart.js donut chart.
+- **Phase 3: Carbon Calculator Engine (Completed)**
+  - Dual calculation modes (Estimated Mode with representative midpoints and Precise Mode with exact numerical inputs).
+  - 3 audited categories: Transportation, Household Energy (combining Grid Electricity and Domestic LPG), and Household Waste.
+  - Traceable scientific factors: CEA Version 22.0 generation baseline factor ($0.675\text{ kg CO}_2\text{e/kWh}$) and IPCC LPG combustion including non-$\text{CO}_2$ GHGs ($2.993\text{ kg CO}_2\text{e/kg LPG}$).
+  - Collapsible manual tariff helper for bill conversion to kWh.
+  - 4-step interactive wizard, Chart.js doughnut visualization with pure-CSS fallback bars, defensive validation, and LocalStorage persistence.
+  - Scope & Scientific Accounting Disclosures card.
 - **Phase 4: Habit Tracker & Gamification (Planned)**
   - Daily checklist logic, consecutive streak date calculations, and badge rewards.
 - **Phase 5: Knowledge Hub (Planned)**

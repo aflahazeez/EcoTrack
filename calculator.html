@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carbon Calculator | EcoTrack</title>
-  <meta name="description" content="Calculate your annual carbon footprint across transport, home energy, diet, and consumption.">
+  <meta name="description" content="Calculate your annual and monthly carbon footprint across transportation, household energy, and waste using audited emission factors and verified boundaries.">
   
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/calculator.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'><path d='M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z'/></svg>">
+
+  <!-- Chart.js CDN for visual breakdown with graceful offline fallback -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
+  <!-- Skip link for keyboard accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Shared Site Header -->
@@ -59,41 +63,927 @@
       <a href="index.html" class="nav-link">Home</a>
       <a href="calculator.html" class="nav-link active">Carbon Calculator</a>
       <a href="habits.html" class="nav-link">Habit Tracker</a>
-      <a href="tips.html" class="nav-link">Eco Tips & Knowledge</a>
+      <a href="tips.html" class="nav-link">Eco Tips &amp; Knowledge</a>
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
     </div>
     <a href="calculator.html" class="btn btn-primary" style="width: 100%;">Calculate Impact</a>
   </div>
 
-  <!-- Page Content Shell -->
+  <!-- Page Main Content -->
   <main id="main-content" class="main-content">
-    <div class="container">
+    <div class="container calculator-wizard" data-mode="estimated">
       
-      <div class="section-header">
-        <span class="section-tag">Phase 3 Module</span>
+      <!-- Page Header -->
+      <div class="section-header" style="margin-bottom: 2rem;">
+        <span class="section-tag">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          Assessment Engine
+        </span>
         <h1 class="section-title">Carbon Footprint Calculator</h1>
         <p class="section-desc">
-          Interactive multi-step assessment calculating annual CO₂e across Transport, Household Energy, Diet, and Consumption.
+          Measure your emissions across transportation, household energy, and waste. Select your preferred calculation mode below to begin.
         </p>
       </div>
 
-      <!-- Module Scaffold Card -->
-      <div class="card card-glass" style="max-width: 800px; margin: 0 auto; text-align: center; padding: 3.5rem 2rem;">
-        <div style="width: 64px; height: 64px; margin: 0 auto 1.5rem auto; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--border-emerald); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--action-emerald);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 6v6l4 2"></path>
-          </svg>
+      <!-- Calculation Mode Selection Cards -->
+      <div class="calc-mode-selector" role="radiogroup" aria-label="Calculation Mode Selection">
+        
+        <!-- Card 1: Estimated Calculation -->
+        <div class="calc-mode-card active" id="mode-card-estimated" role="radio" aria-checked="true" tabindex="0">
+          <div class="calc-mode-header">
+            <div class="calc-mode-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M16 12l-4-4-4 4M12 16V8"></path>
+              </svg>
+            </div>
+            <div class="calc-mode-check" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="calc-mode-title">Estimated Calculation</div>
+          <div class="calc-mode-byline">Based on estimated values.</div>
         </div>
-        <h3 style="margin-bottom: 0.75rem;">Engine Ready for Phase 3</h3>
-        <p style="color: var(--text-muted); max-width: 520px; margin: 0 auto 2rem auto;">
-          The mathematical models, emission factors in <code>data.js</code>, and styling are established. The 4-step wizard and Chart.js donut chart will be implemented in Phase 3.
-        </p>
-        <div class="flex-center" style="gap: 1rem;">
-          <a href="index.html" class="btn btn-secondary">Return Home</a>
-          <a href="habits.html" class="btn btn-outline">Check Habit Tracker</a>
+
+        <!-- Card 2: Precise Calculation -->
+        <div class="calc-mode-card" id="mode-card-precise" role="radio" aria-checked="false" tabindex="0">
+          <div class="calc-mode-header">
+            <div class="calc-mode-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="22" y1="12" x2="18" y2="12"></line>
+                <line x1="6" y1="12" x2="2" y2="12"></line>
+                <line x1="12" y1="6" x2="12" y2="2"></line>
+                <line x1="12" y1="22" x2="12" y2="18"></line>
+              </svg>
+            </div>
+            <div class="calc-mode-check" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="calc-mode-title">Precise Calculation</div>
+          <div class="calc-mode-byline">Based on actual usage values.</div>
         </div>
+
       </div>
+
+      <!-- Multi-Step Progress Tracker -->
+      <nav class="step-indicator" aria-label="Calculator Progress">
+        <div class="step-indicator-progress" id="step-progress-bar"></div>
+        
+        <button type="button" class="step-item active" data-step="1" id="step-nav-1" aria-current="step">
+          <span class="step-num">1</span>
+          <span class="step-label">Transportation</span>
+        </button>
+        
+        <button type="button" class="step-item" data-step="2" id="step-nav-2">
+          <span class="step-num">2</span>
+          <span class="step-label">Household Energy</span>
+        </button>
+        
+        <button type="button" class="step-item" data-step="3" id="step-nav-3">
+          <span class="step-num">3</span>
+          <span class="step-label">Household Waste</span>
+        </button>
+        
+        <button type="button" class="step-item" data-step="4" id="step-nav-4">
+          <span class="step-num">4</span>
+          <span class="step-label">Results</span>
+        </button>
+      </nav>
+
+      <!-- Form Container -->
+      <form id="calculator-form" novalidate>
+        
+        <!-- ================================================================= -->
+        <!-- STEP 1: TRANSPORTATION                                            -->
+        <!-- ================================================================= -->
+        <section class="step-panel active" id="step-panel-1" aria-labelledby="step-1-title">
+          
+          <!-- Mode Panel: Estimated -->
+          <div class="mode-panel mode-panel-estimated" id="step-1-estimated">
+            <div class="wizard-card">
+              <h2 id="step-1-title-est" class="wizard-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--action-emerald);" aria-hidden="true">
+                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
+                  <circle cx="7" cy="17" r="2"></circle>
+                  <path d="M9 17h6"></path>
+                  <circle cx="17" cy="17" r="2"></circle>
+                </svg>
+                <span>1. Transportation &amp; Commute</span>
+              </h2>
+              <p class="wizard-section-desc">
+                Select your primary commute mode, typical daily distance, and travel frequency.
+              </p>
+
+              <!-- Main Transportation Method -->
+              <div class="form-group" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <label class="form-label" for="est-transport-method">Main Transportation Mode</label>
+                <select id="est-transport-method" class="select-control">
+                  <option value="petrolCar" selected>Personal Car (Petrol / Diesel — ~0.171 kg CO₂e/km international proxy)</option>
+                  <option value="electricCar">Electric Vehicle (EV — ~0.111 kg CO₂/km on CEA generation baseline)</option>
+                  <option value="twoWheeler">Motorcycle / Scooter (~0.060 kg CO₂e/km average proxy)</option>
+                  <option value="publicTransit">Public Transport (Bus / Metro / Train — ~0.040 kg CO₂e/pkm)</option>
+                  <option value="mixedTransport">Mixed Multimodal (e.g., Two-wheeler to transit station + train/metro)</option>
+                  <option value="activeClean">Bicycle / Walking / Remote (Zero direct operational emissions)</option>
+                </select>
+                <p class="form-hint">
+                  Walking and cycling have zero direct operational emissions during travel (vehicle manufacturing lifecycle excluded). Mixed transportation uses a composite factor (0.095 kg CO₂e/km) to avoid double-counting.
+                </p>
+              </div>
+
+              <!-- Approximate Daily Travel Distance Range -->
+              <div class="form-group" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <label class="form-label" for="est-distance-range">
+                  <span>Total Daily Travel Distance (Round-Trip / Two-Way)</span>
+                </label>
+                <select id="est-distance-range" class="select-control">
+                  <option value="short">Short commute (&lt;10 km / day round-trip — representative midpoint: 7 km/day)</option>
+                  <option value="moderate" selected>Moderate commute (10–25 km / day round-trip — representative midpoint: 18 km/day)</option>
+                  <option value="long">Long commute (25–50 km / day round-trip — representative midpoint: 35 km/day)</option>
+                  <option value="extensive">Extensive travel (&gt;50 km / day round-trip — representative midpoint: 65 km/day)</option>
+                </select>
+                <p class="form-hint">Important: Represents your full round-trip travel (from home to destination and back home).</p>
+              </div>
+
+              <!-- Travel Frequency -->
+              <div class="form-group">
+                <label class="form-label" for="est-travel-frequency">Travel Frequency</label>
+                <select id="est-travel-frequency" class="select-control">
+                  <option value="daily" selected>Daily commuter (5–6 days / week)</option>
+                  <option value="regular">Regular / Hybrid (3–4 days / week)</option>
+                  <option value="occasional">Occasional / Remote (1–2 days / week)</option>
+                </select>
+                <p class="form-hint">Calculates representative annual commute days based on your weekly active schedule.</p>
+              </div>
+
+              <!-- Wizard Navigation -->
+              <div class="wizard-actions" style="justify-content: flex-end;">
+                <button type="button" class="btn btn-primary" id="btn-next-step-1-est">
+                  <span>Continue to Energy</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode Panel: Precise -->
+          <div class="mode-panel mode-panel-precise" id="step-1-precise">
+            <div class="wizard-card">
+              <h2 id="step-1-title" class="wizard-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--action-emerald);" aria-hidden="true">
+                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
+                  <circle cx="7" cy="17" r="2"></circle>
+                  <path d="M9 17h6"></path>
+                  <circle cx="17" cy="17" r="2"></circle>
+                </svg>
+                <span>1. Transportation &amp; Commute</span>
+              </h2>
+              <p class="wizard-section-desc">
+                Enter your measured travel distances. Enter the full round-trip distance (two-way travel) for each vehicle used. Enter zero for unused categories.
+              </p>
+
+              <!-- Personal Car Usage -->
+              <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                  <label class="form-label" for="car-fuel-type">Personal Car Fuel Type</label>
+                  <select id="car-fuel-type" class="select-control">
+                    <option value="none">I do not drive a personal car</option>
+                    <option value="petrol" selected>Petrol Car (0.1708 kg CO₂e/vkm — UK DESNZ proxy)</option>
+                    <option value="diesel">Diesel Car (0.1684 kg CO₂e/vkm — UK DESNZ proxy)</option>
+                    <option value="cng">CNG Car (0.1380 kg CO₂e/vkm — UK DESNZ proxy)</option>
+                    <option value="electric">Electric Vehicle (0.1110 kg CO₂/vkm on CEA generation baseline)</option>
+                  </select>
+                  <p class="form-hint">
+                    Note on Boundary: Car factors are in vehicle-kilometres (vkm). UK DESNZ factors are international proxies; Indian small hatchbacks typically emit ~0.12–0.14 kg CO₂/km while large SUVs emit ~0.18–0.22 kg CO₂/km.
+                  </p>
+                </div>
+
+                <div class="grid grid-2" id="car-distance-group">
+                  <div class="form-group">
+                    <label class="form-label" for="car-distance">Car Travel Distance (Round-Trip)</label>
+                    <div class="input-group">
+                      <input type="number" id="car-distance" class="input-control" placeholder="0" min="0" max="10000" step="any" value="50">
+                      <span class="input-unit" id="car-unit-label">km / week</span>
+                    </div>
+                    <div class="form-error" id="car-distance-error">Please enter a valid positive distance (0 or more).</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="car-frequency">Distance Reporting Unit</label>
+                    <select id="car-frequency" class="select-control">
+                      <option value="weekly" selected>Kilometers per Week</option>
+                      <option value="monthly">Kilometers per Month</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Motorcycle / Scooter Usage -->
+              <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                  <label class="form-label" for="twowheeler-type">Motorcycle / Scooter Type</label>
+                  <select id="twowheeler-type" class="select-control">
+                    <option value="none">I do not ride a two-wheeler</option>
+                    <option value="scooterSmall" selected>Small Scooter / Moped (&lt;125cc, 0.044 kg CO₂/vkm — ARAI/IPCC)</option>
+                    <option value="motorcycleMedium">Medium Motorcycle (&gt;125cc, 0.084 kg CO₂e/vkm — UK DESNZ proxy)</option>
+                    <option value="electricTwoWheeler">Electric Scooter (0.025 kg CO₂/vkm on CEA generation baseline)</option>
+                  </select>
+                  <p class="form-hint">ARAI India benchmark (~52 km/L petrol) with IPCC direct combustion factor (2.31 kg CO₂/L).</p>
+                </div>
+
+                <div class="grid grid-2" id="twowheeler-distance-group">
+                  <div class="form-group">
+                    <label class="form-label" for="twowheeler-distance">Two-Wheeler Travel Distance (Round-Trip)</label>
+                    <div class="input-group">
+                      <input type="number" id="twowheeler-distance" class="input-control" placeholder="0" min="0" max="10000" step="any" value="30">
+                      <span class="input-unit" id="twowheeler-unit-label">km / week</span>
+                    </div>
+                    <div class="form-error" id="twowheeler-distance-error">Please enter a valid positive distance (0 or more).</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="twowheeler-frequency">Distance Reporting Unit</label>
+                    <select id="twowheeler-frequency" class="select-control">
+                      <option value="weekly" selected>Kilometers per Week</option>
+                      <option value="monthly">Kilometers per Month</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Public Transit Usage -->
+              <div>
+                <div class="grid grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="bus-distance">
+                      <span>Public Bus Commute</span>
+                      <span style="font-size: 0.75rem; color: var(--accent-sage);">0.045 kg CO₂e / pkm</span>
+                    </label>
+                    <div class="input-group">
+                      <input type="number" id="bus-distance" class="input-control" placeholder="0" min="0" max="5000" step="any" value="20">
+                      <span class="input-unit">km / week</span>
+                    </div>
+                    <p class="form-hint">Passenger-kilometre allocation (pkm) assuming typical Indian city bus occupancy (~30–35 passengers).</p>
+                    <div class="form-error" id="bus-distance-error">Please enter a valid positive distance (0 or more).</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="train-distance">
+                      <span>Train / Metro Commute</span>
+                      <span style="font-size: 0.75rem; color: var(--accent-sage);">0.035 kg CO₂ / pkm</span>
+                    </label>
+                    <div class="input-group">
+                      <input type="number" id="train-distance" class="input-control" placeholder="0" min="0" max="5000" step="any" value="25">
+                      <span class="input-unit">km / week</span>
+                    </div>
+                    <p class="form-hint">Passenger-kilometre allocation (pkm) electric traction Scope 2 generation (Indian Railways &amp; DMRC).</p>
+                    <div class="form-error" id="train-distance-error">Please enter a valid positive distance (0 or more).</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Wizard Navigation -->
+              <div class="wizard-actions" style="justify-content: flex-end;">
+                <button type="button" class="btn btn-primary" id="btn-next-step-1">
+                  <span>Continue to Energy</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- STEP 2: HOUSEHOLD ENERGY (Electricity + LPG combined)             -->
+        <!-- ================================================================= -->
+        <section class="step-panel" id="step-panel-2" aria-labelledby="step-2-title">
+          
+          <!-- Mode Panel: Estimated -->
+          <div class="mode-panel mode-panel-estimated" id="step-2-estimated">
+            <div class="wizard-card">
+              <h2 id="step-2-title-est" class="wizard-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-lime);" aria-hidden="true">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span>2. Household Energy &amp; Utilities</span>
+              </h2>
+              <p class="wizard-section-desc">
+                Energy combines your grid electricity and domestic LPG cooking gas. Total household consumption is divided equally among members for your individual per-capita share.
+              </p>
+
+              <!-- Household Size -->
+              <div class="form-group" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <label class="form-label" for="est-household-size">
+                  <span>Household Size (Persons sharing utility bills)</span>
+                  <span class="badge badge-sage">Per-Capita Allocation</span>
+                </label>
+                <select id="est-household-size" class="select-control">
+                  <option value="1">1 person (Single occupant)</option>
+                  <option value="2">2 persons (Couple / roommates)</option>
+                  <option value="3_4" selected>3–4 persons (Standard family — midpoint: 3.5)</option>
+                  <option value="5_plus">5+ persons (Extended household — midpoint: 5.5)</option>
+                </select>
+                <p class="form-hint">Total utility and waste emissions are divided equally by household size to determine your individual share.</p>
+              </div>
+
+              <!-- Electricity Usage Tier -->
+              <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; color: var(--text-ivory); margin-bottom: 0.75rem;">A. Grid Electricity Consumption</h3>
+                <div class="form-group">
+                  <label class="form-label" for="est-electricity-level">Approximate Household Electricity Usage</label>
+                  <select id="est-electricity-level" class="select-control">
+                    <option value="veryLow">Very Low (&lt;50 kWh/mo — basic LED lighting, fans, zero heavy appliances; midpoint: 45 kWh)</option>
+                    <option value="low">Low (50–120 kWh/mo — lights, fans, TV, efficient fridge; midpoint: 85 kWh)</option>
+                    <option value="moderate" selected>Moderate (120–250 kWh/mo — typical urban home, occasional seasonal AC; midpoint: 180 kWh)</option>
+                    <option value="high">High (&gt;250 kWh/mo — regular daily AC, electric water geysers; midpoint: 360 kWh)</option>
+                  </select>
+                  <p class="form-hint">
+                    Grid Factor: <strong>0.675 kg CO₂ / kWh</strong> net generation at power station busbar (CEA Baseline Database Version 22.0, August 2026, for FY 2025–26). Excludes transmission and distribution losses. Not a delivered electricity factor.
+                  </p>
+                </div>
+              </div>
+
+              <!-- LPG Refill Frequency -->
+              <div>
+                <h3 style="font-size: 1.05rem; color: var(--text-ivory); margin-bottom: 0.75rem;">B. Domestic Cooking Gas (LPG)</h3>
+                <div class="grid grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="est-lpg-refill">LPG Cylinder Refill Frequency</label>
+                    <select id="est-lpg-refill" class="select-control">
+                      <option value="everyMonth">Every month (~12 cylinders / year)</option>
+                      <option value="everyTwoMonths">Every two months (~6 cylinders / year)</option>
+                      <option value="everyThreeMonths" selected>Every three months (~4 cylinders / year)</option>
+                      <option value="everyFourToSixMonths">Every 4 to 6 months (~2.4 cylinders / year)</option>
+                      <option value="noLpg">No LPG usage (Electric induction / solar cooking)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="est-lpg-size">LPG Cylinder Size</label>
+                    <select id="est-lpg-size" class="select-control">
+                      <option value="14.2" selected>Standard 14.2 kg Domestic Cylinder (~42.5 kg CO₂e)</option>
+                      <option value="5.0">5.0 kg Mini Domestic Cylinder (~15.0 kg CO₂e)</option>
+                      <option value="19.0">19.0 kg Commercial Cylinder (~56.9 kg CO₂e)</option>
+                    </select>
+                  </div>
+                </div>
+                <p class="form-hint">
+                  Scope 1 combustion factor: <strong>2.993 kg CO₂e per kg LPG</strong> (IPCC 2006 Guidelines Vol 2 Table 2.2 with AR5 GWPs: 2.985 kg CO₂ + 0.008 kg non-CO₂ CH₄ and N₂O). Standard 14.2 kg cylinder = 42.50 kg CO₂e.
+                </p>
+              </div>
+
+              <!-- Wizard Navigation -->
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-step-2-est">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  <span>Back to Transport</span>
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-next-step-2-est">
+                  <span>Continue to Waste</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode Panel: Precise -->
+          <div class="mode-panel mode-panel-precise" id="step-2-precise">
+            <div class="wizard-card">
+              <h2 id="step-2-title" class="wizard-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-lime);" aria-hidden="true">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span>2. Household Energy &amp; Utilities</span>
+              </h2>
+              <p class="wizard-section-desc">
+                Enter your household electricity and cooking gas measurements. Shared consumption is allocated per household member.
+              </p>
+
+              <!-- Household Members -->
+              <div class="form-group" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <label class="form-label" for="household-members">
+                  <span>Household Size (Persons sharing utility bills)</span>
+                  <span class="badge badge-sage">Per-Capita Allocation</span>
+                </label>
+                <div class="input-group" style="max-width: 240px;">
+                  <input type="number" id="household-members" class="input-control" min="1" max="25" step="1" value="3">
+                  <span class="input-unit">persons</span>
+                </div>
+                <p class="form-hint">Total utility and waste emissions are divided by this number to determine your individual share.</p>
+                <div class="form-error" id="household-members-error">Household size must be at least 1 person.</div>
+              </div>
+
+              <!-- Electricity Usage (Actual kWh preferred) -->
+              <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                  <label class="form-label" for="electricity-value">
+                    <span>Monthly Electricity Consumption (Units in kWh)</span>
+                  </label>
+                  <div class="input-group">
+                    <input type="number" id="electricity-value" class="input-control" placeholder="180" min="0" max="20000" step="any" value="180">
+                    <span class="input-unit">kWh / month</span>
+                  </div>
+                  <p class="form-hint" id="electricity-hint">
+                    Check your electricity bill under 'Units Billed' or 'Total kWh'. Generation factor: <strong>0.675 kg CO₂ / kWh</strong> (CEA CO₂ Baseline Database Version 22.0, August 2026, for FY 2025–26 busbar net generation). Excludes T&amp;D losses. Not a measured delivered factor.
+                  </p>
+                  <div class="form-error" id="electricity-error">Please enter a valid electricity value (0 or greater).</div>
+                </div>
+
+                <!-- Optional Tariff Converter for Bill-Only Users -->
+                <div class="tariff-helper-box" style="background: rgba(0, 0, 0, 0.2); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md); padding: 0.9rem 1.15rem; margin-top: 1rem;">
+                  <div class="flex-between items-center" style="cursor: pointer;" id="toggle-tariff-helper">
+                    <span style="font-size: 0.85rem; color: var(--accent-sage); font-weight: 600;">
+                      Only have your bill in ₹? Click to convert using your local tariff rate
+                    </span>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);" id="tariff-helper-toggle-icon">&#9662;</span>
+                  </div>
+                  
+                  <div id="tariff-helper-inputs" style="display: none; margin-top: 0.85rem; border-top: 1px solid var(--border-subtle); padding-top: 0.85rem;">
+                    <div class="grid grid-2">
+                      <div class="form-group">
+                        <label class="form-label" for="bill-amount-input" style="font-size: 0.8rem;">Monthly Bill Amount (₹)</label>
+                        <div class="input-group">
+                          <input type="number" id="bill-amount-input" class="input-control" placeholder="1200" min="0" step="any">
+                          <span class="input-unit">₹</span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="manual-tariff-input" style="font-size: 0.8rem;">Your State Tariff Rate (₹ / kWh)</label>
+                        <div class="input-group">
+                          <input type="number" id="manual-tariff-input" class="input-control" placeholder="6.5" min="1" max="25" step="0.1" value="6.5">
+                          <span class="input-unit">₹ / kWh</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex-between items-center" style="margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                      <p class="form-hint" style="margin: 0; font-size: 0.75rem;">
+                        Tariffs vary across states and slab structures. Enter your bill's average rate per unit.
+                      </p>
+                      <button type="button" class="btn btn-secondary btn-sm" id="btn-apply-bill-conversion">
+                        Apply to kWh
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LPG Cooking Fuel Usage -->
+              <div>
+                <div class="form-group">
+                  <label class="form-label" for="lpg-mode">Domestic Cooking Fuel (LPG)</label>
+                  <select id="lpg-mode" class="select-control">
+                    <option value="cylinders" selected>LPG Domestic Cylinders</option>
+                    <option value="directKg">Direct LPG Quantity (kg/month)</option>
+                    <option value="none">Zero LPG / Induction electric cooking</option>
+                  </select>
+                </div>
+
+                <!-- Cylinder Input Option -->
+                <div id="lpg-cylinder-group">
+                  <div class="grid grid-2">
+                    <div class="form-group">
+                      <label class="form-label" for="lpg-cylinder-size">Cylinder Size</label>
+                      <select id="lpg-cylinder-size" class="select-control">
+                        <option value="14.2" selected>Standard 14.2 kg Cylinder (42.50 kg CO₂e)</option>
+                        <option value="5.0">5.0 kg Mini Cylinder (14.97 kg CO₂e)</option>
+                        <option value="19.0">19.0 kg Commercial Cylinder (56.87 kg CO₂e)</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="lpg-cylinder-count">Annual Cylinders Consumed</label>
+                      <div class="input-group">
+                        <input type="number" id="lpg-cylinder-count" class="input-control" min="0" max="50" step="any" value="8">
+                        <span class="input-unit">cylinders / yr</span>
+                      </div>
+                      <div class="form-error" id="lpg-cylinder-error">Please enter a valid positive number of cylinders.</div>
+                    </div>
+                  </div>
+                  <p class="form-hint">For example, if one 14.2 kg cylinder lasts your home ~1.5 months, that is ~8 cylinders per year.</p>
+                </div>
+
+                <!-- Direct kg Input Option (hidden by default) -->
+                <div class="form-group" id="lpg-kg-group" style="display: none;">
+                  <label class="form-label" for="lpg-kg-amount">Monthly LPG Consumption in kg</label>
+                  <div class="input-group">
+                    <input type="number" id="lpg-kg-amount" class="input-control" min="0" max="500" step="any" value="9.5">
+                    <span class="input-unit">kg LPG / month</span>
+                  </div>
+                  <p class="form-hint">Direct stoichiometric combustion factor: 2.985 kg CO₂ per kg LPG (IPCC Tier 1 stationary combustion).</p>
+                  <div class="form-error" id="lpg-kg-error">Please enter a valid kg amount (0 or greater).</div>
+                </div>
+              </div>
+
+              <!-- Wizard Navigation -->
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-step-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  <span>Back to Transport</span>
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-next-step-2">
+                  <span>Continue to Waste</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- STEP 3: HOUSEHOLD WASTE                                           -->
+        <!-- ================================================================= -->
+        <section class="step-panel" id="step-panel-3" aria-labelledby="step-3-title">
+          
+          <!-- Mode Panel: Estimated -->
+          <div class="mode-panel mode-panel-estimated" id="step-3-estimated">
+            <div class="wizard-card">
+              <h2 id="step-3-title-est" class="wizard-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-sage);" aria-hidden="true">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>3. Household Waste Management</span>
+              </h2>
+              <p class="wizard-section-desc">
+                Estimate your household waste generation and describe your segregation, recycling, and disposal practices.
+              </p>
+
+              <!-- Waste Generation Level -->
+              <div class="form-group" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <label class="form-label" for="est-waste-gen">Approximate Household Waste Generation</label>
+                <select id="est-waste-gen" class="select-control">
+                  <option value="low">Low (&lt;5 kg / week — minimal packaging, zero food waste; midpoint: ~15 kg/mo)</option>
+                  <option value="moderate" selected>Moderate (5–12 kg / week — typical family waste generation; midpoint: ~35 kg/mo)</option>
+                  <option value="high">High (12–25 kg / week — frequent packaged goods &amp; deliveries; midpoint: ~75 kg/mo)</option>
+                  <option value="veryHigh">Very High (&gt;25 kg / week — heavy single-use disposables; midpoint: ~130 kg/mo)</option>
+                </select>
+                <p class="form-hint">Waste emissions are allocated per household member to determine your individual footprint share.</p>
+              </div>
+
+              <!-- Waste Separation & Recycling Practice -->
+              <div class="form-group">
+                <label class="form-label" for="est-waste-practice">Waste Separation &amp; Recycling Practices</label>
+                <select id="est-waste-practice" class="select-control">
+                  <option value="segregatedComposting">Full Segregation &amp; Composting (Organic composted at home, dry waste recycled; ~0.08 kg CO₂e/kg)</option>
+                  <option value="regularRecycling" selected>Conscious Recycling (Dry recyclables separated; organic waste to municipal collection; ~0.20 kg CO₂e/kg)</option>
+                  <option value="unsegregatedDisposal">Standard Municipal Disposal (All waste sent unsegregated to municipal landfill; ~0.45 kg CO₂e/kg)</option>
+                </select>
+                <p class="form-hint">
+                  <strong>Provisional Heuristic Model:</strong> Composting mitigates anaerobic landfill methane decay. Factors are indicative lifestyle models based on IPCC 2006 Vol 5 landfill gas decay models and CPCB waste characterization.
+                </p>
+              </div>
+
+              <!-- Wizard Navigation -->
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-step-3-est">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  <span>Back to Energy</span>
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" id="btn-calculate-est">
+                  <span>Calculate Carbon Footprint</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode Panel: Precise -->
+          <div class="mode-panel mode-panel-precise" id="step-3-precise">
+            <div class="wizard-card">
+              <h2 id="step-3-title" class="wizard-section-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-sage);" aria-hidden="true">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>3. Household Waste Management</span>
+              </h2>
+              <p class="wizard-section-desc">
+                Enter your measured waste generation and specify your recycling practices.
+              </p>
+
+              <!-- Waste Quantity & Unit -->
+              <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="grid grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="waste-quantity">Waste Quantity</label>
+                    <div class="input-group">
+                      <input type="number" id="waste-quantity" class="input-control" placeholder="8" min="0" max="1000" step="any" value="8">
+                      <span class="input-unit" id="waste-unit-label">kg / week</span>
+                    </div>
+                    <div class="form-error" id="waste-quantity-error">Please enter a valid positive waste amount (0 or more).</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="waste-frequency">Reporting Interval</label>
+                    <select id="waste-frequency" class="select-control">
+                      <option value="weekly" selected>kg per Week (~8 kg/wk = 34.7 kg/mo)</option>
+                      <option value="monthly">kg per Month</option>
+                    </select>
+                  </div>
+                </div>
+                <p class="form-hint">
+                  <strong>Methodology Limitation:</strong> Entering an exact waste weight does not yield an exact scientific measurement. Waste emissions are calculated using a provisional heuristic model because methane generation depends on local landfill compaction, moisture, and ambient temperature.
+                </p>
+              </div>
+
+              <!-- Waste Separation & Disposal Method -->
+              <div class="form-group">
+                <label class="form-label" for="waste-practice">Disposal &amp; Recycling Practice</label>
+                <select id="waste-practice" class="select-control">
+                  <option value="segregatedComposting">Full Segregation &amp; Composting (0.08 kg CO₂e/kg — organic aerobically composted)</option>
+                  <option value="regularRecycling" selected>Conscious Recycling (0.20 kg CO₂e/kg — dry recyclables separated, organic to municipal bin)</option>
+                  <option value="unsegregatedDisposal">Standard Municipal Disposal (0.45 kg CO₂e/kg — unsegregated to open landfill)</option>
+                </select>
+                <p class="form-hint">
+                  Source: IPCC 2006 Vol 5 Tier 1 landfill methane model and CPCB municipal solid waste characterization.
+                </p>
+              </div>
+
+              <!-- Wizard Navigation -->
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-step-3">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  <span>Back to Energy</span>
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" id="btn-calculate">
+                  <span>Calculate Carbon Footprint</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </form>
+
+      <!-- =================================================================== -->
+      <!-- STEP 4: RESULTS DASHBOARD                                           -->
+      <!-- =================================================================== -->
+      <section class="step-panel" id="step-panel-4" aria-labelledby="results-title">
+        <div class="results-dashboard">
+          
+          <!-- Mode Indicator Callout -->
+          <div class="results-mode-callout" id="results-mode-callout">
+            <span class="results-mode-badge badge-estimated" id="results-mode-badge">Estimated Calculation Mode</span>
+            <p class="results-mode-disclaimer" id="results-mode-disclaimer">
+              This footprint is based on your lifestyle choices and representative category assumptions. It provides an indicative baseline for understanding your primary impact areas.
+            </p>
+          </div>
+
+          <!-- Summary Hero Card -->
+          <div class="results-hero-card">
+            <div class="results-headline" id="results-title">Your Estimated Annual Carbon Footprint</div>
+            
+            <div class="results-total-value">
+              <span id="res-total-tonnes">0.00</span>
+              <span class="results-total-unit">t CO₂e / year</span>
+            </div>
+            
+            <div class="results-sub-value">
+              Equivalent to <strong id="res-total-kg" style="color: var(--text-ivory);">0</strong> kg CO₂e / year 
+              (&asymp; <span id="res-monthly-kg" style="color: var(--accent-lime); font-weight: 700;">0</span> kg CO₂e / month)
+            </div>
+
+            <!-- Scope Notice -->
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem; margin-bottom: 0; line-height: 1.45;">
+              <strong>Accounting Scope:</strong> All three categories are calculated in greenhouse gas carbon dioxide equivalents (kg CO₂e), incorporating Scope 1 direct fuel &amp; LPG combustion, Scope 2 power station generation emissions (grid electricity &amp; electric rail), and Scope 3 landfill waste decomposition.
+            </p>
+          </div>
+
+          <!-- Donut Chart & Category Breakdown Split -->
+          <div class="results-visual-grid">
+            
+            <!-- Left: Chart.js Doughnut Chart Container -->
+            <div class="chart-card">
+              <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; color: var(--text-ivory); text-align: center;">
+                Emissions by Category
+              </h3>
+              
+              <!-- Canvas for Chart.js -->
+              <div class="chart-container-inner" id="chart-container">
+                <canvas id="carbonChart" aria-label="Greenhouse gas emission breakdown chart" role="img"></canvas>
+              </div>
+
+              <!-- Fallback visual if Chart.js is unavailable -->
+              <div class="fallback-chart" id="fallback-chart" style="display: none;">
+                <div class="fallback-bar-group">
+                  <div class="fallback-bar-label">
+                    <span>Transportation</span>
+                    <span id="fb-transport-pct">0%</span>
+                  </div>
+                  <div class="fallback-bar-track">
+                    <div class="fallback-bar-fill" id="fb-transport-bar" style="background: #10b981; width: 0%;"></div>
+                  </div>
+                </div>
+                <div class="fallback-bar-group">
+                  <div class="fallback-bar-label">
+                    <span>Household Energy</span>
+                    <span id="fb-energy-pct">0%</span>
+                  </div>
+                  <div class="fallback-bar-track">
+                    <div class="fallback-bar-fill" id="fb-energy-bar" style="background: #a3e635; width: 0%;"></div>
+                  </div>
+                </div>
+                <div class="fallback-bar-group">
+                  <div class="fallback-bar-label">
+                    <span>Household Waste</span>
+                    <span id="fb-waste-pct">0%</span>
+                  </div>
+                  <div class="fallback-bar-track">
+                    <div class="fallback-bar-fill" id="fb-waste-bar" style="background: #38bdf8; width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <p style="font-size: 0.775rem; color: var(--text-muted); text-align: center; margin-top: 1.25rem;">
+                Total footprint reported in equivalent kilograms of carbon dioxide (kg CO₂e).
+              </p>
+            </div>
+
+            <!-- Right: Category Metric Cards -->
+            <div class="breakdown-list">
+              
+              <!-- 1. Transportation -->
+              <div class="breakdown-card">
+                <div class="breakdown-info">
+                  <span class="breakdown-dot" style="background: #10b981;"></span>
+                  <div>
+                    <div class="breakdown-title">Transportation</div>
+                    <div class="breakdown-subtext" id="res-transport-sub">Commute &amp; travel (Scope 1 &amp; 2)</div>
+                  </div>
+                </div>
+                <div class="breakdown-values">
+                  <div class="breakdown-kg"><span id="res-transport-annual">0</span> kg CO₂e/yr</div>
+                  <div class="breakdown-percentage"><span id="res-transport-pct">0</span>% (<span id="res-transport-monthly">0</span> kg/mo)</div>
+                </div>
+              </div>
+
+              <!-- 2. Household Energy (Combines Electricity + LPG) -->
+              <div class="breakdown-card" style="flex-direction: column; align-items: stretch; gap: 0.85rem;">
+                <div class="flex-between items-center">
+                  <div class="breakdown-info">
+                    <span class="breakdown-dot" style="background: #a3e635;"></span>
+                    <div>
+                      <div class="breakdown-title">Household Energy</div>
+                      <div class="breakdown-subtext" id="res-energy-sub">Electricity &amp; cooking fuel combined</div>
+                    </div>
+                  </div>
+                  <div class="breakdown-values">
+                    <div class="breakdown-kg"><span id="res-energy-annual">0</span> kg CO₂e/yr</div>
+                    <div class="breakdown-percentage"><span id="res-energy-pct">0</span>% (<span id="res-energy-monthly">0</span> kg/mo)</div>
+                  </div>
+                </div>
+
+                <!-- Subcategories: Electricity & LPG -->
+                <div style="background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; border: 1px solid var(--border-subtle); font-size: 0.8125rem;">
+                  <div class="flex-between" style="margin-bottom: 0.35rem;">
+                    <span style="color: var(--accent-lime);">&bull; Grid Electricity (Scope 2 CO₂e)</span>
+                    <span style="color: var(--text-ivory);"><strong id="res-electricity-annual">0</strong> kg CO₂e/yr (<span id="res-electricity-subpct">0</span>% of energy)</span>
+                  </div>
+                  <div class="flex-between">
+                    <span style="color: #f59e0b;">&bull; LPG Cooking Fuel (Scope 1 CO₂e)</span>
+                    <span style="color: var(--text-ivory);"><strong id="res-lpg-annual">0</strong> kg CO₂e/yr (<span id="res-lpg-subpct">0</span>% of energy)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Household Waste -->
+              <div class="breakdown-card">
+                <div class="breakdown-info">
+                  <span class="breakdown-dot" style="background: #38bdf8;"></span>
+                  <div>
+                    <div class="breakdown-title">Household Waste</div>
+                    <div class="breakdown-subtext" id="res-waste-sub">Municipal waste &amp; recycling (heuristic)</div>
+                  </div>
+                </div>
+                <div class="breakdown-values">
+                  <div class="breakdown-kg"><span id="res-waste-annual">0</span> kg CO₂e/yr</div>
+                  <div class="breakdown-percentage"><span id="res-waste-pct">0</span>% (<span id="res-waste-monthly">0</span> kg/mo)</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Scope & Scientific Accounting Disclosures Card -->
+          <div class="results-accounting-card" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+            <h4 style="font-size: 0.95rem; color: var(--accent-sage); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>Scientific Accounting Boundaries &amp; Scope Disclosure</span>
+            </h4>
+            <div class="grid grid-2" style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.55; gap: 1.5rem;">
+              <div>
+                <strong style="color: var(--text-ivory); display: block; margin-bottom: 0.25rem;">Included Operational Boundaries:</strong>
+                <ul style="padding-left: 1.15rem; margin: 0;">
+                  <li><strong>Transportation:</strong> Passenger travel in kg CO₂e. Tailpipe Scope 1 direct combustion (fuel) and Scope 2 operational charging/traction (EV/metro at busbar).</li>
+                  <li><strong>Grid Electricity:</strong> 0.675 kg CO₂e/kWh net generation at busbar (CEA Database Ver. 22.0, August 2026, for FY 2025–26). Excludes T&amp;D losses.</li>
+                  <li><strong>Cooking Gas:</strong> 2.993 kg CO₂e/kg LPG (IPCC Tier 1 with AR5 GWPs: 2.985 kg CO₂ + 0.008 kg non-CO₂ CH₄ and N₂O).</li>
+                  <li><strong>Household Waste:</strong> Landfill anaerobic methane decay model (Scope 3 provisional heuristic).</li>
+                </ul>
+              </div>
+              <div>
+                <strong style="color: var(--text-ivory); display: block; margin-bottom: 0.25rem;">Excluded Lifecycle Boundaries:</strong>
+                <ul style="padding-left: 1.15rem; margin: 0;">
+                  <li>Diet &amp; food agriculture (removed per specification).</li>
+                  <li>Commercial air travel &amp; freight shipping.</li>
+                  <li>Manufactured consumer goods &amp; electronic embodied carbon.</li>
+                  <li>Public municipal infrastructure &amp; commercial heating.</li>
+                </ul>
+              </div>
+            </div>
+            <div style="font-size: 0.775rem; color: var(--text-muted); margin-top: 1rem; margin-bottom: 0; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+              <p style="margin-bottom: 0.35rem;">
+                <strong>Consistent CO₂e Accounting:</strong> Every category is expressed in kilograms of carbon dioxide equivalent (kg CO₂e), enabling internally consistent category comparisons, percentage share calculations, and total aggregation.
+              </p>
+              <p style="margin: 0;">
+                <strong>Note on National Baselines:</strong> Comparisons against national all-sector per-capita averages (e.g. 1.9 t CO₂e) are deliberately omitted because national baselines include heavy industry, mining, power sector, freight, and agriculture; comparing household operational sub-scopes against all-sector totals is scientifically flawed.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tailored Insight & Actionable Advice -->
+          <div class="insight-box" id="res-insight-box">
+            <div class="insight-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+              </svg>
+              <span>Personalized Sustainability Insight</span>
+            </div>
+            <p class="insight-text" id="res-insight-text">
+              Loading tailored recommendation based on your highest emitting category...
+            </p>
+            <a href="tips.html" class="btn btn-sm btn-outline" id="res-insight-link">
+              <span>View Targeted Reduction Tips</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Bottom Actions -->
+          <div class="results-action-bar">
+            <button type="button" class="btn btn-secondary btn-lg" id="btn-edit-inputs">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              <span>Edit Inputs &amp; Recalculate</span>
+            </button>
+            <a href="dashboard.html" class="btn btn-primary btn-lg">
+              <span>Go to Impact Dashboard</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+      </section>
 
     </div>
   </main>
@@ -128,24 +1018,24 @@
             <a href="calculator.html">Carbon Calculator</a>
             <a href="habits.html">Habit Tracker</a>
             <a href="tips.html">Knowledge Hub</a>
-            <a href="dashboard.html">Impact Dashboard</a>
+            <a href="dashboard.html">Analytics Dashboard</a>
           </div>
         </div>
 
         <div class="footer-col">
-          <h4>Resources</h4>
+          <h4>Calculators</h4>
           <div class="footer-links">
-            <a href="tips.html#transport">Clean Commuting</a>
-            <a href="tips.html#energy">Energy Conservation</a>
-            <a href="tips.html#diet">Plant-Rich Diet</a>
-            <a href="tips.html#waste">Zero-Waste Guide</a>
+            <a href="calculator.html">Transportation Footprint</a>
+            <a href="calculator.html">Household Electricity</a>
+            <a href="calculator.html">Domestic Cooking Gas</a>
+            <a href="calculator.html">Household Waste</a>
           </div>
         </div>
 
         <div class="footer-col">
           <h4>Architecture</h4>
           <div class="privacy-pill">
-            <strong>100% Client-Side Privacy</strong>
+            <strong>Browser-Local Storage</strong>
             All calculations and habit data are stored locally in your browser. Zero backend trackers.
           </div>
         </div>
@@ -160,6 +1050,7 @@
     </div>
   </footer>
 
+  <!-- Core Scripts -->
   <script src="js/main.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/data.js"></script>
