@@ -30,8 +30,8 @@ The application runs on client-side web technologies with **zero backend depende
 EcoTrack is designed around a five-page multi-page architecture:
 
 1. **Home (`index.html`)**  
-   *Current Status: Design-System Preview.*  
-   Currently functions as a live design-system showcase and component testbed (displaying color tokens, typography, glassmorphism cards, buttons, and responsive grid layouts) while the dedicated landing page content, hero metrics, and interactive previews are scheduled for implementation in Phase 2.
+   *Current Status: Complete Landing Page (Phase 2).*  
+   The central entry point introducing the platform's mission, four core pillars (Calculator, Habit Tracker, Knowledge Hub, Dashboard), documented environmental benchmarks, and a three-step workflow overview.
 
 2. **Carbon Calculator (`calculator.html`)**  
    *Current Status: Foundation Shell.*  
@@ -191,8 +191,8 @@ Then visit `http://localhost:8000` in your web browser.
   - Defensive `EcoStorage` manager with corrupted JSON recovery and in-memory fallback.
   - Documented emission factors and citations cataloged in `js/data.js`.
   - JavaScript syntax-verified scripts.
-- **Phase 2: Home Page Landing Experience (Pending Approval)**
-  - Dedicated landing page content, dynamic climate impact counter, and interactive preview cards.
+- **Phase 2: Home Page Landing Experience (Completed)**
+  - Complete landing page with hero introduction, dual Call-to-Actions, four core feature showcases, verified climate benchmarks, and responsive layout.
 - **Phase 3: Carbon Calculator Engine (Planned)**
   - 4-step interactive wizard, category emission breakdowns, and Chart.js donut chart.
 - **Phase 4: Habit Tracker & Gamification (Planned)**

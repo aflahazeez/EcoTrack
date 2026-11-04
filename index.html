@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EcoTrack | Sustainable Intelligence & Carbon Analytics</title>
-  <meta name="description" content="A modern, privacy-first sustainability platform to track carbon emissions and adopt greener daily habits. Built for TERRACODE 2026.">
+  <meta name="description" content="A lightweight, privacy-focused environmental sustainability web application to track personal carbon emissions and cultivate lasting green habits.">
   
   <!-- Design System CSS -->
   <link rel="stylesheet" href="css/style.css">
@@ -71,123 +71,416 @@
     <a href="calculator.html" class="btn btn-primary" style="width: 100%;">Calculate Impact</a>
   </div>
 
-  <!-- Main Content Showcase: Design System & Architectural Foundation -->
+  <!-- Main Content Area -->
   <main id="main-content" class="main-content">
-    <div class="container">
-      
-      <!-- Foundation Status Banner -->
-      <div style="margin-bottom: 2.5rem; text-align: center;">
-        <span class="badge badge-lime">Phase 1 Complete • Architectural Foundation & Design System</span>
-      </div>
+    
+    <!-- 1. Hero Section -->
+    <section class="hero-section" aria-labelledby="hero-heading">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero-content">
+        <span class="section-tag">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          EcoTrack
+        </span>
+        
+        <h1 id="hero-heading" class="hero-title">
+          <span class="hero-tagline-main">GREEN TOMORROW</span>
+          <span class="hero-tagline-sub">YOUR FOOTPRINT. YOUR FUTURE.</span>
+        </h1>
+        
+        <p class="hero-desc">
+          EcoTrack is a lightweight sustainability platform that helps you quantify annual carbon emissions, build daily eco-friendly routines, and track measurable environmental progress—stored privately in your browser.
+        </p>
 
-      <!-- Hero Preview Area -->
-      <section class="section-padding" style="padding-top: 1rem; text-align: center;">
-        <div class="section-header">
-          <span class="section-tag">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        <!-- Main Call-to-Actions -->
+        <div class="hero-cta-group">
+          <a href="calculator.html" class="btn btn-primary btn-lg">
+            <span>Calculate Your Footprint</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
-            Modern Eco-Tech Platform
-          </span>
-          <h1 class="section-title">Understand Your Impact. <br><span style="color: var(--accent-lime);">Act with Precision.</span></h1>
+          </a>
+          <a href="dashboard.html" class="btn btn-secondary btn-lg">
+            <span>View Impact Dashboard</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Trust & Technical Feature Highlights -->
+        <div class="trust-badges" aria-label="Key Platform Guarantees">
+          <div class="trust-badge-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Browser-Local Storage</span>
+          </div>
+          <div class="trust-badge-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+            </svg>
+            <span>Zero Server Telemetry</span>
+          </div>
+          <div class="trust-badge-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span>Documented Emission Factors</span>
+          </div>
+          <div class="trust-badge-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4l3 3"></path>
+            </svg>
+            <span>Zero Sign-Up Required</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. Feature Showcase: Four Pillars of Personal Climate Action -->
+    <section class="section-padding" aria-labelledby="features-heading">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Platform Pillars</span>
+          <h2 id="features-heading" class="section-title">Four Tools for Measurable Action</h2>
           <p class="section-desc">
-            A privacy-first sustainability intelligence suite designed to measure carbon footprints, foster consistent green habits, and drive real climate action.
+            EcoTrack combines carbon calculation, daily behavioral gamification, curated guidance, and personal analytics into a single cohesive platform.
           </p>
         </div>
 
-        <div class="flex-center" style="gap: 1rem; flex-wrap: wrap; margin-bottom: 3.5rem;">
-          <a href="calculator.html" class="btn btn-primary btn-lg">Launch Calculator</a>
-          <a href="habits.html" class="btn btn-secondary btn-lg">Explore Habits</a>
-          <a href="dashboard.html" class="btn btn-outline btn-lg">View Analytics</a>
-        </div>
-      </section>
+        <div class="grid grid-2">
+          
+          <!-- Feature 1: Carbon Calculator -->
+          <div class="card card-interactive feature-card">
+            <div>
+              <div class="flex-between items-center" style="margin-bottom: 1.25rem;">
+                <div class="feature-icon-wrapper" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+                <span class="badge badge-emerald">Assessment Engine</span>
+              </div>
+              <h3 style="margin-bottom: 0.75rem;">Carbon Footprint Calculator</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                Quantify your annual greenhouse gas emissions across daily transport, home electricity, domestic cooking fuel, and diet. Receive immediate category breakdowns and compare your footprint against national benchmarks.
+              </p>
+              <ul class="feature-highlights">
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Vehicle kilometers, electricity kWh, LPG gas, and diet inputs</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Immediate emission breakdown by category</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Direct comparison with Indian and global per-capita averages</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <a href="calculator.html" class="btn btn-outline btn-sm">
+                <span>Start Calculation</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
 
-      <!-- Design System Component Gallery -->
-      <section style="margin-top: 1rem;">
-        <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 2rem;">
-          <h3>Design System Verification Gallery</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">
-            Verifying typography, color tokens, button glows, and glass surfaces across viewport sizes.
+          <!-- Feature 2: Habit Tracker -->
+          <div class="card card-interactive feature-card">
+            <div>
+              <div class="flex-between items-center" style="margin-bottom: 1.25rem;">
+                <div class="feature-icon-wrapper" aria-hidden="true" style="background: rgba(163, 230, 53, 0.12); border-color: rgba(163, 230, 53, 0.3); color: var(--accent-lime);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="7"></circle>
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                  </svg>
+                </div>
+                <span class="badge badge-lime">Behavioral Streaks</span>
+              </div>
+              <h3 style="margin-bottom: 0.75rem;">Daily Sustainable Habit Tracker</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                Turn climate awareness into sustained daily routines. Check off actionable green commitments—from carpooling and zero food waste to reusable alternatives—while maintaining consecutive-day streaks and earning milestone badges.
+              </p>
+              <ul class="feature-highlights">
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Daily commitment checklist covering energy, waste, and food</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Consecutive-day streak counters with date-tracking</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Milestone badges that reward consistent green habits</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <a href="habits.html" class="btn btn-outline btn-sm">
+                <span>Explore Habit Tracker</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Feature 3: Eco Tips Hub -->
+          <div class="card card-interactive feature-card">
+            <div>
+              <div class="flex-between items-center" style="margin-bottom: 1.25rem;">
+                <div class="feature-icon-wrapper" aria-hidden="true" style="background: rgba(110, 231, 183, 0.12); border-color: rgba(110, 231, 183, 0.25); color: var(--accent-sage);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                  </svg>
+                </div>
+                <span class="badge badge-sage">Actionable Guidance</span>
+              </div>
+              <h3 style="margin-bottom: 0.75rem;">Eco-Tips & Knowledge Hub</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                Access bite-sized, practical sustainability guides categorized by clean commuting, energy conservation, plant-rich nutrition, and low-waste lifestyle strategies to systematically shrink your footprint.
+              </p>
+              <ul class="feature-highlights">
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Categorized guides for Transport, Energy, Food, and Waste</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Clear impact ratings highlighting high-yield reduction actions</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Practical, zero-cost everyday conservation practices</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <a href="tips.html" class="btn btn-outline btn-sm">
+                <span>Browse Eco Tips</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Feature 4: Impact Dashboard -->
+          <div class="card card-interactive feature-card">
+            <div>
+              <div class="flex-between items-center" style="margin-bottom: 1.25rem;">
+                <div class="feature-icon-wrapper" aria-hidden="true" style="background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); color: var(--accent-amber);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                  </svg>
+                </div>
+                <span class="badge badge-amber">Personal Analytics</span>
+              </div>
+              <h3 style="margin-bottom: 0.75rem;">Personal Impact Dashboard</h3>
+              <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                A single command center aggregating your environmental journey. Review your historical assessment baselines, monitor daily habit streak momentum, view unlocked badges, and manage your browser-local data.
+              </p>
+              <ul class="feature-highlights">
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Historical footprint evaluation tracking</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Habit consistency overview and milestone showcase</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Full user control over browser-local data with clear/reset tools</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <a href="dashboard.html" class="btn btn-outline btn-sm">
+                <span>View Dashboard</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. Documented Environmental Statistics Section -->
+    <section class="section-padding" style="background: rgba(10, 33, 25, 0.45); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);" aria-labelledby="stats-heading">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Documented Climate Data</span>
+          <h2 id="stats-heading" class="section-title">Verified Environmental Benchmarks</h2>
+          <p class="section-desc">
+            EcoTrack grounds your individual calculations in published environmental research and institutional databases. Standard reference benchmarks include:
           </p>
         </div>
 
-        <!-- 3-Column Feature Cards Grid -->
+        <div class="grid grid-4">
+          
+          <!-- Stat 1: India Benchmark -->
+          <div class="stat-card">
+            <div>
+              <div class="metric-value">1.9 <span style="font-size: 1.15rem; color: var(--accent-sage); font-weight: 600;">t CO₂e</span></div>
+              <div class="metric-label">India Per-Capita / Year</div>
+              <p style="color: var(--text-ivory-dim); font-size: 0.875rem; margin-top: 0.75rem; line-height: 1.5;">
+                The average annual greenhouse gas emission per person in India, serving as an everyday baseline for evaluating individual lifestyle footprints.
+              </p>
+            </div>
+            <div class="stat-citation">
+              <strong>Source:</strong> Global Carbon Project &amp; Our World in Data (2022–2023)
+            </div>
+          </div>
+
+          <!-- Stat 2: Global Benchmark -->
+          <div class="stat-card">
+            <div>
+              <div class="metric-value">4.5 <span style="font-size: 1.15rem; color: var(--accent-sage); font-weight: 600;">t CO₂e</span></div>
+              <div class="metric-label">Global Per-Capita / Year</div>
+              <p style="color: var(--text-ivory-dim); font-size: 0.875rem; margin-top: 0.75rem; line-height: 1.5;">
+                The worldwide average annual greenhouse gas emission per person across both industrialized and developing economies.
+              </p>
+            </div>
+            <div class="stat-citation">
+              <strong>Source:</strong> International Energy Agency (IEA) &amp; World Bank
+            </div>
+          </div>
+
+          <!-- Stat 3: Grid Electricity -->
+          <div class="stat-card">
+            <div>
+              <div class="metric-value">0.82 <span style="font-size: 1.15rem; color: var(--accent-sage); font-weight: 600;">kg / kWh</span></div>
+              <div class="metric-label">Indian Grid Intensity</div>
+              <p style="color: var(--text-ivory-dim); font-size: 0.875rem; margin-top: 0.75rem; line-height: 1.5;">
+                Estimated end-consumer emissions per unit of grid electricity in India, accounting for generation mix and ~18% transmission losses.
+              </p>
+            </div>
+            <div class="stat-citation">
+              <strong>Source:</strong> Central Electricity Authority (CEA) Baseline Ver. 18 (2023)
+            </div>
+          </div>
+
+          <!-- Stat 4: Tree Sequestration -->
+          <div class="stat-card">
+            <div>
+              <div class="metric-value">21.8 <span style="font-size: 1.15rem; color: var(--accent-sage); font-weight: 600;">kg / yr</span></div>
+              <div class="metric-label">Mature Tree Sequestration</div>
+              <p style="color: var(--text-ivory-dim); font-size: 0.875rem; margin-top: 0.75rem; line-height: 1.5;">
+                The estimated annual carbon dioxide absorbed by a healthy mature tree, used to calculate tree-equivalent absorption metrics.
+              </p>
+            </div>
+            <div class="stat-citation">
+              <strong>Source:</strong> US EPA GHG Equivalencies &amp; Arbor Day Foundation (~48 lbs/yr)
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. How It Works Section -->
+    <section class="section-padding" aria-labelledby="workflow-heading">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-tag">Simple Workflow</span>
+          <h2 id="workflow-heading" class="section-title">How EcoTrack Works</h2>
+          <p class="section-desc">
+            A three-step cycle designed to move from awareness to continuous, measurable lifestyle improvements.
+          </p>
+        </div>
+
         <div class="grid grid-3">
           
-          <!-- Card 1 -->
-          <div class="card card-interactive">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
-              <span class="badge badge-emerald">Interactive Engine</span>
-              <span style="color: var(--accent-lime); font-size: 0.85rem; font-weight: 600;">01</span>
-            </div>
-            <h3 style="margin-bottom: 0.75rem;">Carbon Footprint Wizard</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
-              Calculates transport, household energy, diet, and lifestyle emissions using scientifically verified emission factors.
+          <div class="step-card">
+            <div class="step-number" aria-hidden="true">01</div>
+            <h3 style="margin-bottom: 0.65rem;">1. Assess Your Baseline</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+              Answer practical questions regarding your weekly commuting, monthly electricity usage, cooking gas cylinders, and dietary habits in the Carbon Calculator.
             </p>
-            <div class="metric-value">1.9<span style="font-size: 1.25rem; font-weight: 600; color: var(--accent-sage);"> t CO₂e</span></div>
-            <div class="metric-label">National Benchmark</div>
           </div>
 
-          <!-- Card 2 -->
-          <div class="card card-interactive">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
-              <span class="badge badge-lime">Gamified Habit Loop</span>
-              <span style="color: var(--accent-lime); font-size: 0.85rem; font-weight: 600;">02</span>
-            </div>
-            <h3 style="margin-bottom: 0.75rem;">Daily Eco Streaks</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
-              Build continuous green micro-habits, claim achievements, and track sequential daily streaks saved securely in your browser.
+          <div class="step-card">
+            <div class="step-number" aria-hidden="true">02</div>
+            <h3 style="margin-bottom: 0.65rem;">2. Commit to Daily Habits</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+              Use the Habit Tracker checklist to log achievable daily sustainable actions, maintain unbroken streaks, and earn milestone badges.
             </p>
-            <div class="metric-value">7<span style="font-size: 1.25rem; font-weight: 600; color: var(--accent-amber);"> Days</span></div>
-            <div class="metric-label">Active Streak Counter</div>
           </div>
 
-          <!-- Card 3 -->
-          <div class="card card-interactive">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
-              <span class="badge badge-sage">Zero Telemetry</span>
-              <span style="color: var(--accent-lime); font-size: 0.85rem; font-weight: 600;">03</span>
-            </div>
-            <h3 style="margin-bottom: 0.75rem;">Privacy-First LocalStorage</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
-              Zero third-party trackers, zero server dependencies, and instant local response times. All personal data stays on device.
+          <div class="step-card">
+            <div class="step-number" aria-hidden="true">03</div>
+            <h3 style="margin-bottom: 0.65rem;">3. Track Long-Term Impact</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+              Re-evaluate periodically to observe footprint reductions, inspect earned milestone achievements, and review your progress directly in the Dashboard.
             </p>
-            <div class="metric-value">100<span style="font-size: 1.25rem; font-weight: 600; color: var(--accent-sage);">%</span></div>
-            <div class="metric-label">Client-Side Privacy</div>
           </div>
 
         </div>
 
-        <!-- Token Visual Palette Showcase -->
-        <div class="card card-glass" style="margin-top: 2rem;">
-          <h4 style="margin-bottom: 1rem; color: var(--text-ivory);">Active Botanical Palette Tokens</h4>
-          <div class="flex" style="gap: 1rem; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-deep); padding: 0.5rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span style="width: 14px; height: 14px; border-radius: 50%; background: #061610; border: 1px solid #6ee7b7;"></span>
-              <span style="font-size: 0.8rem; font-family: monospace;">Deep Forest (#061610)</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-deep); padding: 0.5rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span style="width: 14px; height: 14px; border-radius: 50%; background: #0f2c22; border: 1px solid #6ee7b7;"></span>
-              <span style="font-size: 0.8rem; font-family: monospace;">Card Surface (#0F2C22)</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-deep); padding: 0.5rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span style="width: 14px; height: 14px; border-radius: 50%; background: #10b981;"></span>
-              <span style="font-size: 0.8rem; font-family: monospace;">Emerald Action (#10B981)</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-deep); padding: 0.5rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span style="width: 14px; height: 14px; border-radius: 50%; background: #a3e635;"></span>
-              <span style="font-size: 0.8rem; font-family: monospace;">Accent Lime (#A3E635)</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-deep); padding: 0.5rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span style="width: 14px; height: 14px; border-radius: 50%; background: #fbf8ee;"></span>
-              <span style="font-size: 0.8rem; font-family: monospace;">Warm Ivory (#FBF8EE)</span>
-            </div>
+      </div>
+    </section>
+
+    <!-- 5. Bottom Call to Action Section -->
+    <section class="section-padding" style="padding-top: 1rem;" aria-label="Get Started Banner">
+      <div class="container">
+        <div class="cta-banner">
+          <span class="section-tag" style="margin-bottom: 1rem;">Start Your Assessment</span>
+          <h2 style="font-size: clamp(1.8rem, 3.5vw + 0.5rem, 2.6rem); margin-bottom: 1rem;">
+            Ready to Understand Your Carbon Footprint?
+          </h2>
+          <p style="color: var(--text-ivory-dim); max-width: 600px; margin: 0 auto 2rem auto; font-size: 1.05rem; line-height: 1.6;">
+            Take the first step toward quantifiable sustainability. Our calculator runs entirely in your browser with zero sign-up or backend tracking required.
+          </p>
+          <div class="flex-center" style="gap: 1rem; flex-wrap: wrap;">
+            <a href="calculator.html" class="btn btn-primary btn-lg">
+              <span>Launch Carbon Calculator</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <a href="dashboard.html" class="btn btn-secondary btn-lg">
+              <span>Open Dashboard</span>
+            </a>
           </div>
         </div>
+      </div>
+    </section>
 
-      </section>
-
-    </div>
   </main>
 
   <!-- Shared Site Footer -->
@@ -212,10 +505,10 @@
             An open-source sustainability platform empowering individuals to make quantifiable, impactful environmental choices every single day.
           </p>
           <div class="foss-badge">
-            <svg viewBox="0 0 24 24">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
             </svg>
-            <span>TERRACODE 2026 • MEA FOSS Club</span>
+            <span>Open Source Initiative</span>
           </div>
         </div>
 
@@ -242,11 +535,11 @@
           </div>
         </div>
 
-        <!-- Column 4: Privacy & FOSS Architecture -->
+        <!-- Column 4: Privacy & Architecture -->
         <div class="footer-col">
           <h4>Architecture</h4>
           <div class="privacy-pill">
-            <strong>100% Client-Side Privacy</strong>
+            <strong>Browser-Local Storage</strong>
             All calculations and habit data are stored locally in your browser. Zero backend trackers.
           </div>
         </div>
@@ -256,7 +549,7 @@
       <!-- Bottom Bar -->
       <div class="footer-bottom">
         <div>
-          &copy; 2026 EcoTrack. Developed for TERRACODE 2026, MEA Engineering College.
+          &copy; 2026 EcoTrack. All rights reserved.
         </div>
         <div class="footer-bottom-links">
           <span>HTML5 &bull; CSS3 &bull; Vanilla JS &bull; LocalStorage</span>

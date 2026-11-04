@@ -1,6 +1,6 @@
 /**
  * EcoTrack – Scientific Emission Factors & Static Content Data
- * TERRACODE 2026 | FOSS Club, MEA Engineering College
+ * Sustainable Intelligence & Carbon Analytics Platform
  * 
  * Emission factors and benchmarks documented with precise authoritative sources.
  * Sources include:

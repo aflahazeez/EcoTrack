@@ -1,6 +1,6 @@
 /**
  * EcoTrack – LocalStorage Management Helper
- * TERRACODE 2026 | FOSS Club, MEA Engineering College
+ * Sustainable Intelligence & Carbon Analytics Platform
  * 
  * Centralizes all browser storage read/write operations.
  * Built with defensive resilience:

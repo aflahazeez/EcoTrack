@@ -1,6 +1,6 @@
 /**
  * EcoTrack – Main Application Script
- * TERRACODE 2026 | FOSS Club, MEA Engineering College
+ * Sustainable Intelligence & Carbon Analytics Platform
  * 
  * Handles global interactions:
  * 1. Mobile navigation with full accessibility (ARIA, Escape key, Outside-click)
