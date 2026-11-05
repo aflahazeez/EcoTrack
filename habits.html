@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Habit Tracker | EcoTrack</title>
-  <meta name="description" content="Build sustainable habits, track daily streaks, and earn eco badges.">
+  <title>Sustainable Living Hub | EcoTrack</title>
+  <meta name="description" content="Build sustainable habits, track daily streaks, and explore actionable eco tips in EcoTrack's integrated living hub.">
   
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/habits.css">
@@ -32,7 +32,7 @@
         <a href="index.html" class="nav-link">Home</a>
         <a href="calculator.html" class="nav-link">Calculator</a>
         <a href="habits.html" class="nav-link active">Habit Tracker</a>
-        <a href="tips.html" class="nav-link">Eco Tips</a>
+        <a href="#tips" class="nav-link">Eco Tips</a>
         <a href="dashboard.html" class="nav-link">Dashboard</a>
       </nav>
 
@@ -59,7 +59,7 @@
       <a href="index.html" class="nav-link">Home</a>
       <a href="calculator.html" class="nav-link">Carbon Calculator</a>
       <a href="habits.html" class="nav-link active">Habit Tracker</a>
-      <a href="tips.html" class="nav-link">Eco Tips & Knowledge</a>
+      <a href="#tips" class="nav-link">Eco Tips &amp; Knowledge</a>
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
     </div>
     <a href="calculator.html" class="btn btn-primary" style="width: 100%;">Calculate Impact</a>
@@ -69,33 +69,382 @@
   <main id="main-content" class="main-content">
     <div class="container">
       
-      <div class="section-header">
-        <span class="section-tag">Phase 4 Module</span>
-        <h1 class="section-title">Daily Green Habit Tracker</h1>
+      <!-- 1. Hub Introduction Header (Centered) -->
+      <div class="section-header hub-header">
+        <h1 class="section-title">Sustainable Living Hub</h1>
         <p class="section-desc">
-          Transform carbon awareness into actionable daily routines. Check off sustainable deeds, grow your streak, and earn badges.
+          Transform climate awareness into quantifiable daily impact. Build consecutive streaks with practical routines, or explore actionable eco tips and convert them directly into personal habits.
         </p>
+        <div class="flex-center" style="gap: 1rem; margin-top: 1.25rem;">
+          <a href="#checklist" class="btn btn-secondary btn-sm">
+            <span>Checklist</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </a>
+          <a href="#tips" class="btn btn-outline btn-sm">
+            <span>Browse Eco Tips</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+          </a>
+        </div>
       </div>
 
-      <!-- Module Scaffold Card -->
-      <div class="card card-glass" style="max-width: 800px; margin: 0 auto; text-align: center; padding: 3.5rem 2rem;">
-        <div style="width: 64px; height: 64px; margin: 0 auto 1.5rem auto; background: rgba(163, 230, 53, 0.15); border: 1px solid var(--accent-lime); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-lime);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-          </svg>
+      <!-- 2. Today's Progress Overview (Top Metrics) -->
+      <section class="hub-overview-grid" aria-label="Today's Sustainability Progress">
+        
+        <!-- Card 1: Daily Progress -->
+        <div class="hub-metric-card card-progress">
+          <div>
+            <div class="metric-header">
+              <span class="metric-label">Today's Progress</span>
+              <div class="metric-icon-wrap icon-emerald" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="metric-main-value">
+              <span id="metric-progress-pct">0%</span>
+              <span class="metric-sub" id="metric-progress-count">0 of 8</span>
+            </div>
+            <p class="metric-desc" id="metric-progress-msg">
+              Check off your first habit to keep your green streak alive!
+            </p>
+          </div>
+          <div class="hub-progress-track" aria-hidden="true">
+            <div class="hub-progress-fill" id="metric-progress-bar" style="width: 0%;"></div>
+          </div>
         </div>
-        <h3 style="margin-bottom: 0.75rem;">Tracker Module Ready for Phase 4</h3>
-        <p style="color: var(--text-muted); max-width: 520px; margin: 0 auto 2rem auto;">
-          The habit checklist logic, streak counter with date calculation, and badge reward system will be built in Phase 4 using LocalStorage.
-        </p>
-        <div class="flex-center" style="gap: 1rem;">
-          <a href="index.html" class="btn btn-secondary">Return Home</a>
-          <a href="tips.html" class="btn btn-outline">Browse Eco Tips</a>
+
+        <!-- Card 2: Consistency & Active Streak -->
+        <div class="hub-metric-card card-streak">
+          <div>
+            <div class="metric-header">
+              <span class="metric-label">Consistency Streak</span>
+              <div class="metric-icon-wrap icon-amber" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="metric-main-value">
+              <span id="metric-streak-count">0</span>
+              <span class="metric-sub">Days Active</span>
+            </div>
+            <p class="metric-desc">
+              Maintained by completing at least 1 sustainable action every calendar day.
+            </p>
+          </div>
+          <div class="streak-meta">
+            <span>Personal Best</span>
+            <strong id="metric-streak-best">0 days</strong>
+          </div>
         </div>
-      </div>
+
+        <!-- Card 3: Active Habit Portfolio -->
+        <div class="hub-metric-card card-habits">
+          <div>
+            <div class="metric-header">
+              <span class="metric-label">Habits Tracked</span>
+              <div class="metric-icon-wrap icon-sage" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="metric-main-value">
+              <span id="metric-total-habits">8</span>
+              <span class="metric-sub">Active Routines</span>
+            </div>
+            <p class="metric-desc">
+              Practical habits across transport, energy, water conservation, and waste segregation.
+            </p>
+          </div>
+          <div class="streak-meta">
+            <span>Lifetime Logged</span>
+            <strong id="metric-lifetime-count">0</strong>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 3. Daily Habit Checklist Section -->
+      <section id="checklist" class="hub-main-grid" aria-labelledby="checklist-title">
+        <div class="card card-glass" style="padding: 2rem;">
+          
+          <!-- Checklist Header & Toolbar -->
+          <div class="section-toolbar">
+            <div class="section-title-wrap">
+              <h2 id="checklist-title">Daily Habit Checklist</h2>
+              <span class="count-badge" id="badge-total-count">Today</span>
+            </div>
+
+            <!-- Toolbar Controls: Filters & Reset -->
+            <div class="toolbar-actions">
+              <!-- Status Filter Pills -->
+              <div class="filter-pill-group" role="tablist" aria-label="Habit status filters">
+                <button type="button" class="filter-pill active" data-status-filter="all" role="tab" aria-selected="true">
+                  <span>All</span>
+                  <span class="pill-count" id="filter-count-all">(8)</span>
+                </button>
+                <button type="button" class="filter-pill" data-status-filter="remaining" role="tab" aria-selected="false">
+                  <span>Remaining</span>
+                  <span class="pill-count" id="filter-count-remaining">(8)</span>
+                </button>
+                <button type="button" class="filter-pill" data-status-filter="completed" role="tab" aria-selected="false">
+                  <span>Completed</span>
+                  <span class="pill-count" id="filter-count-completed">(0)</span>
+                </button>
+              </div>
+
+              <!-- Category Dropdown (Custom Restyled Dark Botanical Select) -->
+              <div class="category-select-wrapper">
+                <label for="habit-category-filter" class="sr-only">Filter by Category</label>
+                <select id="habit-category-filter" class="hub-category-select">
+                  <option value="all">All Categories</option>
+                  <option value="Transportation">Transportation</option>
+                  <option value="Energy">Energy</option>
+                  <option value="Water">Water Conservation</option>
+                  <option value="Waste">Waste Management</option>
+                  <option value="Sustainable Lifestyle">Lifestyle</option>
+                </select>
+              </div>
+
+              <!-- Reset Today Button -->
+              <button type="button" class="btn btn-outline btn-sm" id="btn-reset-today" title="Reset today's checks">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+                <span>Reset Today</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Date Navigation Bar in Checklist Header -->
+          <div class="checklist-date-nav" aria-label="Checklist date navigation">
+            <div class="date-nav-controls">
+              <button type="button" class="eco-nav-btn eco-nav-arrow" id="btn-date-prev" title="Previous Day" aria-label="Previous day">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+
+              <div class="date-display-badge" id="date-display-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span id="displayed-date-label">Today • Active Date</span>
+              </div>
+
+              <button type="button" class="eco-nav-btn eco-nav-arrow" id="btn-date-next" title="Next Day" aria-label="Next day">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <div class="date-picker-wrap">
+              <label for="checklist-date-picker" class="sr-only">Choose date</label>
+              <input type="date" id="checklist-date-picker" class="eco-date-input hub-form-control" aria-label="Choose date">
+              <button type="button" class="btn btn-outline btn-sm eco-today-btn" id="btn-date-today" title="Jump to today">
+                <span>Today</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Date Status Banner (shown on past dates) -->
+          <div class="date-status-banner" id="date-status-banner" style="display: none;" role="status">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span id="date-status-text">Day complete — this is a look back at your progress.</span>
+          </div>
+
+          <!-- Dynamic Habit Items List -->
+          <div class="habit-items-container" id="habit-items-list" role="group" aria-label="Habit items checklist">
+            <!-- Rendered by js/habits.js -->
+          </div>
+
+          <!-- Future Date Empty State -->
+          <div class="hub-empty-state" id="future-date-state" style="display: none;">
+            <div class="empty-state-icon" aria-hidden="true" style="color: var(--accent-sage);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h4>Not yet! This day is still ahead of us.</h4>
+            <p>Your habits will be ready when the day arrives.</p>
+            <div style="margin-top: 1.25rem;">
+              <button type="button" class="btn btn-primary btn-sm" id="btn-future-return-today">
+                <span>Return to Today</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Past Date Empty State -->
+          <div class="hub-empty-state" id="past-empty-state" style="display: none;">
+            <div class="empty-state-icon" aria-hidden="true" style="color: var(--text-muted);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <h4>No Activity Recorded for this Day</h4>
+            <p>No habit completions were logged on this date. Streaks and stats reflect active days.</p>
+            <div style="margin-top: 1.25rem;">
+              <button type="button" class="btn btn-primary btn-sm" id="btn-past-return-today">
+                <span>Return to Today</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty State (Shown when filters yield 0 results) -->
+          <div class="hub-empty-state" id="habits-empty-state" style="display: none;">
+            <div class="empty-state-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <h4>No Habits in this View</h4>
+            <p>You can adjust your status or category filters, add a custom habit below, or adopt a tip from the Eco Tips section.</p>
+          </div>
+
+          <!-- Add Custom Habit Card -->
+          <div class="add-custom-card" id="add-custom-habit-card">
+            <h3>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--action-emerald);" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add a Custom Sustainable Habit</span>
+            </h3>
+            <p>Have a personal eco-routine? Create a trackable habit and categorize it.</p>
+            
+            <form id="form-add-custom-habit" class="custom-form-grid" novalidate>
+              <div class="form-group">
+                <label for="input-custom-habit-title" class="form-label">Habit Title</label>
+                <input type="text" 
+                       id="input-custom-habit-title" 
+                       class="form-control hub-form-control" 
+                       placeholder="e.g., Turn off tap while brushing teeth" 
+                       required 
+                       maxlength="80" 
+                       autocomplete="off">
+              </div>
+
+              <div class="form-group">
+                <label for="select-custom-habit-cat" class="form-label">Category</label>
+                <div class="category-select-wrapper" style="width: 100%;">
+                  <select id="select-custom-habit-cat" class="hub-category-select hub-form-control">
+                    <option value="Transportation">Transportation</option>
+                    <option value="Energy">Energy</option>
+                    <option value="Water">Water Conservation</option>
+                    <option value="Waste">Waste Management</option>
+                    <option value="Sustainable Lifestyle" selected>Sustainable Lifestyle</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="height: 44px; white-space: nowrap;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add Habit</span>
+              </button>
+            </form>
+            <div id="custom-habit-error" class="form-error-inline" role="alert" aria-live="polite"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 4. Daily Eco Tips Spotlight (Single-Card Carousel) -->
+      <section id="tips" class="tips-section-wrapper" aria-labelledby="tips-section-title">
+        <div class="tips-header-wrap">
+          <span class="section-tag">Daily Eco Tips Spotlight</span>
+          <h2 id="tips-section-title" class="section-title">Actionable Knowledge Hub</h2>
+          <p class="section-desc">
+            Explore today's rotating spotlight of 4 evidence-based sustainability actions. Click <strong>Add as Habit</strong> on any recommendation to immediately adopt it into your daily routine above.
+          </p>
+        </div>
+
+        <!-- Single-Card Carousel Component -->
+        <div class="tips-carousel-container" 
+             id="tips-carousel" 
+             role="region" 
+             aria-roledescription="carousel" 
+             aria-label="Daily Eco Tips Carousel"
+             tabindex="0">
+          
+          <!-- Previous Slide Button -->
+          <button type="button" 
+                  class="carousel-nav-btn carousel-prev-btn" 
+                  id="carousel-btn-prev" 
+                  aria-label="Previous tip" 
+                  title="Previous tip">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- Carousel Viewport: Strictly 1 Card Visible at a Time -->
+          <div class="carousel-viewport" id="carousel-viewport" aria-live="polite">
+            <!-- 4 Daily Selected Tip Cards (Only 1 Active) Injected by js/habits.js -->
+          </div>
+
+          <!-- Next Slide Button -->
+          <button type="button" 
+                  class="carousel-nav-btn carousel-next-btn" 
+                  id="carousel-btn-next" 
+                  aria-label="Next tip" 
+                  title="Next tip">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+
+        </div>
+
+        <!-- Carousel Bottom Bar: Indicators & Status -->
+        <div class="carousel-bottom-bar">
+          <div class="carousel-dots-group" id="carousel-dots" role="tablist" aria-label="Tip carousel slide indicators">
+            <!-- 4 Indicator Dots Dynamically Rendered -->
+          </div>
+          <div class="carousel-status-pill" id="carousel-status-pill" aria-live="polite">
+            <span class="carousel-pulse-indicator" aria-hidden="true"></span>
+            <span id="carousel-status-text">Auto-rotating every 6s</span>
+          </div>
+        </div>
+
+      </section>
 
     </div>
   </main>
+
+  <!-- Floating Toast Alert for User Actions -->
+  <div class="hub-toast" id="hub-toast" role="status" aria-live="polite">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span id="hub-toast-msg">Habit updated successfully</span>
+  </div>
 
   <!-- Shared Site Footer -->
   <footer class="site-footer" role="contentinfo">
@@ -126,7 +475,7 @@
             <a href="index.html">Home</a>
             <a href="calculator.html">Carbon Calculator</a>
             <a href="habits.html">Habit Tracker</a>
-            <a href="tips.html">Knowledge Hub</a>
+            <a href="habits.html#tips">Eco Tips &amp; Knowledge</a>
             <a href="dashboard.html">Impact Dashboard</a>
           </div>
         </div>
@@ -134,10 +483,10 @@
         <div class="footer-col">
           <h4>Resources</h4>
           <div class="footer-links">
-            <a href="tips.html#transport">Clean Commuting</a>
-            <a href="tips.html#energy">Energy Conservation</a>
-            <a href="tips.html#diet">Plant-Rich Diet</a>
-            <a href="tips.html#waste">Zero-Waste Guide</a>
+            <a href="habits.html#tips">Clean Commuting</a>
+            <a href="habits.html#tips">Energy Conservation</a>
+            <a href="habits.html#tips">Water Conservation</a>
+            <a href="habits.html#tips">Zero-Waste Guide</a>
           </div>
         </div>
 
@@ -151,16 +500,16 @@
       </div>
 
       <div class="footer-bottom">
-        <div>&copy; 2026 EcoTrack. All rights reserved.</div>
-        <div class="footer-bottom-links">
-          <span>HTML5 &bull; CSS3 &bull; Vanilla JS &bull; LocalStorage</span>
-        </div>
+        <p>&copy; 2026 EcoTrack. Released under the MIT License.</p>
+        <p style="color: var(--accent-lime); font-size: 0.8125rem; font-weight: 600;">GREEN TOMORROW &bull; YOUR FOOTPRINT. YOUR FUTURE.</p>
       </div>
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <!-- Scripts -->
   <script src="js/storage.js"></script>
+  <script src="js/data.js"></script>
   <script src="js/habits.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

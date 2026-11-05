@@ -257,7 +257,255 @@ const ECO_DATA = {
       scope: "Landfill anaerobic methane decay (Scope 3 provisional)",
       assumptionsAndLimitations: "PROVISIONAL HEURISTIC MODEL: Real-world solid waste emissions depend heavily on organic biodegradable fraction (~50% in Indian MSW), moisture content, and whether disposal occurs in open unmanaged dumps or sanitary landfills. Aerobic composting avoids anaerobic methane formation. These factors provide indicative lifestyle models, not exact measurements."
     }
-  }
+  },
+
+  // -------------------------------------------------------------------------
+  // 4. Default Practical Sustainable Habits Catalog (Phase 4)
+  // -------------------------------------------------------------------------
+  defaultHabits: [
+    {
+      id: "habit_trans_public",
+      title: "Use public transport, cycle, or walk for daily trips",
+      category: "Transportation",
+      isCustom: false,
+      tipId: "tip_trans_transit"
+    },
+    {
+      id: "habit_energy_lights",
+      title: "Switch off unused lights and fans when leaving rooms",
+      category: "Energy",
+      isCustom: false,
+      tipId: "tip_energy_lighting"
+    },
+    {
+      id: "habit_energy_unplug",
+      title: "Unplug phantom-draw electronics & chargers when not in use",
+      category: "Energy",
+      isCustom: false,
+      tipId: "tip_energy_phantom"
+    },
+    {
+      id: "habit_water_tap",
+      title: "Turn off tap while brushing, shaving, or soaping hands",
+      category: "Water",
+      isCustom: false,
+      tipId: "tip_water_tap"
+    },
+    {
+      id: "habit_water_wash",
+      title: "Save water while washing dishes, clothes, or vehicles",
+      category: "Water",
+      isCustom: false,
+      tipId: "tip_water_fixtures"
+    },
+    {
+      id: "habit_waste_bottle",
+      title: "Carry a reusable water bottle and beverage cup",
+      category: "Waste",
+      isCustom: false,
+      tipId: "tip_waste_bottles"
+    },
+    {
+      id: "habit_waste_plastic",
+      title: "Avoid single-use plastic bags and disposable cutlery",
+      category: "Waste",
+      isCustom: false,
+      tipId: "tip_waste_bags"
+    },
+    {
+      id: "habit_waste_segregate",
+      title: "Segregate dry recyclables and compostable organic waste",
+      category: "Waste",
+      isCustom: false,
+      tipId: "tip_waste_compost"
+    }
+  ],
+
+  // -------------------------------------------------------------------------
+  // 5. Categorized Actionable Eco Tips Catalog (Phase 4)
+  // -------------------------------------------------------------------------
+  ecoTips: [
+    // Transportation
+    {
+      id: "tip_trans_transit",
+      category: "Transportation",
+      title: "Choose Public Transit, Walking, or Cycling",
+      explanation: "Personal passenger vehicles generate substantial urban greenhouse gas emissions. Switching to buses, metro, cycling, or walking drastically cuts per-capita carbon and reduces urban congestion.",
+      action: "Replace 2 solo vehicle commutes each week with public transport, walking, or cycling.",
+      impact: "High Impact",
+      habitEquivalent: "Use public transport, cycle, or walk for daily trips"
+    },
+    {
+      id: "tip_trans_combine",
+      category: "Transportation",
+      title: "Combine Multiple Errands into a Single Trip",
+      explanation: "Internal-combustion engines consume more fuel and emit up to twice as much pollution during cold starts. Batching errands keeps the engine at optimal operating temperature.",
+      action: "Plan errands in advance and accomplish grocery, post, and pharmacy runs in one loop.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Batch daily errands into a single efficient trip"
+    },
+    {
+      id: "tip_trans_tire",
+      category: "Transportation",
+      title: "Maintain Recommended Vehicle Tire Pressure",
+      explanation: "Under-inflated tires increase rolling friction, which burns 3% to 5% more fuel and accelerates premature tire wear.",
+      action: "Check tire air pressure once every month when the vehicle has been resting.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Check tire pressure and vehicle maintenance monthly"
+    },
+    {
+      id: "tip_trans_carpool",
+      category: "Transportation",
+      title: "Carpool or Share Rides for Daily Commutes",
+      explanation: "Most commuter vehicles travel with only one occupant. Sharing rides with coworkers or classmates directly halves per-person transportation emissions.",
+      action: "Coordinate shared rides with 1–2 colleagues who travel along similar daily routes.",
+      impact: "High Impact",
+      habitEquivalent: "Carpool or share rides for regular commute"
+    },
+
+    // Energy
+    {
+      id: "tip_energy_lighting",
+      category: "Energy",
+      title: "Switch Off Lights & Adopt High-Efficiency LEDs",
+      explanation: "Lighting accounts for 10–15% of household electricity. Switching off unused fixtures and upgrading to modern 9W LEDs cuts lighting power consumption by up to 80%.",
+      action: "Turn off lights when exiting any room and replace remaining incandescent or CFL bulbs.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Switch off unused lights and fans when leaving rooms"
+    },
+    {
+      id: "tip_energy_ac",
+      category: "Energy",
+      title: "Set Air Conditioner Thermostats to 24°C or Higher",
+      explanation: "Bureau of Energy Efficiency (BEE) benchmarks show that each 1°C increase on an air conditioner saves roughly 6% in electricity while maintaining thermal comfort with ceiling fans.",
+      action: "Set cooling thermostats between 24°C and 26°C and clean the intake mesh filters monthly.",
+      impact: "High Impact",
+      habitEquivalent: "Set AC temperature to 24°C or higher with fans"
+    },
+    {
+      id: "tip_energy_phantom",
+      category: "Energy",
+      title: "Eliminate Phantom Load from Idle Electronics",
+      explanation: "Appliances left on standby (TVs, game consoles, microwave clocks, chargers) continuously consume phantom power, accounting for up to 8% of residential power bills.",
+      action: "Turn off extension power strips at the wall socket when work desks and TVs are idle.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Unplug phantom-draw electronics & chargers when not in use"
+    },
+    {
+      id: "tip_energy_laundry",
+      category: "Energy",
+      title: "Air-Dry Laundry Naturally & Wash in Cold Water",
+      explanation: "Electric tumble dryers are heavy power consumers (~2,500W). Natural outdoor air-drying harnesses free solar energy and ultraviolet rays for natural sanitization.",
+      action: "Hang clothes on drying racks or balcony lines and select cold water wash cycles.",
+      impact: "High Impact",
+      habitEquivalent: "Air-dry clothes naturally instead of using heated dryers"
+    },
+
+    // Water Conservation
+    {
+      id: "tip_water_tap",
+      category: "Water",
+      title: "Turn Off Running Taps During Grooming & Scrubbing",
+      explanation: "A running household tap discharges 6 to 9 liters of clean water every minute. Closing it while brushing or lathering saves 15 to 25 liters during each session.",
+      action: "Shut faucets tightly while brushing teeth, soaping hands, or scrubbing cookware.",
+      impact: "High Impact",
+      habitEquivalent: "Turn off tap while brushing, shaving, or soaping hands"
+    },
+    {
+      id: "tip_water_aerators",
+      category: "Water",
+      title: "Fit Inexpensive Flow Aerators on Taps",
+      explanation: "Tap aerators mix micro-bubbles into the stream to maintain strong water pressure while slashing volumetric discharge by 30% to 50%.",
+      action: "Screw low-cost aerators onto kitchen and bathroom washbasin faucets.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Use water-saving aerators or low-flow sprayers"
+    },
+    {
+      id: "tip_water_fixtures",
+      category: "Water",
+      title: "Detect and Promptly Fix Plumbing Leaks",
+      explanation: "A faucet dripping once per second wastes over 30 liters daily, while a leaky toilet flapper valve can silently waste over 200 liters every day.",
+      action: "Check taps for drips and test toilet cisterns with food coloring to identify silent leaks.",
+      impact: "High Impact",
+      habitEquivalent: "Inspect and fix plumbing drips and leaks promptly"
+    },
+    {
+      id: "tip_water_shower",
+      category: "Water",
+      title: "Adopt 5-Minute Showers or Traditional Bucket Baths",
+      explanation: "Standard showerheads discharge 10–15 liters per minute. Keeping showers under 5 minutes or using a 15-liter bucket saves over 50 liters per bath.",
+      action: "Set a 5-minute timer before showering or switch to a bucket bath for daily hygiene.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Keep showers under 5 minutes or use a bucket bath"
+    },
+
+    // Waste Management
+    {
+      id: "tip_waste_bottles",
+      category: "Waste",
+      title: "Carry a Reusable Stainless Steel Water Bottle",
+      explanation: "Globally, over 1 million single-use plastic bottles are purchased every minute. Manufacturing a single PET bottle consumes three times the volume of water inside it.",
+      action: "Pack a durable stainless steel bottle or refillable flask in your everyday bag.",
+      impact: "High Impact",
+      habitEquivalent: "Carry a reusable water bottle and beverage cup"
+    },
+    {
+      id: "tip_waste_bags",
+      category: "Waste",
+      title: "Keep Washable Canvas Bags by the Door",
+      explanation: "Single-use thin plastic carry bags have an average utility of only 12 minutes before persisting in landfills and drainage systems for centuries.",
+      action: "Keep 2–3 foldable cloth tote bags in your backpack or near the front door.",
+      impact: "High Impact",
+      habitEquivalent: "Avoid single-use plastic bags and disposable cutlery"
+    },
+    {
+      id: "tip_waste_compost",
+      category: "Waste",
+      title: "Segregate Organic Food Scraps for Composting",
+      explanation: "When organic waste is buried in landfills without oxygen, it creates methane (a GHG 28 times more potent than CO2). Aerobic composting prevents methane formation completely.",
+      action: "Separate wet kitchen vegetable scraps into a dedicated composting bin.",
+      impact: "High Impact",
+      habitEquivalent: "Segregate dry recyclables and compostable organic waste"
+    },
+    {
+      id: "tip_waste_repurpose",
+      category: "Waste",
+      title: "Repurpose Glass Containers & Packaging Before Discarding",
+      explanation: "Extending the lifespan of glass and tin containers avoids embodied manufacturing emissions and reduces solid waste heading to landfills.",
+      action: "Clean and reuse empty condiment jars for spices, nuts, or desk stationery storage.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Reuse glass jars and packaging before discarding"
+    },
+
+    // Sustainable Lifestyle
+    {
+      id: "tip_life_mealplan",
+      category: "Sustainable Lifestyle",
+      title: "Plan Meals & Store Produce to Prevent Food Spoilage",
+      explanation: "Approximately one-third of all food produced is wasted globally, squandering all the water, energy, and soil nutrients invested in growing it.",
+      action: "Check the refrigerator and create a 3-day meal plan before purchasing fresh produce.",
+      impact: "High Impact",
+      habitEquivalent: "Plan meals and store produce to eliminate food waste"
+    },
+    {
+      id: "tip_life_local",
+      category: "Sustainable Lifestyle",
+      title: "Select Local, In-Season Vegetables and Fruits",
+      explanation: "Out-of-season produce often requires long-distance cold-chain transport or heated greenhouse operations. In-season local food is fresher, cheaper, and lower in emissions.",
+      action: "Shop at neighborhood weekly markets and select locally harvested regional fruits and vegetables.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Choose seasonal and locally harvested regional produce"
+    },
+    {
+      id: "tip_life_repair",
+      category: "Sustainable Lifestyle",
+      title: "Repair, Mend, or Borrow Before Buying Brand New",
+      explanation: "Consumer manufacturing accounts for enormous embodied energy. Repairing torn clothing or borrowing infrequently used tools minimizes consumer demand.",
+      action: "Mend minor seam tears, resole shoes, or rent tools before purchasing new replacements.",
+      impact: "Moderate Impact",
+      habitEquivalent: "Mend, repair, or borrow items before buying new"
+    }
+  ]
 };
 
 // Expose on window object for browser accessibility

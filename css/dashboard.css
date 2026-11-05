@@ -1,0 +1,601 @@
+/* ==========================================================================
+   EcoTrack – Personal Impact Dashboard Styles (Phase 5)
+   Dark Botanical / Modern Eco-Tech Visual Identity
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Dashboard Page Header
+   -------------------------------------------------------------------------- */
+.dashboard-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard-header .section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-header .section-title {
+  font-size: clamp(2rem, 3.8vw, 2.75rem);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--text-ivory);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+
+.dashboard-header .section-desc {
+  font-size: 1.05rem;
+  color: var(--text-ivory-dim);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   2. Main Layout Grids
+   -------------------------------------------------------------------------- */
+.dashboard-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  margin-bottom: 2.25rem;
+}
+
+@media (max-width: 960px) {
+  .dashboard-main-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.dashboard-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-ivory);
+}
+
+.dashboard-section-title .title-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.dashboard-section-title svg {
+  color: var(--accent-sage);
+}
+
+/* --------------------------------------------------------------------------
+   3. Card Styling & Accents
+   -------------------------------------------------------------------------- */
+.dashboard-card {
+  background: var(--card-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.dashboard-card:hover {
+  border-color: var(--border-medium);
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-sage), transparent);
+  opacity: 0.4;
+}
+
+/* --------------------------------------------------------------------------
+   4. Footprint Overview Hero Card
+   -------------------------------------------------------------------------- */
+.footprint-hero {
+  background: linear-gradient(145deg, rgba(15, 44, 34, 0.9) 0%, rgba(10, 33, 25, 0.95) 100%);
+  border: 1px solid var(--border-emerald);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.footprint-hero-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.footprint-hero-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.footprint-mode-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+}
+
+.badge-mode-estimated {
+  background: rgba(163, 230, 53, 0.12);
+  color: var(--accent-lime);
+  border-color: rgba(163, 230, 53, 0.25);
+}
+
+.badge-mode-precise {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--action-emerald);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.footprint-hero-values {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.footprint-main-num {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 3.25rem);
+  font-weight: 800;
+  color: var(--accent-lime);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.footprint-main-unit {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-ivory);
+}
+
+.footprint-monthly-rate {
+  font-size: 0.925rem;
+  color: var(--accent-sage);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.footprint-meta-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.85rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.footprint-date-display {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* --------------------------------------------------------------------------
+   5. Category Breakdown Styling
+   -------------------------------------------------------------------------- */
+.category-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.category-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.925rem;
+}
+
+.category-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-ivory);
+}
+
+.category-indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-transport { background-color: var(--action-emerald); box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+.dot-energy { background-color: var(--accent-lime); box-shadow: 0 0 8px rgba(163, 230, 53, 0.4); }
+.dot-waste { background-color: #38bdf8; box-shadow: 0 0 8px rgba(56, 189, 248, 0.4); }
+
+.category-val-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.category-kg-val {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-ivory);
+}
+
+.category-pct-badge {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.category-progress-track {
+  height: 8px;
+  background: rgba(6, 22, 16, 0.7);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  border: 1px solid rgba(110, 231, 183, 0.08);
+}
+
+.category-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fill-transport { background: linear-gradient(90deg, #059669, #10b981); }
+.fill-energy { background: linear-gradient(90deg, #84cc16, #a3e635); }
+.fill-waste { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+
+/* Subcategories for Household Energy */
+.energy-subcategories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(6, 22, 16, 0.5);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--accent-lime);
+}
+
+.subcat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.subcat-title {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.subcat-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-ivory);
+}
+
+/* --------------------------------------------------------------------------
+   6. Habit Progress Cards
+   -------------------------------------------------------------------------- */
+.habits-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 580px) {
+  .habits-overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.habit-stat-tile {
+  background: rgba(6, 22, 16, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.habit-stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.habit-stat-label {
+  font-size: 0.775rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.habit-stat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-emerald-subtle {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--action-emerald);
+}
+
+.icon-amber-subtle {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--accent-amber);
+}
+
+.icon-lime-subtle {
+  background: rgba(163, 230, 53, 0.12);
+  color: var(--accent-lime);
+}
+
+.icon-sage-subtle {
+  background: rgba(110, 231, 183, 0.12);
+  color: var(--accent-sage);
+}
+
+.habit-stat-value {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-ivory);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.habit-stat-sub {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.today-habit-progress-wrap {
+  margin-top: 0.75rem;
+}
+
+.today-progress-bar {
+  height: 6px;
+  background: rgba(6, 22, 16, 0.8);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.today-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--action-emerald), var(--accent-lime));
+  border-radius: var(--radius-pill);
+  transition: width 0.5s ease;
+}
+
+/* --------------------------------------------------------------------------
+   7. Historical Footprint Chart Section
+   -------------------------------------------------------------------------- */
+.chart-section-card {
+  margin-bottom: 2.25rem;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 320px;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.chart-single-note {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(163, 230, 53, 0.08);
+  border: 1px solid rgba(163, 230, 53, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: var(--accent-lime);
+  margin-top: 1rem;
+}
+
+.chart-fallback-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+
+.chart-fallback-table th,
+.chart-fallback-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.chart-fallback-table th {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chart-fallback-table td {
+  color: var(--text-ivory);
+}
+
+/* --------------------------------------------------------------------------
+   8. Recent Activity Feed
+   -------------------------------------------------------------------------- */
+.activity-card {
+  margin-bottom: 2rem;
+}
+
+.activity-feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: rgba(6, 22, 16, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.activity-item:hover {
+  background: rgba(6, 22, 16, 0.8);
+}
+
+.activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activity-icon-calc {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--action-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.activity-icon-habit {
+  background: rgba(163, 230, 53, 0.15);
+  color: var(--accent-lime);
+  border: 1px solid rgba(163, 230, 53, 0.3);
+}
+
+.activity-body {
+  flex: 1;
+}
+
+.activity-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-ivory);
+  margin-bottom: 0.2rem;
+}
+
+.activity-desc {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.activity-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+/* --------------------------------------------------------------------------
+   9. Friendly Empty States
+   -------------------------------------------------------------------------- */
+.dashboard-empty-card {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: rgba(15, 44, 34, 0.5);
+  border: 1px dashed var(--border-medium);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-sage);
+  margin-bottom: 1.25rem;
+}
+
+.empty-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-ivory);
+  margin-bottom: 0.5rem;
+}
+
+.empty-desc {
+  font-size: 0.925rem;
+  color: var(--text-muted);
+  max-width: 440px;
+  margin: 0 auto 1.5rem auto;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   10. Quick Actions Bar
+   -------------------------------------------------------------------------- */
+.dashboard-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}

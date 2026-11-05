@@ -37,17 +37,17 @@ EcoTrack is designed around a five-page multi-page architecture:
    *Current Status: Completed (Phase 3).*  
    Interactive multi-step carbon footprint assessment engine featuring dual calculation modes (Estimated and Precise Mode), three audited categories (Transportation, Household Energy [combining Electricity and LPG], and Household Waste), verified emission factors (CEA busbar generation and IPCC stoichiometric combustion), Chart.js doughnut chart with CSS fallback progress bars, and browser-local persistence.
 
-3. **Habit Tracker (`habits.html`)**  
-   *Current Status: Foundation Shell.*  
-   Houses the shared navigation and styling scaffolding. The daily sustainable commitment checklist, streak counter calculation, and achievement badges will be integrated in Phase 4.
+3. **Habit Tracker & Sustainable Living Hub (`habits.html`)**  
+   *Current Status: Completed (Phase 4).*  
+   Unified sustainable lifestyle hub combining an interactive daily habit checklist with date navigation (Past read-only archive, Today interactive tracker, and Future preview), 5 randomized daily routines, streak counting algorithm, and single-card Eco Tips carousel with "Add as Habit" capability.
 
 4. **Eco-Tips & Knowledge Hub (`tips.html`)**  
-   *Current Status: Foundation Shell.*  
-   Houses the shared layout and category structure. The searchable sustainability guides and category filter system are planned for Phase 5.
+   *Current Status: Active Redirecting Bridge (Phase 4).*  
+   Directs users smoothly to the integrated Eco Tips section inside the Sustainable Living Hub (`habits.html#tips`).
 
 5. **Impact Dashboard (`dashboard.html`)**  
-   *Current Status: Foundation Shell.*  
-   Houses the layout shell. The historical footprint comparison charts, habit progress summaries, and LocalStorage data management tools are scheduled for Phase 6.
+   *Current Status: Completed (Phase 5).*  
+   Unified personal impact analytics command center aggregating latest annual footprint (tonnes $\text{CO}_2\text{e}$), monthly emission rate, calculation mode, category breakdown with electricity/LPG subcategories, habit progress & streaks, historical footprint trend chart with pure-CSS fallback table, recent activity feed, and independent friendly empty states.
 
 ---
 
@@ -55,7 +55,7 @@ EcoTrack is designed around a five-page multi-page architecture:
 
 To maintain transparency, the platform's features are categorized into currently functioning foundation modules and upcoming phase deliverables:
 
-### Implemented (Phases 1–3)
+### Implemented (Phases 1–5)
 - **Dark Botanical Visual Identity:** Custom CSS design system using deep forest backgrounds (`#061610`), dark green surfaces (`#0F2C22`), emerald action buttons (`#10B981`), lime/sage data accents (`#A3E635`, `#6EE7B7`), and warm ivory text (`#FBF8EE`).
 - **Atmospheric Backgrounds:** Multi-layered radial gradient mesh avoiding flat, empty dark voids.
 - **Consistent Shared Navigation:** Uniform desktop header and responsive mobile drawer navigation across all five pages.
@@ -70,14 +70,34 @@ To maintain transparency, the platform's features are categorized into currently
   - **Shared Calculation Engine:** Unified numerical pipeline and defensive validation preventing silent arbitrary replacement.
   - **Visualizations:** Chart.js doughnut chart with pure-CSS fallback progress bars.
   - **Scientific Disclosures Card:** Clear boundary disclosures distinguishing Scope 1, Scope 2, and Scope 3 boundaries and explaining why all-sector comparisons are omitted.
+- **Sustainable Living Hub (`habits.html`, `js/habits.js`, `css/habits.css`):**
+  - **Integrated Living Hub:** Unified experience combining a daily sustainable habit tracker with an actionable eco tips spotlight.
+  - **Strictly Centered Header:** Clean, balanced page title (`Sustainable Living Hub`) with legacy top date badge removed, centering focus and typography.
+  - **Checklist Date Navigation:** Prominent date navigation toolbar integrated directly into the Daily Habit Checklist header (`#checklist`), featuring Previous Day (`#btn-date-prev`), Next Day (`#btn-date-next`), native Dark Botanical date picker (`#checklist-date-picker`), dynamic formatted date label (`#displayed-date-label`), and a quick "Today" jump button (`#btn-date-today`). Defaults to user's local calendar date (`YYYY-MM-DD`).
+  - **Past Date Read-Only Archival Mode:** Selecting past calendar dates displays saved completion records and historical progress with checkboxes disabled (`.habit-item-card.read-only`), modification controls hidden (custom habit form, reset button, and delete buttons), a clear status banner (`Day complete — this is a look back at your progress.`), and a dedicated empty state when no activity was logged. Historical records are strictly protected and never overwritten.
+  - **Today Mode (Fully Interactive):** Default active view featuring 5 stable randomized habits, live completion toggling, custom habit creation, and reset functionality.
+  - **Future Date Safe Guard:** Selecting future dates displays a friendly upcoming empty state (`Not yet! This day is still ahead of us.`), locks interaction, and prevents premature completions or false streak increments.
+  - **Daily Habit Rotation (5 per Day):** Deterministic date-seeded pseudo-random selection presenting 5 varied daily routines from the user's available pool (defaults + custom + tip-derived), stable across reloads on the same date and rotating on new calendar days.
+  - **Date-Specific Completion Records:** Daily completions indexed strictly by local `YYYY-MM-DD` calendar dates to guarantee completions today do not auto-check tomorrow.
+  - **Reliable Streak Engine:** Date-arithmetic streak calculation algorithm that maintains streaks from yesterday if today has not yet been checked, records all-time personal bests, and tallies total lifetime completions from verified historical dates.
+  - **Daily Progress Metrics:** Interactive completion percentages and count indicators where the denominator accurately represents the selected date's habit count.
+  - **Consistent Dark Botanical Controls:** Uniform styling across all dropdown selects, date inputs, filter pills, inputs, and navigation buttons using deep forest backgrounds (`#0C2B20`), subtle emerald borders (`rgba(16, 185, 129, 0.35)`), warm ivory text (`#FBF8EE`), custom SVG chevrons, and emerald/lime focus indicators with zero browser defaults.
+  - **Custom Habits:** Dynamic custom habit creation with category tagging, character length constraints, and case-insensitive duplicate prevention.
+  - **Single-Card Eco Tips Carousel:** Daily rotation of 4 distinct tips presented in an accessible single-card carousel with previous/next controls, 4 position indicator dots, 6-second auto-rotation, hover/focus pause, touch/swipe support, and `prefers-reduced-motion` compliance.
+  - **Bidirectional "Add as Habit" Integration:** One-click conversion of any eco tip into a trackable daily routine with duplicate prevention and live UI state synchronization.
+  - **Navigation Bridge (`tips.html`):** Seamless transition redirect connecting existing links directly to `habits.html#tips`.
+- **Personal Impact Dashboard (`dashboard.html`, `js/dashboard.js`, `css/dashboard.css`):**
+  - **Footprint Overview:** Latest annual footprint ($t\text{ CO}_2\text{e}$), monthly emission rate, verified assessment date, mode badge (`Estimated` vs `Precise`), and quick re-calculation link.
+  - **Category Breakdown:** Audited emissions for Transportation, Household Energy, and Household Waste with dynamic progress bars and subcategory percentage allocations for Grid Electricity and Domestic LPG.
+  - **Habit Progress & Streaks:** Today's completed habit count vs. selected habits, visual progress bar, active streak, all-time personal best streak, and total lifetime habit checkoffs from actual saved data.
+  - **Historical Footprint Trend Chart:** Activated `STORAGE_KEYS.HISTORY` (`ecotrack_history_log`) recording chronological snapshots upon calculation completion without mutating `STORAGE_KEYS.FOOTPRINT`. Includes defensive duplicate prevention, single-point baseline mode with guidance note, and multi-point line chart via Chart.js with pure-CSS fallback table.
+  - **Recent Activity Feed:** Chronological timeline summarizing latest footprint assessments and recorded habit completion days.
+  - **Independent Empty States:** Friendly, non-blocking empty states with actionable buttons when either footprint or habit progress has not yet been logged.
 - **Defensive Storage Engine (`js/storage.js`):** Centralized LocalStorage wrapper with corrupted JSON error handling, storage availability detection, and an in-memory session fallback (`_memoryFallback`) for restricted environments.
 - **Traceable Emission Factors (`js/data.js`):** Centralized CEA, IPCC, and empirical factors with detailed source citations, boundary definitions, and uncertainty disclosures.
 
 ### Planned for Upcoming Phases
-- [ ] **Dynamic Daily Habit Checklist:** Interactive checkboxes saving daily green actions to LocalStorage (Phase 4).
-- [ ] **Streak & Badge Engine:** Date-difference algorithms calculating consecutive-day streaks and unlocking achievement badges (Phase 4).
-- [ ] **Filterable & Searchable Knowledge Hub:** Dynamic client-side search and category filtering for eco-tips (Phase 5).
-- [ ] **Data Management Controls:** Dashboard tools to view historical assessment logs and safely reset local records (Phase 6).
+- [ ] **Phase 6: Knowledge Hub Deep Guides & Search** (Expanded searchable articles, in-depth sustainability guides, and downloadable reference checklists).
 
 ---
 
@@ -94,10 +114,14 @@ To maintain transparency, the platform's features are categorized into currently
 
 ## 💾 Browser-Local Data Storage
 
-EcoTrack operates without external databases, server-side APIs, or cloud user accounts. User metrics and habit records are stored as browser-local data using the browser's Web Storage API (`localStorage`) via `js/storage.js`:
+EcoTrack operates entirely client-side without external databases, server-side APIs, or cloud user accounts. User metrics and habit records are stored as browser-local data using the browser's Web Storage API (`localStorage`) managed through `js/storage.js`:
 
-- **Browser-Local Persistence:** Data is stored locally within the user's specific browser profile and does not transmit to external servers. It remains subject to the security, retention policies, and clearing mechanisms of the user's local browser and device.
-- **Defensive Parsing:** Parsing operations are wrapped in `try...catch` blocks to ensure corrupted or invalid values never crash the application.
+- **Strict Key Isolation:**
+  - `STORAGE_KEYS.FOOTPRINT` (`ecotrack_footprint_data`): Stores the user's latest annual and monthly carbon calculations, mode selection (`estimated` vs `precise`), category breakdowns, and raw inputs.
+  - `STORAGE_KEYS.HABITS` (`ecotrack_habits_data`): Manages the active habits list (defaults and user custom additions), daily completion records mapped strictly by `YYYY-MM-DD` ISO calendar dates, and consistency streak statistics.
+  - `STORAGE_KEYS.HISTORY` (`ecotrack_history_log`): Chronological array of verified footprint snapshots (timestamp, mode, annual kg, annual tonnes, and category breakdown) recorded upon calculation completion with duplicate prevention.
+  - Operations across the Calculator, Habits, and Dashboard maintain strict isolation and never corrupt or overwrite unrelated datasets.
+- **Defensive Parsing & Schema Migration:** Parsing operations are wrapped in `try...catch` blocks with sensible defaults to ensure corrupted or invalid values never crash the application.
 - **Private Browsing Fallback:** When `localStorage` is disabled or blocked (e.g., in private/incognito browsing or sandboxed iframes), operations fall back to an internal in-memory object so the site remains usable during that session.
 - **No Application Telemetry:** The application codebase does not include analytics trackers, advertising scripts, or telemetry beacons.
 
@@ -216,12 +240,25 @@ Then visit `http://localhost:8000` in your web browser.
   - Collapsible manual tariff helper for bill conversion to kWh.
   - 4-step interactive wizard, Chart.js doughnut visualization with pure-CSS fallback bars, defensive validation, and LocalStorage persistence.
   - Scope & Scientific Accounting Disclosures card.
-- **Phase 4: Habit Tracker & Gamification (Planned)**
-  - Daily checklist logic, consecutive streak date calculations, and badge rewards.
-- **Phase 5: Knowledge Hub (Planned)**
-  - Searchable eco-guides and category filtering.
-- **Phase 6: Analytics Dashboard (Planned)**
-  - Historical comparison charts and LocalStorage data management.
+- **Phase 4: Sustainable Living Hub (Habit Tracker + Eco Tips) (Completed)**
+  - Transformed `habits.html` into a unified Sustainable Living Hub.
+  - Interactive daily checklist with date-specific completion logging (`YYYY-MM-DD`).
+  - Consecutive-day streak calculation algorithm with active status preservation and personal best tracking.
+  - Categorized Eco Tips library with 19 practical recommendations across Transportation, Energy, Water Conservation, Waste Management, and Sustainable Lifestyle.
+  - One-click "Add as Habit" action linking tips to the active habit checklist with duplicate prevention.
+  - Custom habit creation (with length validation and duplicate rejection) and deletion controls.
+  - Complete LocalStorage persistence via `EcoStorage` using `STORAGE_KEYS.HABITS`, strictly isolated from footprint data.
+  - Transparent redirecting bridge in `tips.html` forwarding smoothly to `habits.html#tips`.
+- **Phase 5: Personal Impact Dashboard (Completed)**
+  - Unified command center aggregating latest carbon footprint metrics ($t\text{ CO}_2\text{e}$ and monthly rate) and assessment date.
+  - Category-wise breakdown with responsive progress bars and subcategory shares for Grid Electricity and Domestic LPG.
+  - Habit progress tracking with today's completed habit count vs. selected habits, visual progress bar, active streak, longest streak, and lifetime statistics.
+  - Activated `STORAGE_KEYS.HISTORY` (`ecotrack_history_log`) for chronological footprint snapshot tracking with defensive duplicate prevention.
+  - Responsive Chart.js historical trend line chart with single-baseline explanation mode and pure-CSS fallback table.
+  - Recent activity timeline tracking verified calculation events and recorded habit completion days.
+  - Independent, friendly empty states with direct navigation links.
+- **Phase 6: Knowledge Hub Deep Guides (Planned)**
+  - Searchable in-depth sustainability articles, regional guides, and filterable impact indexes.
 
 ---
 

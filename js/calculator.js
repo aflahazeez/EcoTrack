@@ -442,6 +442,91 @@
   }
 
   // ---------------------------------------------------------------------------
+  // 3.5. Historical Snapshot Helper (Phase 5)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Appends a lightweight snapshot of calculation results to STORAGE_KEYS.HISTORY.
+   * Defensively prevents duplicate records for identical calculation events.
+   * Leaves STORAGE_KEYS.FOOTPRINT completely unchanged.
+   * @param {Object} resultData 
+   */
+  function saveFootprintHistorySnapshot(resultData) {
+    if (!resultData || typeof EcoStorage === 'undefined' || typeof STORAGE_KEYS === 'undefined') return;
+
+    try {
+      const existing = EcoStorage.get(STORAGE_KEYS.HISTORY, []);
+      const historyList = Array.isArray(existing) ? existing : [];
+
+      const timestamp = resultData.calculatedAt || new Date().toISOString();
+      const annualKg = Math.round((resultData.totals ? resultData.totals.annualKg : 0) * 100) / 100;
+      const annualTonnes = Math.round((resultData.totals ? resultData.totals.annualTonnes : 0) * 100) / 100;
+      const mode = resultData.calculationMode || 'estimated';
+
+      // Duplicate prevention: check exact timestamp or recent identical calculation
+      const isDuplicate = historyList.some(entry => {
+        if (!entry) return false;
+        if (entry.timestamp === timestamp) return true;
+        if (entry.mode === mode && Math.abs(entry.annualKg - annualKg) < 0.001) {
+          const entryTime = new Date(entry.timestamp).getTime();
+          const currTime = new Date(timestamp).getTime();
+          if (!isNaN(entryTime) && !isNaN(currTime) && Math.abs(currTime - entryTime) < 3000) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      if (!isDuplicate) {
+        const transportKg = resultData.breakdown && resultData.breakdown.transport
+          ? Math.round(resultData.breakdown.transport.annualKg * 100) / 100 : 0;
+        const energyKg = resultData.breakdown && resultData.breakdown.energy
+          ? Math.round(resultData.breakdown.energy.annualKg * 100) / 100 : 0;
+        const wasteKg = resultData.breakdown && resultData.breakdown.waste
+          ? Math.round(resultData.breakdown.waste.annualKg * 100) / 100 : 0;
+        const elecKg = resultData.breakdown && resultData.breakdown.energy && resultData.breakdown.energy.electricity
+          ? Math.round(resultData.breakdown.energy.electricity.annualKg * 100) / 100 : 0;
+        const lpgKg = resultData.breakdown && resultData.breakdown.energy && resultData.breakdown.energy.lpg
+          ? Math.round(resultData.breakdown.energy.lpg.annualKg * 100) / 100 : 0;
+
+        const snapshot = {
+          id: 'calc_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+          timestamp: timestamp,
+          calculationMode: mode,
+          mode: mode,
+          annualKg: annualKg,
+          annualTonnes: annualTonnes,
+          categoryBreakdown: {
+            transport: transportKg,
+            energy: energyKg,
+            waste: wasteKg,
+            electricity: elecKg,
+            lpg: lpgKg
+          },
+          breakdown: {
+            transport: transportKg,
+            energy: energyKg,
+            waste: wasteKg,
+            electricity: elecKg,
+            lpg: lpgKg
+          }
+        };
+
+        historyList.push(snapshot);
+
+        // Cap history at 50 records to prevent storage exhaustion
+        if (historyList.length > 50) {
+          historyList.splice(0, historyList.length - 50);
+        }
+
+        EcoStorage.set(STORAGE_KEYS.HISTORY, historyList);
+      }
+    } catch (err) {
+      console.warn('[EcoCalculator] Could not save historical snapshot:', err);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
   // 4. Form Validation Engine
   // ---------------------------------------------------------------------------
 
@@ -781,6 +866,7 @@
     // Save to LocalStorage defensively
     if (typeof EcoStorage !== 'undefined' && typeof STORAGE_KEYS !== 'undefined') {
       EcoStorage.set(STORAGE_KEYS.FOOTPRINT, resultData);
+      saveFootprintHistorySnapshot(resultData);
     }
 
     // Render results
@@ -1408,10 +1494,12 @@
   }
 
   // Run on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   }
 
   // Expose on window for automated testing and dashboard compatibility
@@ -1426,7 +1514,8 @@
       validatePreciseStep1: validatePreciseStep1,
       validatePreciseStep2: validatePreciseStep2,
       validatePreciseStep3: validatePreciseStep3,
-      renderResults: renderResults
+      renderResults: renderResults,
+      saveHistorySnapshot: saveFootprintHistorySnapshot
     };
   }
 

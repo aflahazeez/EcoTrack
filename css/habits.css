@@ -1,56 +1,1503 @@
 /* ==========================================================================
-   EcoTrack – Habits Page Styles (Phase 4 Foundation)
+   EcoTrack – Sustainable Living Hub (Habits & Eco Tips) Styles (Phase 4 Refinements)
+   Dark Botanical / Modern Eco-Tech Visual Identity
    ========================================================================== */
 
-.habits-container {
-  max-width: 900px;
-  margin: 0 auto;
+/* --------------------------------------------------------------------------
+   1. Hub Header (Strictly Centered & Balanced Spacing)
+   -------------------------------------------------------------------------- */
+.hub-header {
+  margin-bottom: 2.75rem;
+  text-align: center;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Streak Counter Card */
-.streak-card {
+.hub-header .section-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--text-ivory);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.85rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.hub-header .section-desc {
+  font-size: 1.0625rem;
+  color: var(--text-ivory-dim);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   2. Progress Overview Cards (Top Metric Grid)
+   -------------------------------------------------------------------------- */
+.hub-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.hub-metric-card {
+  background: var(--card-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.hub-metric-card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+.hub-metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+}
+
+.hub-metric-card.card-progress::before {
+  background: linear-gradient(90deg, var(--action-emerald), var(--accent-lime));
+}
+
+.hub-metric-card.card-streak::before {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+.hub-metric-card.card-habits::before {
+  background: linear-gradient(90deg, var(--accent-sage), #38bdf8);
+}
+
+.metric-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, rgba(163, 230, 53, 0.08) 0%, rgba(15, 44, 34, 0.95) 100%);
-  border: 1px solid rgba(163, 230, 53, 0.25);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem 2rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.streak-flame {
-  width: 52px;
-  height: 52px;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  border-radius: 50%;
+.metric-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.metric-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.metric-icon-wrap.icon-emerald {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--action-emerald);
+}
+
+.metric-icon-wrap.icon-amber {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
   color: var(--accent-amber);
 }
 
-/* Daily Checklist Item */
-.habit-item {
+.metric-icon-wrap.icon-sage {
+  background: rgba(110, 231, 183, 0.15);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  color: var(--accent-sage);
+}
+
+.metric-main-value {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-ivory);
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.metric-main-value span.metric-sub {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.metric-desc {
+  font-size: 0.875rem;
+  color: var(--text-ivory-dim);
+  margin-bottom: 1rem;
+  line-height: 1.45;
+}
+
+/* Progress bar inside card */
+.hub-progress-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  position: relative;
+  margin-top: auto;
+}
+
+.hub-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--action-emerald), var(--accent-lime));
+  border-radius: var(--radius-pill);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Streak status chip */
+.streak-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.streak-meta strong {
+  color: var(--accent-lime);
+}
+
+/* --------------------------------------------------------------------------
+   3. Habit Tracker Main Section & Toolbar
+   -------------------------------------------------------------------------- */
+.hub-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+.section-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-title-wrap h2 {
+  font-size: 1.5rem;
+  font-family: var(--font-heading);
+  color: var(--text-ivory);
+  margin: 0;
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.65rem;
+  background: rgba(163, 230, 53, 0.15);
+  border: 1px solid rgba(163, 230, 53, 0.3);
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-lime);
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Category & Status Filter Pills */
+.filter-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  background: var(--card-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-ivory-dim);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.filter-pill:hover {
+  background: var(--card-surface-hover);
+  border-color: var(--border-medium);
+  color: var(--text-ivory);
+}
+
+.filter-pill.active {
+  background: var(--action-emerald);
+  border-color: var(--action-emerald);
+  color: var(--action-emerald-dark);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.filter-pill .pill-count {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* --------------------------------------------------------------------------
+   4. Unified Dark Botanical Form Controls & Checklist Date Navigation
+   -------------------------------------------------------------------------- */
+
+/* Form Group & Labels */
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-ivory);
+  margin-bottom: 0.45rem;
+  letter-spacing: 0.01em;
+}
+
+/* Universal Text Inputs & Hub Form Controls (Habit Title, Text, Number, Search) */
+.hub-form-control,
+.form-control,
+input[type="text"].hub-form-control,
+input[type="text"].form-control,
+input[type="text"],
+#input-custom-habit-title {
+  box-sizing: border-box !important;
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  background-color: var(--card-surface, #0c2b20) !important;
+  color: var(--text-ivory, #fbf8ee) !important;
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 0.65rem 1.25rem;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border-radius: var(--radius-pill, 9999px) !important;
+  outline: none !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: border-color var(--transition-fast, 0.2s ease),
+              background-color var(--transition-fast, 0.2s ease),
+              box-shadow var(--transition-fast, 0.2s ease);
+}
+
+.hub-form-control:hover,
+.form-control:hover,
+input[type="text"].hub-form-control:hover,
+input[type="text"].form-control:hover,
+input[type="text"]:hover,
+#input-custom-habit-title:hover {
+  background-color: var(--card-surface-hover, #10382a) !important;
+  border-color: var(--action-emerald, #10b981) !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+
+.hub-form-control:focus,
+.hub-form-control:focus-visible,
+.form-control:focus,
+.form-control:focus-visible,
+input[type="text"].hub-form-control:focus,
+input[type="text"].hub-form-control:focus-visible,
+input[type="text"].form-control:focus,
+input[type="text"].form-control:focus-visible,
+input[type="text"]:focus,
+input[type="text"]:focus-visible,
+#input-custom-habit-title:focus,
+#input-custom-habit-title:focus-visible {
+  background-color: var(--card-surface-hover, #10382a) !important;
+  border-color: var(--border-focus, #a3e635) !important;
+  outline: 2px solid var(--border-focus, #a3e635) !important;
+  outline-offset: 1px;
+  box-shadow: var(--glow-lime, 0 0 14px rgba(163, 230, 53, 0.35)) !important;
+}
+
+/* Placeholder Styling for Dark Botanical Theme */
+.hub-form-control::placeholder,
+.form-control::placeholder,
+input[type="text"]::placeholder,
+#input-custom-habit-title::placeholder {
+  color: var(--accent-sage, #6ee7b7);
+  opacity: 0.65;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.hub-form-control::-webkit-input-placeholder,
+.form-control::-webkit-input-placeholder,
+input[type="text"]::-webkit-input-placeholder,
+#input-custom-habit-title::-webkit-input-placeholder {
+  color: var(--accent-sage, #6ee7b7);
+  opacity: 0.65;
+  font-size: 0.8125rem;
+}
+
+.hub-form-control::-moz-placeholder,
+.form-control::-moz-placeholder,
+input[type="text"]::-moz-placeholder,
+#input-custom-habit-title::-moz-placeholder {
+  color: var(--accent-sage, #6ee7b7);
+  opacity: 0.65;
+  font-size: 0.8125rem;
+}
+
+.hub-form-control:-ms-input-placeholder,
+.form-control:-ms-input-placeholder,
+input[type="text"]:-ms-input-placeholder,
+#input-custom-habit-title:-ms-input-placeholder {
+  color: var(--accent-sage, #6ee7b7);
+  opacity: 0.65;
+  font-size: 0.8125rem;
+}
+
+/* Browser Autofill Protection */
+.hub-form-control:-webkit-autofill,
+.hub-form-control:-webkit-autofill:hover,
+.hub-form-control:-webkit-autofill:focus,
+#input-custom-habit-title:-webkit-autofill {
+  -webkit-text-fill-color: var(--text-ivory, #fbf8ee) !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0c2b20 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: var(--text-ivory);
+}
+
+/* Textarea Support */
+textarea.hub-form-control,
+textarea.form-control,
+textarea {
+  box-sizing: border-box !important;
+  width: 100%;
+  min-height: 88px;
+  background-color: var(--card-surface, #0c2b20) !important;
+  color: var(--text-ivory, #fbf8ee) !important;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  padding: 0.75rem 1.15rem;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border-radius: var(--radius-md, 12px) !important;
+  outline: none !important;
+  resize: vertical;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+textarea.hub-form-control:focus,
+textarea.form-control:focus,
+textarea:focus {
+  border-color: var(--border-focus) !important;
+  outline: 2px solid var(--border-focus) !important;
+  box-shadow: var(--glow-lime) !important;
+}
+
+/* Native Checkbox Support */
+input[type="checkbox"].hub-checkbox,
+input[type="checkbox"].form-checkbox,
+input[type="checkbox"] {
+  accent-color: var(--action-emerald, #10b981);
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* Category Select Wrapper */
+.category-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 175px;
+}
+
+/* Unified Select Dropdowns */
+.eco-select,
+.hub-category-select,
+select.hub-form-control,
+select.form-control,
+#select-custom-habit-cat {
+  box-sizing: border-box !important;
+  width: 100%;
+  height: 44px;
+  background-color: var(--card-surface, #0c2b20) !important;
+  color: var(--text-ivory, #fbf8ee) !important;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.6rem 2.25rem 0.6rem 1.15rem;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border-radius: var(--radius-pill) !important;
+  outline: none !important;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236ee7b7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 14px 14px;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Compact 38px toolbar filter */
+.section-toolbar .hub-category-select {
+  height: 38px;
+  padding: 0.4rem 2.25rem 0.4rem 1rem;
+}
+
+.eco-select:hover,
+.hub-category-select:hover,
+select.hub-form-control:hover,
+select.form-control:hover,
+#select-custom-habit-cat:hover {
+  background-color: var(--card-surface-hover) !important;
+  border-color: var(--action-emerald) !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+.eco-select:focus,
+.eco-select:focus-visible,
+.hub-category-select:focus,
+.hub-category-select:focus-visible,
+select.hub-form-control:focus,
+select.hub-form-control:focus-visible,
+select.form-control:focus,
+select.form-control:focus-visible,
+#select-custom-habit-cat:focus,
+#select-custom-habit-cat:focus-visible {
+  border-color: var(--border-focus) !important;
+  outline: 2px solid var(--border-focus) !important;
+  outline-offset: 1px;
+  box-shadow: var(--glow-lime) !important;
+}
+
+.eco-select option,
+.hub-category-select option,
+select.hub-form-control option,
+select.form-control option,
+#select-custom-habit-cat option {
+  background-color: #0b241c;
+  color: #fbf8ee;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid rgba(110, 231, 183, 0.1);
+}
+
+.eco-select option:hover,
+.eco-select option:checked,
+.hub-category-select option:hover,
+.hub-category-select option:checked,
+select.hub-form-control option:hover,
+select.hub-form-control option:checked,
+select.form-control option:hover,
+select.form-control option:checked,
+#select-custom-habit-cat option:hover,
+#select-custom-habit-cat option:checked {
+  background-color: #14382c;
+  color: var(--accent-lime);
+}
+
+/* Date Input Control (Dark Botanical Native Style) */
+.eco-date-input {
+  height: 38px;
+  background-color: var(--card-surface);
+  color: var(--text-ivory);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.4rem 0.95rem;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-pill);
+  outline: none;
+  cursor: pointer;
+  color-scheme: dark;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.eco-date-input:hover {
+  background-color: var(--card-surface-hover);
+  border-color: var(--action-emerald);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+.eco-date-input:focus,
+.eco-date-input:focus-visible {
+  border-color: var(--border-focus);
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  box-shadow: var(--glow-lime);
+}
+
+.eco-date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0.8) sepia(50%) saturate(300%) hue-rotate(90deg) brightness(1.1);
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.eco-date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Date Navigation Toolbar in Checklist Header */
+.checklist-date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  background: rgba(6, 22, 16, 0.65);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.date-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.eco-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-pill);
+  background: var(--card-surface);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--accent-sage);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.eco-nav-btn:hover {
+  background: var(--card-surface-hover);
+  border-color: var(--action-emerald);
+  color: var(--accent-lime);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+  transform: scale(1.05);
+}
+
+.eco-nav-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  box-shadow: var(--glow-lime);
+}
+
+.date-display-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.15rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-ivory);
+  letter-spacing: 0.01em;
+  user-select: none;
+}
+
+.date-display-badge svg {
+  color: var(--action-emerald);
+}
+
+.date-picker-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.eco-today-btn {
+  height: 38px;
+  padding: 0 1rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  background: var(--card-surface);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--accent-sage);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.eco-today-btn:hover {
+  background: var(--card-surface-hover);
+  border-color: var(--accent-lime);
+  color: var(--accent-lime);
+  box-shadow: 0 0 10px rgba(163, 230, 53, 0.25);
+}
+
+.eco-today-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  box-shadow: var(--glow-lime);
+}
+
+/* Date Status Banner */
+.date-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-md);
+  color: var(--accent-sage);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.date-status-banner svg {
+  color: var(--action-emerald);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   5. Habit Items Checklist
+   -------------------------------------------------------------------------- */
+.habit-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.habit-item-card {
   background: var(--card-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  margin-bottom: 0.85rem;
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
   transition: all var(--transition-fast);
   cursor: pointer;
+  user-select: none;
+  position: relative;
 }
 
-.habit-item:hover {
+.habit-item-card:hover {
   background: var(--card-surface-hover);
   border-color: var(--border-medium);
+  transform: translateX(3px);
 }
 
-.habit-item.completed {
+.habit-item-card:focus-visible {
+  outline: 2px solid var(--border-focus);
+}
+
+/* Completed Habit State */
+.habit-item-card.completed {
+  background: rgba(16, 185, 129, 0.08);
   border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.06);
+}
+
+.habit-item-card.completed .habit-title {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  text-decoration-color: rgba(110, 231, 183, 0.4);
+}
+
+/* Read-Only State for Past Dates */
+.habit-item-card.read-only {
+  cursor: default;
+}
+
+.habit-item-card.read-only:hover {
+  transform: none;
+  background: var(--card-surface);
+  border-color: var(--border-subtle);
+}
+
+.habit-item-card.read-only.completed:hover {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.habit-item-card.read-only .habit-checkbox {
+  pointer-events: none;
+}
+
+.habit-left {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Custom Checkbox */
+.habit-checkbox {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 2px solid var(--border-medium);
+  background: rgba(6, 22, 16, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  color: transparent;
+}
+
+.habit-item-card:hover .habit-checkbox {
+  border-color: var(--action-emerald);
+}
+
+.habit-item-card.completed .habit-checkbox {
+  background: var(--action-emerald);
+  border-color: var(--action-emerald);
+  color: var(--action-emerald-dark);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.habit-checkbox svg {
+  stroke-width: 3.5;
+  stroke: currentColor;
+}
+
+.habit-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.habit-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.category-tag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-pill);
+}
+
+.category-tag.cat-transportation {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--action-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.category-tag.cat-energy {
+  background: rgba(163, 230, 53, 0.15);
+  color: var(--accent-lime);
+  border: 1px solid rgba(163, 230, 53, 0.3);
+}
+
+.category-tag.cat-water {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.category-tag.cat-waste {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.category-tag.cat-lifestyle {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.badge-source {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+}
+
+.habit-title {
+  font-size: 0.975rem;
+  font-weight: 500;
+  color: var(--text-ivory);
+  line-height: 1.4;
+  word-break: break-word;
+  transition: color var(--transition-fast);
+}
+
+.habit-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Delete Custom Habit Button */
+.btn-delete-habit {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.4rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.btn-delete-habit:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-danger);
+}
+
+.btn-delete-habit:focus-visible {
+  outline: 2px solid var(--accent-danger);
+}
+
+/* --------------------------------------------------------------------------
+   6. Add Custom Habit Form Card
+   -------------------------------------------------------------------------- */
+.add-custom-card {
+  background: var(--card-surface);
+  border: 1px dashed var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.add-custom-card h3 {
+  font-size: 1.1rem;
+  color: var(--text-ivory);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-custom-card p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.custom-form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 1.25rem;
+  align-items: flex-end;
+}
+
+.custom-form-grid .form-group {
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-form-grid .btn {
+  height: 44px;
+  white-space: nowrap;
+}
+
+.form-error-inline {
+  color: var(--accent-danger);
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
+  display: none;
+}
+
+.form-error-inline.visible {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   7. Eco Tips Single-Card Carousel (Refined Phase 4)
+   -------------------------------------------------------------------------- */
+.tips-section-wrapper {
+  background: rgba(10, 33, 25, 0.45);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 3.5rem;
+  margin-top: 2rem;
+}
+
+.tips-header-wrap {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 2.5rem auto;
+}
+
+/* Single-Card Carousel Shell */
+.tips-carousel-container {
+  max-width: 840px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  outline: none;
+}
+
+.tips-carousel-container:focus-visible {
+  outline: 2px solid var(--border-focus);
+  border-radius: var(--radius-lg);
+}
+
+/* Carousel Navigation Arrows */
+.carousel-nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--card-surface);
+  border: 1px solid var(--border-medium);
+  color: var(--accent-sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.carousel-nav-btn:hover {
+  background: var(--action-emerald);
+  color: var(--action-emerald-dark);
+  border-color: var(--action-emerald);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  transform: scale(1.06);
+}
+
+.carousel-nav-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Viewport holding exactly ONE visible slide card */
+.carousel-viewport {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Slide Cards: Strictly only .active is displayed */
+.carousel-slide {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.carousel-slide.active {
+  display: block;
+  opacity: 1;
+  animation: tipSlideFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes tipSlideFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Prominent Tip Card Styling */
+.tip-carousel-card {
+  background: linear-gradient(145deg, rgba(15, 44, 34, 0.95) 0%, rgba(10, 33, 25, 0.98) 100%);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  box-shadow: var(--shadow-card), 0 0 30px rgba(16, 185, 129, 0.05);
+  position: relative;
+}
+
+.tip-carousel-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--action-emerald), var(--accent-lime), #38bdf8);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.tip-carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.tip-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.tip-slide-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.15rem 0.65rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+}
+
+.tip-impact-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+}
+
+.tip-impact-badge.high {
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: var(--accent-sage);
+}
+
+.tip-impact-badge.moderate {
+  background: rgba(163, 230, 53, 0.15);
+  border: 1px solid rgba(163, 230, 53, 0.35);
+  color: var(--accent-lime);
+}
+
+.tip-carousel-title {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-ivory);
+  margin-bottom: 0.85rem;
+  line-height: 1.3;
+}
+
+.tip-carousel-explanation {
+  font-size: 0.95rem;
+  color: var(--text-ivory-dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Callout Box for Practical Action */
+.tip-carousel-action-box {
+  background: rgba(6, 22, 16, 0.7);
+  border-left: 4px solid var(--action-emerald);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 1.15rem 1.35rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.action-box-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--action-emerald);
+  flex-shrink: 0;
+}
+
+.action-box-text {
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Carousel Card Footer */
+.tip-carousel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.tip-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.tip-footer-note svg {
+  color: var(--action-emerald);
+}
+
+/* Add as Habit Button States */
+.btn-add-habit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
+}
+
+.btn-add-habit.btn-added {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: var(--accent-sage);
+  cursor: default;
+}
+
+/* Carousel Bottom Controls: Position Dots & Status Indicator */
+.carousel-bottom-bar {
+  max-width: 840px;
+  margin: 1.5rem auto 3rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.carousel-dots-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(110, 231, 183, 0.25);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.carousel-dot:hover {
+  background: rgba(163, 230, 53, 0.5);
+  transform: scale(1.2);
+}
+
+.carousel-dot.active {
+  width: 32px;
+  background: var(--action-emerald);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+}
+
+.carousel-dot:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.carousel-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(15, 44, 34, 0.6);
+  border: 1px solid var(--border-subtle);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  user-select: none;
+}
+
+.carousel-pulse-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--action-emerald);
+  box-shadow: 0 0 8px var(--action-emerald);
+  animation: pulseEmerald 2s infinite;
+}
+
+@keyframes pulseEmerald {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. Empty States & Toast Alerts
+   -------------------------------------------------------------------------- */
+.hub-empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--card-surface);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-md);
+  margin-bottom: 2rem;
+}
+
+.empty-state-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+  color: var(--accent-sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
+.hub-empty-state h4 {
+  font-size: 1.1rem;
+  color: var(--text-ivory);
+  margin-bottom: 0.4rem;
+}
+
+.hub-empty-state p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  max-width: 420px;
+  margin: 0 auto 1.25rem auto;
+}
+
+/* Floating Toast Notification */
+.hub-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--card-surface);
+  border: 1px solid var(--action-emerald);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.3);
+  padding: 0.85rem 1.35rem;
+  border-radius: var(--radius-md);
+  color: var(--text-ivory);
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  z-index: 9999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.hub-toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hub-toast svg {
+  color: var(--action-emerald);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   9. Reduced Motion & Accessibility
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-slide.active {
+    animation: none;
+    transition: none;
+  }
+  .carousel-pulse-indicator {
+    animation: none;
+  }
+  .hub-metric-card,
+  .habit-item-card,
+  .carousel-dot {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. Responsive Layout Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .hub-overview-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .custom-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .custom-form-grid .btn {
+    width: 100%;
+  }
+
+  .tip-carousel-card {
+    padding: 1.75rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .checklist-date-nav {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .date-nav-controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .date-display-badge {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.8125rem;
+  }
+
+  .date-picker-wrap {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .eco-date-input {
+    flex: 1;
+  }
+
+  .filter-pill-group {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .filter-pill {
+    white-space: nowrap;
+  }
+
+  .category-select-wrapper {
+    width: 100%;
+  }
+
+  .habit-item-card {
+    padding: 1rem;
+    gap: 0.85rem;
+  }
+
+  .tips-carousel-container {
+    gap: 0.5rem;
+  }
+
+  .carousel-nav-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .tip-carousel-title {
+    font-size: 1.25rem;
+  }
+
+  .tip-carousel-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-add-habit {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .carousel-bottom-bar {
+    justify-content: center;
+  }
+
+  .hub-toast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
 }

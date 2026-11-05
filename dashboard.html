@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Impact Analytics Dashboard | EcoTrack</title>
-  <meta name="description" content="View historical emission trends, habit consistency, and earned sustainability badges.">
+  <title>Personal Impact Dashboard | EcoTrack</title>
+  <meta name="description" content="View your latest carbon footprint, category breakdown, daily habit streaks, and genuine historical impact analytics.">
   
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'><path d='M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z'/></svg>">
+
+  <!-- Chart.js CDN with pure-CSS fallback table if offline -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -58,41 +62,418 @@
       <a href="index.html" class="nav-link">Home</a>
       <a href="calculator.html" class="nav-link">Carbon Calculator</a>
       <a href="habits.html" class="nav-link">Habit Tracker</a>
-      <a href="tips.html" class="nav-link">Eco Tips & Knowledge</a>
+      <a href="tips.html" class="nav-link">Eco Tips &amp; Knowledge</a>
       <a href="dashboard.html" class="nav-link active">My Dashboard</a>
     </div>
     <a href="calculator.html" class="btn btn-primary" style="width: 100%;">Calculate Impact</a>
   </div>
 
-  <!-- Page Content Shell -->
+  <!-- Page Main Content -->
   <main id="main-content" class="main-content">
     <div class="container">
       
-      <div class="section-header">
-        <span class="section-tag">Phase 6 Module</span>
-        <h1 class="section-title">Personal Impact Analytics</h1>
+      <!-- Dashboard Page Header -->
+      <div class="dashboard-header">
+        <span class="section-tag">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10"></path>
+          </svg>
+          Personal Analytics &bull; Phase 5
+        </span>
+        <h1 class="section-title">Personal Impact Dashboard</h1>
         <p class="section-desc">
-          Unified command center aggregating your lifetime footprint reduction, historical evaluations, and unlocked milestones.
+          Unified command center tracking your latest carbon footprint evaluation, category breakdown, daily sustainable habits, and historical impact progression.
         </p>
       </div>
 
-      <!-- Module Scaffold Card -->
-      <div class="card card-glass" style="max-width: 800px; margin: 0 auto; text-align: center; padding: 3.5rem 2rem;">
-        <div style="width: 64px; height: 64px; margin: 0 auto 1.5rem auto; background: rgba(245, 158, 11, 0.15); border: 1px solid var(--accent-amber); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-amber);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10"></line>
-            <line x1="12" y1="20" x2="12" y2="4"></line>
-            <line x1="6" y1="20" x2="6" y2="14"></line>
+      <!-- Section 1 & 2: Top Grid (Footprint Overview & Category Breakdown) -->
+      <section aria-label="Carbon Footprint Assessment Overview" style="margin-bottom: 2rem;">
+        
+        <!-- Footprint Empty State (Hidden when footprint exists) -->
+        <div id="footprint-empty-state" class="dashboard-empty-card" style="display: none;">
+          <div class="empty-icon-wrap" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h2 class="empty-title">No Carbon Footprint Recorded Yet</h2>
+          <p class="empty-desc">
+            Evaluate your annual greenhouse gas emissions across transportation, household energy, and waste to establish your personal carbon profile.
+          </p>
+          <a href="calculator.html" class="btn btn-primary">
+            <span>Calculate Your Footprint</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Footprint Content Grid (Visible when footprint exists) -->
+        <div id="footprint-content" class="dashboard-main-grid">
+          
+          <!-- Card A: Latest Footprint Summary -->
+          <div class="dashboard-card">
+            <div class="dashboard-section-title">
+              <div class="title-left">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                <span>Latest Footprint</span>
+              </div>
+              <a href="calculator.html" class="btn btn-secondary btn-sm">
+                <span>Calculate Again</span>
+              </a>
+            </div>
+
+            <div class="footprint-hero">
+              <div class="footprint-hero-header">
+                <span class="footprint-hero-label">Annual Greenhouse Gas Emissions</span>
+                <span id="dash-mode-badge" class="footprint-mode-badge badge-mode-estimated">Estimated Mode</span>
+              </div>
+
+              <div class="footprint-hero-values">
+                <span id="dash-footprint-tonnes" class="footprint-main-num">0.00</span>
+                <span class="footprint-main-unit">tonnes CO₂e</span>
+              </div>
+
+              <div class="footprint-monthly-rate">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Monthly rate: <strong id="dash-footprint-monthly">0</strong> kg CO₂e / month</span>
+              </div>
+
+              <div class="footprint-meta-footer">
+                <div class="footprint-date-display">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span id="dash-calc-date">Calculated Recently</span>
+                </div>
+                <span>Scope 1 &amp; Scope 2 Busbar Boundary</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card B: Category-wise Breakdown -->
+          <div class="dashboard-card">
+            <div class="dashboard-section-title">
+              <div class="title-left">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Category Breakdown</span>
+              </div>
+            </div>
+
+            <div class="category-breakdown-list">
+              <!-- 1. Transportation -->
+              <div class="category-row">
+                <div class="category-row-header">
+                  <div class="category-name-wrap">
+                    <span class="category-indicator-dot dot-transport" aria-hidden="true"></span>
+                    <span>Transportation</span>
+                  </div>
+                  <div class="category-val-wrap">
+                    <span id="dash-trans-kg" class="category-kg-val">0 kg</span>
+                    <span id="dash-trans-pct" class="category-pct-badge">0%</span>
+                  </div>
+                </div>
+                <div class="category-progress-track" aria-hidden="true">
+                  <div id="dash-trans-bar" class="category-progress-fill fill-transport" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- 2. Household Energy -->
+              <div class="category-row">
+                <div class="category-row-header">
+                  <div class="category-name-wrap">
+                    <span class="category-indicator-dot dot-energy" aria-hidden="true"></span>
+                    <span>Household Energy</span>
+                  </div>
+                  <div class="category-val-wrap">
+                    <span id="dash-energy-kg" class="category-kg-val">0 kg</span>
+                    <span id="dash-energy-pct" class="category-pct-badge">0%</span>
+                  </div>
+                </div>
+                <div class="category-progress-track" aria-hidden="true">
+                  <div id="dash-energy-bar" class="category-progress-fill fill-energy" style="width: 0%;"></div>
+                </div>
+
+                <!-- Subcategories within Energy -->
+                <div class="energy-subcategories">
+                  <div class="subcat-item">
+                    <span class="subcat-title">Grid Electricity</span>
+                    <span id="dash-subcat-elec" class="subcat-value">0 kg (0%)</span>
+                  </div>
+                  <div class="subcat-item">
+                    <span class="subcat-title">Domestic LPG</span>
+                    <span id="dash-subcat-lpg" class="subcat-value">0 kg (0%)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Household Waste -->
+              <div class="category-row">
+                <div class="category-row-header">
+                  <div class="category-name-wrap">
+                    <span class="category-indicator-dot dot-waste" aria-hidden="true"></span>
+                    <span>Household Waste</span>
+                  </div>
+                  <div class="category-val-wrap">
+                    <span id="dash-waste-kg" class="category-kg-val">0 kg</span>
+                    <span id="dash-waste-pct" class="category-pct-badge">0%</span>
+                  </div>
+                </div>
+                <div class="category-progress-track" aria-hidden="true">
+                  <div id="dash-waste-bar" class="category-progress-fill fill-waste" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 3: Habit Progress & Consistency -->
+      <section aria-label="Sustainable Habits Progress" style="margin-bottom: 2rem;">
+        
+        <!-- Habits Empty State (Hidden when habits exist) -->
+        <div id="habits-empty-state" class="dashboard-empty-card" style="display: none;">
+          <div class="empty-icon-wrap" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h2 class="empty-title">Start Tracking Daily Habits</h2>
+          <p class="empty-desc">
+            Cultivate quantifiable sustainable routines in daily commuting, electricity reduction, water conservation, and waste segregation.
+          </p>
+          <a href="habits.html#checklist" class="btn btn-primary">
+            <span>Start Tracking Habits</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Habits Content (Visible when habits exist) -->
+        <div id="habits-content" class="dashboard-card">
+          <div class="dashboard-section-title">
+            <div class="title-left">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>Habit Progress &amp; Streaks</span>
+            </div>
+            <a href="habits.html#checklist" class="btn btn-secondary btn-sm">
+              <span>Open Habit Tracker</span>
+            </a>
+          </div>
+
+          <div class="habits-overview-grid">
+            
+            <!-- Tile 1: Today's Progress -->
+            <div class="habit-stat-tile">
+              <div>
+                <div class="habit-stat-header">
+                  <span class="habit-stat-label">Today's Progress</span>
+                  <div class="habit-stat-icon icon-emerald-subtle" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="habit-stat-value">
+                  <span id="dash-habit-today-pct">0%</span>
+                </div>
+                <div class="habit-stat-sub">
+                  <span id="dash-habit-today-count">0 of 5</span> completed today
+                </div>
+              </div>
+
+              <div class="today-habit-progress-wrap">
+                <div class="today-progress-bar" aria-hidden="true">
+                  <div id="dash-habit-today-bar" class="today-progress-fill" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tile 2: Current Streak -->
+            <div class="habit-stat-tile">
+              <div>
+                <div class="habit-stat-header">
+                  <span class="habit-stat-label">Active Streak</span>
+                  <div class="habit-stat-icon icon-amber-subtle" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2c1 3 4 5 4 9a6 6 0 1 1-12 0c0-4 3-6 4-9 1 3 3 4 4 0z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div id="dash-habit-current-streak" class="habit-stat-value">0 days</div>
+                <div class="habit-stat-sub">Consecutive active commitment</div>
+              </div>
+            </div>
+
+            <!-- Tile 3: Longest Streak -->
+            <div class="habit-stat-tile">
+              <div>
+                <div class="habit-stat-header">
+                  <span class="habit-stat-label">Best Streak</span>
+                  <div class="habit-stat-icon icon-lime-subtle" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                  </div>
+                </div>
+                <div id="dash-habit-longest-streak" class="habit-stat-value">0 days</div>
+                <div class="habit-stat-sub">All-time personal record</div>
+              </div>
+            </div>
+
+            <!-- Tile 4: Total Lifetime Completions -->
+            <div class="habit-stat-tile">
+              <div>
+                <div class="habit-stat-header">
+                  <span class="habit-stat-label">Lifetime Habits</span>
+                  <div class="habit-stat-icon icon-sage-subtle" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M8 12h8M12 8v8"/>
+                    </svg>
+                  </div>
+                </div>
+                <div id="dash-habit-total-completions" class="habit-stat-value">0</div>
+                <div class="habit-stat-sub">
+                  Total habit checkoffs (<span id="dash-habit-total-registered">0</span> registered)
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Historical Footprint Chart -->
+      <section aria-label="Historical Carbon Footprint Trend" class="chart-section-card">
+        
+        <!-- History Empty State (Hidden when history exists) -->
+        <div id="history-empty-state" class="dashboard-empty-card" style="display: none;">
+          <div class="empty-icon-wrap" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <h2 class="empty-title">No Historical Calculations Found</h2>
+          <p class="empty-desc">
+            Complete your first carbon assessment in the calculator to begin recording your chronological reduction timeline.
+          </p>
+          <a href="calculator.html" class="btn btn-primary">
+            <span>Calculate Footprint</span>
+          </a>
+        </div>
+
+        <!-- History Content (Visible when history exists) -->
+        <div id="history-content" class="dashboard-card">
+          <div class="dashboard-section-title">
+            <div class="title-left">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span>Historical Footprint Trend</span>
+            </div>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Chronological log of verified carbon footprint calculations over time.
+          </p>
+
+          <!-- Chart.js Canvas Container -->
+          <div id="history-chart-wrapper" class="chart-wrapper">
+            <canvas id="historyChart" aria-label="Historical Carbon Footprint Chart"></canvas>
+          </div>
+
+          <!-- Pure-CSS Fallback Table (Active if offline or CDN is unavailable) -->
+          <div id="history-fallback-wrapper" style="display: none;">
+            <table class="chart-fallback-table" aria-label="Historical Footprint Calculations Table">
+              <thead>
+                <tr>
+                  <th scope="col">Assessment Date</th>
+                  <th scope="col">Mode</th>
+                  <th scope="col">Emissions Total</th>
+                </tr>
+              </thead>
+              <tbody id="history-fallback-body">
+                <!-- Dynamically populated by dashboard.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Baseline Single Assessment Note -->
+          <div id="history-single-note" class="chart-single-note" style="display: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Showing your baseline evaluation. Future footprint calculations will automatically plot your reduction trend over time.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Recent Activity Feed -->
+      <section aria-label="Recent Activity Log" class="activity-card">
+        <div class="dashboard-card">
+          <div class="dashboard-section-title">
+            <div class="title-left">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Recent Activity</span>
+            </div>
+          </div>
+
+          <div id="dash-activity-list" class="activity-feed-list">
+            <!-- Dynamically populated by dashboard.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Quick Navigation Bar -->
+      <div class="dashboard-actions-bar">
+        <a href="calculator.html" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8v8M8 12h8"/>
           </svg>
-        </div>
-        <h3 style="margin-bottom: 0.75rem;">Analytics Dashboard Ready for Phase 6</h3>
-        <p style="color: var(--text-muted); max-width: 520px; margin: 0 auto 2rem auto;">
-          Historical emission trends, badge showcase, LocalStorage export/reset controls, and Chart.js bar charts will be implemented in Phase 6.
-        </p>
-        <div class="flex-center" style="gap: 1rem;">
-          <a href="index.html" class="btn btn-secondary">Return Home</a>
-          <a href="calculator.html" class="btn btn-outline">Calculate Footprint</a>
-        </div>
+          <span>New Footprint Assessment</span>
+        </a>
+        <a href="habits.html#checklist" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span>Daily Habit Tracker</span>
+        </a>
+        <a href="habits.html#tips" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="9.69" y1="16" x2="21" y2="16"></line>
+            <line x1="9.69" y1="8" x2="21" y2="8"></line>
+            <line x1="9.69" y1="12" x2="21" y2="12"></line>
+          </svg>
+          <span>Browse Eco Tips</span>
+        </a>
       </div>
 
     </div>
@@ -162,5 +543,7 @@
 
   <script src="js/main.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/dashboard.js"></script>
 </body>
 </html>
