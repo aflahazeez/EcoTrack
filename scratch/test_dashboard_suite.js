@@ -291,6 +291,32 @@ assert(!dashboardHtml.includes('globalHouseholdAverageTonnes'), 'dashboard.html 
 assert(!dashboardHtml.includes('indiaHouseholdAverageTonnes'), 'dashboard.html does not display unsupported national all-sector baseline');
 assert(!dashboardHtml.includes('grade-a'), 'dashboard.html does not display unsupported letter grades');
 
+// -----------------------------------------------------------------------------
+// 7. UI Refinements Verification
+// -----------------------------------------------------------------------------
+console.log('\n--- 7. Dashboard & Homepage UI Refinements ---');
+assert(dashboardHtml.includes('Personal Analytics'), 'dashboard.html contains "Personal Analytics" tag');
+assert(!dashboardHtml.includes('Personal Analytics &bull; Phase 5'), 'dashboard.html does not contain "• Phase 5" in heading');
+assert(!dashboardHtml.includes('Personal Analytics • Phase 5'), 'dashboard.html does not contain "• Phase 5" text');
+assert(!dashboardHtml.includes('M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'), 'dashboard.html does not contain dollar currency symbol');
+assert(dashboardHtml.includes('M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z'), 'dashboard.html uses leaf symbol beside Latest Footprint metric');
+assert(dashboardCss.includes('gap: 24px'), 'css/dashboard.css defines 24px vertical spacing between cards');
+assert(dashboardCss.includes('gap: 20px'), 'css/dashboard.css defines 20px mobile spacing');
+
+// Dashboard caption verification
+assert(dashboardHtml.includes('Get an overview of your carbon footprint, track your daily sustainable habits, and monitor your environmental progress.'), 'dashboard.html contains exact updated caption');
+assert(!dashboardHtml.includes('Unified command center tracking your latest carbon footprint evaluation'), 'dashboard.html removed old caption');
+
+// Scope 1 & Scope 2 Busbar Boundary removal verification
+assert(!dashboardHtml.includes('Scope 1 & Scope 2 Busbar Boundary'), 'dashboard.html removed "Scope 1 & Scope 2 Busbar Boundary"');
+assert(!dashboardHtml.includes('Scope 1 &amp; Scope 2 Busbar Boundary'), 'dashboard.html removed HTML-escaped "Scope 1 & Scope 2 Busbar Boundary"');
+
+// Homepage caption verification
+const indexHtmlPath = path.join(__dirname, '..', 'index.html');
+const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+assert(indexHtml.includes('EcoTrack is a lightweight sustainability platform that helps you quantify annual carbon emissions, build daily eco-friendly routines, and track measurable environmental progress.'), 'index.html contains exact updated caption');
+assert(!indexHtml.includes('progress—stored privately in your browser.'), 'index.html removed old caption ending');
+
 console.log('\n============================================================');
 console.log(`TOTAL PHASE 5 DASHBOARD AUDIT: ${passedTests} PASSED, ${failedTests} FAILED`);
 console.log('============================================================\n');

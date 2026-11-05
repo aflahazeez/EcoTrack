@@ -180,7 +180,7 @@
     const hasFootprint = Boolean(footprintData && footprintData.totals);
 
     if (elements.footprintContent) {
-      elements.footprintContent.style.display = hasFootprint ? 'block' : 'none';
+      elements.footprintContent.style.display = hasFootprint ? '' : 'none';
     }
     if (elements.footprintEmptyState) {
       elements.footprintEmptyState.style.display = hasFootprint ? 'none' : 'block';
