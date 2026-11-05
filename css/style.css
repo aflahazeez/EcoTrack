@@ -152,11 +152,17 @@ input, select, textarea {
 .eco-custom-select {
   position: relative;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   font-family: var(--font-body);
 }
 
 .eco-custom-select-trigger {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   min-height: 44px;
   background-color: #0a2119;
   color: #d4ded8;
@@ -197,6 +203,8 @@ input, select, textarea {
 }
 
 .eco-custom-select-label {
+  min-width: 0;
+  flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -268,6 +276,8 @@ input, select, textarea {
   transition: background-color 0.12s ease, color 0.12s ease;
   user-select: none;
   line-height: 1.35;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .eco-custom-select-option:hover,
@@ -422,7 +432,9 @@ img, svg {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: minmax(0, 1fr); }
+  .grid > * { min-width: 0; }
+  .form-group { min-width: 0; }
 }
 
 /* Flex Utilities */
@@ -553,6 +565,41 @@ img, svg {
 .btn-lg {
   padding: 0.95rem 2rem;
   font-size: 1.05rem;
+}
+
+@media (max-width: 640px) {
+  .btn-lg {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+  .hero-cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .hero-cta-group .btn {
+    width: 100%;
+    max-width: 340px;
+    min-height: 46px;
+    box-sizing: border-box;
+  }
+  .cta-banner .flex-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .cta-banner .btn {
+    width: 100%;
+    max-width: 320px;
+    min-height: 46px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+  }
 }
 
 /* Badges & Tags */

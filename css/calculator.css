@@ -311,6 +311,13 @@
   margin-bottom: 2rem;
 }
 
+@media (max-width: 640px) {
+  .wizard-card {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
 .wizard-card::before {
   content: '';
   position: absolute;
@@ -577,6 +584,53 @@
   justify-content: space-between;
   gap: 1rem;
   margin-top: 2rem;
+}
+
+@media (max-width: 480px) {
+  .wizard-actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+  .wizard-actions .btn {
+    width: 100%;
+    min-height: 46px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9375rem;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .wizard-actions .btn-lg {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+  .wizard-actions.flex-end {
+    justify-content: stretch;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  .wizard-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .wizard-actions .btn {
+    min-height: 46px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  .wizard-actions .btn-lg {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
 }
 
 /* --------------------------------------------------------------------------

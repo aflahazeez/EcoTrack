@@ -661,3 +661,13 @@
   margin-top: 2rem;
   flex-wrap: wrap;
 }
+
+@media (max-width: 640px) {
+  .dashboard-empty-card .btn {
+    padding: 0.7rem 1.15rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
