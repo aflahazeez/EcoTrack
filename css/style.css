@@ -418,6 +418,10 @@ img, svg {
 }
 
 @media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
   .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
 }
 
