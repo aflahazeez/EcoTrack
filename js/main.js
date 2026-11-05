@@ -9,10 +9,8 @@
  * 4. Continuous horizontal sliding transitions (mobile-app UX)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  initMobileNavigation();
-  initPageSlider();
-});
+// Application lifecycle initialisation triggers at bottom of script after all declarations
+// to ensure zero parser delay and immediate first-frame mounting without visual flash
 
 /**
  * Initializes mobile navigation with robust state management & accessibility
@@ -254,6 +252,10 @@ function initPageSlider() {
         window.initCustomSelects(currentPanel);
       }
 
+      if (typeof document !== 'undefined') {
+        document.documentElement.classList.remove('eco-route-resolving');
+      }
+
       if (targetOnLoad.hash) {
         setTimeout(() => scrollToTargetHash(targetOnLoad.hash), 60);
       }
@@ -261,6 +263,9 @@ function initPageSlider() {
       currentPanel.appendChild(main);
       if (footer && footer.parentNode) {
         currentPanel.appendChild(footer);
+      }
+      if (typeof document !== 'undefined') {
+        document.documentElement.classList.remove('eco-route-resolving');
       }
     }
   }
@@ -625,3 +630,26 @@ function initPageSlider() {
     navigateTo(targetFile, targetHash, isBack);
   });
 }
+
+/**
+ * Initializes mobile navigation and page slider controllers.
+ * Executes immediately if the DOM shell is available to eliminate initial paint delay,
+ * or attaches to DOMContentLoaded as a fallback.
+ */
+function initApp() {
+  initMobileNavigation();
+  initPageSlider();
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    if (document.querySelector('.main-content')) {
+      initApp();
+    } else {
+      document.addEventListener('DOMContentLoaded', initApp);
+    }
+  } else {
+    initApp();
+  }
+}
+

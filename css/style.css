@@ -1194,3 +1194,9 @@ img, svg {
     transform: none !important;
   }
 }
+
+/* Prevent flash of mismatched static view during direct hash-route initial load or refresh */
+html.eco-route-resolving .main-content,
+html.eco-route-resolving .site-footer {
+  display: none !important;
+}
