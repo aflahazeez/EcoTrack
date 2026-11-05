@@ -205,31 +205,225 @@
     }
   }
 
+  let dateTransitionTimeout = null;
+
   /**
-   * Switches the active checklist view date and updates DOM components
+   * Switches the active checklist date with a subtle, smooth transition
    * @param {string} newDateStr - 'YYYY-MM-DD'
+   * @param {boolean} [force=false] - Force update even if already matching dateStr
    */
-  function changeSelectedDate(newDateStr) {
+  function changeSelectedDate(newDateStr, force = false) {
     if (!newDateStr || !/^\d{4}-\d{2}-\d{2}$/.test(newDateStr)) return;
-    selectedViewDate = newDateStr;
+    if (newDateStr === selectedViewDate && !force) return;
 
-    if (typeof document !== 'undefined') {
-      const datePicker = document.getElementById('checklist-date-picker');
-      if (datePicker) datePicker.value = selectedViewDate;
-
-      const dateLabel = document.getElementById('displayed-date-label');
-      if (dateLabel) dateLabel.textContent = formatDisplayedDate(selectedViewDate);
-
-      const countBadge = document.getElementById('badge-total-count');
-      if (countBadge) {
-        const mode = getDateMode(selectedViewDate);
-        if (mode === 'today') countBadge.textContent = 'Today';
-        else if (mode === 'past') countBadge.textContent = 'Past Record';
-        else countBadge.textContent = 'Upcoming';
-      }
+    if (dateTransitionTimeout) {
+      clearTimeout(dateTransitionTimeout);
+      dateTransitionTimeout = null;
     }
 
-    renderAll();
+    const isReducedMotion = (typeof window !== 'undefined' && window.matchMedia)
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
+    const hasDoc = typeof document !== 'undefined';
+    const container = hasDoc ? document.getElementById('habit-items-list') : null;
+    const pastEmpty = hasDoc ? document.getElementById('past-empty-state') : null;
+    const futureEmpty = hasDoc ? document.getElementById('future-date-state') : null;
+    const banner = hasDoc ? document.getElementById('date-status-banner') : null;
+    const emptyState = hasDoc ? document.getElementById('hub-checklist-empty') : null;
+
+    function applyDateChange() {
+      selectedViewDate = newDateStr;
+
+      if (typeof document !== 'undefined') {
+        const datePicker = document.getElementById('checklist-date-picker');
+        if (datePicker) datePicker.value = selectedViewDate;
+
+        const dateLabel = document.getElementById('displayed-date-label');
+        if (dateLabel) dateLabel.textContent = formatDisplayedDate(selectedViewDate);
+
+        const countBadge = document.getElementById('badge-total-count');
+        if (countBadge) {
+          const mode = getDateMode(selectedViewDate);
+          if (mode === 'today') countBadge.textContent = 'Today';
+          else if (mode === 'past') countBadge.textContent = 'Past Record';
+          else countBadge.textContent = 'Upcoming';
+        }
+
+        const triggerLabel = document.getElementById('calendar-trigger-date-text');
+        if (triggerLabel) {
+          const parts = selectedViewDate.split('-');
+          const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+          const triggerFormatted = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          triggerLabel.textContent = (selectedViewDate === getLocalDateString()) ? 'Today' : triggerFormatted;
+        }
+
+        if (isCalPopupOpen) {
+          renderCalendarPopup();
+        }
+      }
+
+      renderProgressOverview();
+      renderHabitsList();
+    }
+
+    if (isReducedMotion || !container) {
+      applyDateChange();
+      return;
+    }
+
+    const animTargets = [container, pastEmpty, futureEmpty, banner, emptyState].filter(Boolean);
+
+    // Subtle smooth fade + slight shift
+    animTargets.forEach(el => {
+      el.style.transition = 'opacity 130ms cubic-bezier(0.4, 0, 0.2, 1), transform 130ms cubic-bezier(0.4, 0, 0.2, 1)';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(4px)';
+    });
+
+    dateTransitionTimeout = setTimeout(() => {
+      applyDateChange();
+
+      // Position for smooth fade-in entry
+      animTargets.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-4px)';
+      });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          animTargets.forEach(el => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          });
+
+          dateTransitionTimeout = setTimeout(() => {
+            animTargets.forEach(el => {
+              el.style.transition = '';
+              el.style.transform = '';
+            });
+            dateTransitionTimeout = null;
+          }, 150);
+        });
+      });
+    }, 130);
+  }
+
+  // -------------------------------------------------------------------------
+  // Integrated Custom Calendar Popup Controller
+  // -------------------------------------------------------------------------
+  let calViewYear = new Date().getFullYear();
+  let calViewMonth = new Date().getMonth(); // 0-11
+  let isCalPopupOpen = false;
+
+  const MONTH_NAMES = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  function openCalendarPopup() {
+    if (typeof document === 'undefined') return;
+    const popup = document.getElementById('eco-calendar-popup');
+    if (!popup) return;
+
+    if (selectedViewDate) {
+      const parts = selectedViewDate.split('-');
+      if (parts.length === 3) {
+        calViewYear = parseInt(parts[0], 10);
+        calViewMonth = parseInt(parts[1], 10) - 1;
+      }
+    }
+    renderCalendarPopup();
+    popup.classList.add('is-open');
+    popup.setAttribute('aria-hidden', 'false');
+    isCalPopupOpen = true;
+
+    const btnCalToggle = document.getElementById('btn-calendar-toggle');
+    if (btnCalToggle) btnCalToggle.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeCalendarPopup() {
+    if (typeof document === 'undefined') return;
+    const popup = document.getElementById('eco-calendar-popup');
+    if (!popup) return;
+    popup.classList.remove('is-open');
+    popup.setAttribute('aria-hidden', 'true');
+    isCalPopupOpen = false;
+
+    const btnCalToggle = document.getElementById('btn-calendar-toggle');
+    if (btnCalToggle) btnCalToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggleCalendarPopup() {
+    if (isCalPopupOpen) {
+      closeCalendarPopup();
+    } else {
+      openCalendarPopup();
+    }
+  }
+
+  function renderCalendarPopup() {
+    if (typeof document === 'undefined') return;
+    const titleEl = document.getElementById('cal-month-title');
+    const gridEl = document.getElementById('cal-days-grid');
+    if (!titleEl || !gridEl) return;
+
+    titleEl.textContent = `${MONTH_NAMES[calViewMonth]} ${calViewYear}`;
+    gridEl.innerHTML = '';
+
+    const firstDayIndex = new Date(calViewYear, calViewMonth, 1).getDay(); // 0 = Sun
+    const daysInCurrentMonth = new Date(calViewYear, calViewMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(calViewYear, calViewMonth, 0).getDate();
+
+    const todayStr = getLocalDateString();
+
+    // Previous month trailing days
+    for (let i = firstDayIndex - 1; i >= 0; i--) {
+      const dayNum = daysInPrevMonth - i;
+      const prevDate = new Date(calViewYear, calViewMonth - 1, dayNum);
+      const prevDateStr = getLocalDateString(prevDate);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-day other-month';
+      btn.textContent = dayNum;
+      btn.setAttribute('data-cal-date', prevDateStr);
+      btn.setAttribute('aria-label', prevDateStr);
+      gridEl.appendChild(btn);
+    }
+
+    // Current month days
+    for (let d = 1; d <= daysInCurrentMonth; d++) {
+      const curDate = new Date(calViewYear, calViewMonth, d);
+      const curDateStr = getLocalDateString(curDate);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-day';
+      if (curDateStr === selectedViewDate) {
+        btn.classList.add('selected');
+        btn.setAttribute('aria-selected', 'true');
+      }
+      if (curDateStr === todayStr) {
+        btn.classList.add('is-today');
+      }
+      btn.textContent = d;
+      btn.setAttribute('data-cal-date', curDateStr);
+      btn.setAttribute('aria-label', curDateStr);
+      gridEl.appendChild(btn);
+    }
+
+    // Next month leading days (fill grid to 35 or 42 cells)
+    const totalFilled = firstDayIndex + daysInCurrentMonth;
+    const nextDaysNeeded = (totalFilled <= 35 ? 35 : 42) - totalFilled;
+    for (let n = 1; n <= nextDaysNeeded; n++) {
+      const nextDate = new Date(calViewYear, calViewMonth + 1, n);
+      const nextDateStr = getLocalDateString(nextDate);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-day other-month';
+      btn.textContent = n;
+      btn.setAttribute('data-cal-date', nextDateStr);
+      btn.setAttribute('aria-label', nextDateStr);
+      gridEl.appendChild(btn);
+    }
   }
 
   /**
@@ -865,45 +1059,175 @@
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  let isSlidingTip = false;
+  let currentTrackIndex = 1;
+
   /**
-   * Navigates the carousel to a specific slide index (0 to 3)
-   * @param {number} targetIndex
+   * Updates accessibility attributes, tabindex, and visual active state for real slides and clones
+   * @param {number} activeRealIndex
    */
-  function goToTipSlide(targetIndex) {
-    const totalSlides = 4;
-    currentTipSlide = (targetIndex + totalSlides) % totalSlides;
-
+  function updateSlideAccessibility(activeRealIndex) {
     if (typeof document === 'undefined') return;
-
     const slides = document.querySelectorAll('.carousel-slide');
     const dots = document.querySelectorAll('.carousel-dot');
-    if (slides.length === 0) return;
 
-    slides.forEach((slide, idx) => {
-      const isActive = idx === currentTipSlide;
-      slide.classList.toggle('active', isActive);
-      slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    slides.forEach((slide) => {
+      const slideRealIdx = parseInt(slide.getAttribute('data-slide-index'), 10);
+      const isClone = slide.hasAttribute('data-clone');
+      let isVisuallyActive = false;
+      if (!isClone && slideRealIdx === activeRealIndex) {
+        isVisuallyActive = true;
+      } else if (isClone) {
+        const cloneType = slide.getAttribute('data-clone');
+        if (cloneType === 'next' && currentTrackIndex === 5) isVisuallyActive = true;
+        if (cloneType === 'prev' && currentTrackIndex === 0) isVisuallyActive = true;
+      }
+
+      slide.classList.toggle('active', isVisuallyActive);
+      slide.setAttribute('aria-hidden', (!isClone && slideRealIdx === activeRealIndex) ? 'false' : 'true');
+
+      const interactiveElements = slide.querySelectorAll('button, a, input');
+      interactiveElements.forEach(el => {
+        if (!isClone && slideRealIdx === activeRealIndex) {
+          el.removeAttribute('tabindex');
+        } else {
+          el.setAttribute('tabindex', '-1');
+        }
+      });
     });
 
     dots.forEach((dot, idx) => {
-      const isActive = idx === currentTipSlide;
+      const isActive = idx === activeRealIndex;
       dot.classList.toggle('active', isActive);
       dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
   }
 
   /**
-   * Navigates to the next tip slide, looping back when reaching the 4th
+   * Navigates the carousel to a specific slide index (0 to 3) with smooth horizontal translation
+   * @param {number} targetIndex
+   * @param {boolean} [restartTimer=true]
    */
-  function nextTipSlide() {
-    goToTipSlide(currentTipSlide + 1);
+  function goToTipSlide(targetIndex, restartTimer = true) {
+    const totalSlides = 4;
+    currentTipSlide = (targetIndex + totalSlides) % totalSlides;
+    currentTrackIndex = currentTipSlide + 1;
+
+    if (typeof document === 'undefined') return;
+
+    const track = document.getElementById('carousel-track');
+    if (!track) return;
+
+    if (isReducedMotionPreferred()) {
+      track.style.transition = 'none';
+    } else {
+      track.style.transition = 'transform 400ms cubic-bezier(0.25, 1, 0.5, 1)';
+    }
+
+    track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+    updateSlideAccessibility(currentTipSlide);
+
+    if (restartTimer) {
+      startCarouselAutoTimer();
+    }
   }
 
   /**
-   * Navigates to the previous tip slide
+   * Navigates to the next tip slide, continuously looping in the rightward direction
+   * @param {boolean} [manual=false]
    */
-  function prevTipSlide() {
-    goToTipSlide(currentTipSlide - 1);
+  function nextTipSlide(manual = false) {
+    if (isSlidingTip) return;
+
+    if (typeof document === 'undefined') {
+      currentTipSlide = (currentTipSlide + 1) % 4;
+      return;
+    }
+
+    const track = document.getElementById('carousel-track');
+    if (!track) {
+      currentTipSlide = (currentTipSlide + 1) % 4;
+      return;
+    }
+
+    isSlidingTip = true;
+    currentTrackIndex++;
+    currentTipSlide = (currentTipSlide + 1) % 4;
+    updateSlideAccessibility(currentTipSlide);
+
+    if (isReducedMotionPreferred()) {
+      track.style.transition = 'none';
+      if (currentTrackIndex > 4) currentTrackIndex = 1;
+      track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+      isSlidingTip = false;
+    } else {
+      track.style.transition = 'transform 400ms cubic-bezier(0.25, 1, 0.5, 1)';
+      track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+
+      setTimeout(() => {
+        if (currentTrackIndex === 5) {
+          // Reached forward clone (index 5) of Tip 0! Instantly reset to real Tip 0 (index 1)
+          track.style.transition = 'none';
+          currentTrackIndex = 1;
+          track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+          void track.offsetHeight; // force layout flush
+        }
+        isSlidingTip = false;
+      }, 410);
+    }
+
+    if (manual) {
+      startCarouselAutoTimer();
+    }
+  }
+
+  /**
+   * Navigates to the previous tip slide, continuously looping in the leftward direction
+   * @param {boolean} [manual=false]
+   */
+  function prevTipSlide(manual = false) {
+    if (isSlidingTip) return;
+
+    if (typeof document === 'undefined') {
+      currentTipSlide = (currentTipSlide - 1 + 4) % 4;
+      return;
+    }
+
+    const track = document.getElementById('carousel-track');
+    if (!track) {
+      currentTipSlide = (currentTipSlide - 1 + 4) % 4;
+      return;
+    }
+
+    isSlidingTip = true;
+    currentTrackIndex--;
+    currentTipSlide = (currentTipSlide - 1 + 4) % 4;
+    updateSlideAccessibility(currentTipSlide);
+
+    if (isReducedMotionPreferred()) {
+      track.style.transition = 'none';
+      if (currentTrackIndex < 1) currentTrackIndex = 4;
+      track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+      isSlidingTip = false;
+    } else {
+      track.style.transition = 'transform 400ms cubic-bezier(0.25, 1, 0.5, 1)';
+      track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+
+      setTimeout(() => {
+        if (currentTrackIndex === 0) {
+          // Reached backward clone (index 0) of Tip 3! Instantly reset to real Tip 3 (index 4)
+          track.style.transition = 'none';
+          currentTrackIndex = 4;
+          track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+          void track.offsetHeight; // force layout flush
+        }
+        isSlidingTip = false;
+      }, 410);
+    }
+
+    if (manual) {
+      startCarouselAutoTimer();
+    }
   }
 
   /**
@@ -918,21 +1242,29 @@
     stopCarouselAutoTimer();
     carouselTimer = setInterval(() => {
       if (!isCarouselHovered && !isCarouselFocused) {
-        nextTipSlide();
+        nextTipSlide(false);
       }
     }, 6000);
+
+    if (typeof window !== 'undefined') {
+      window._ecoHabitsTimer = carouselTimer;
+    }
 
     updateCarouselStatusText('Auto-rotating every 6s');
   }
 
   /**
-   * Pauses the auto-slide timer
+   * Pauses or stops the auto-slide timer
    * @param {string} [reason='paused']
    */
   function stopCarouselAutoTimer(reason) {
     if (carouselTimer) {
       clearInterval(carouselTimer);
       carouselTimer = null;
+    }
+    if (typeof window !== 'undefined' && window._ecoHabitsTimer) {
+      clearInterval(window._ecoHabitsTimer);
+      window._ecoHabitsTimer = null;
     }
     if (reason) {
       updateCarouselStatusText(reason);
@@ -1286,24 +1618,19 @@
 
     const existingHabits = hubState.habits;
 
-    // Build 4 Slide Cards (Strictly only ONE active at a time)
-    let slidesHtml = '';
-    todayTips.forEach((tip, idx) => {
-      const isActive = idx === currentTipSlide;
+    function createSlideCardHtml(tip, idx, isClone, cloneType) {
       const habitTitle = tip.habitEquivalent || tip.title;
       const alreadyInHabits = existingHabits.some(
         h => (h.tipId && h.tipId === tip.id) || h.title.trim().toLowerCase() === habitTitle.trim().toLowerCase()
       );
       const catClass = getCategoryClass(tip.category);
       const isHighImpact = (tip.impact || '').toLowerCase().includes('high');
+      const isActive = !isClone && idx === currentTipSlide;
 
-      slidesHtml += `
+      return `
         <div class="carousel-slide ${isActive ? 'active' : ''}" 
              data-slide-index="${idx}" 
-             role="group" 
-             aria-roledescription="slide" 
-             aria-label="Tip ${idx + 1} of ${todayTips.length}"
-             aria-hidden="${isActive ? 'false' : 'true'}">
+             ${isClone ? `data-clone="${cloneType}" aria-hidden="true"` : `role="group" aria-roledescription="slide" aria-label="Tip ${idx + 1} of ${todayTips.length}" aria-hidden="${isActive ? 'false' : 'true'}"`}>
           <div class="tip-carousel-card">
             <div class="tip-carousel-header">
               <div class="tip-header-meta">
@@ -1340,7 +1667,7 @@
               <button type="button" 
                       class="btn btn-sm btn-add-habit ${alreadyInHabits ? 'btn-added' : 'btn-primary'}" 
                       data-tip-habit-id="${tip.id}"
-                      ${alreadyInHabits ? 'disabled aria-disabled="true"' : ''}>
+                      ${alreadyInHabits || isClone ? 'disabled aria-disabled="true"' : ''}>
                 ${alreadyInHabits 
                   ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg><span>In Your Habits</span>`
                   : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>Add as Habit</span>`
@@ -1350,8 +1677,27 @@
           </div>
         </div>
       `;
+    }
+
+    let slidesHtml = '';
+    // Prepend clone of last slide (Tip 4) for seamless continuous leftward loop
+    slidesHtml += createSlideCardHtml(todayTips[todayTips.length - 1], todayTips.length - 1, true, 'prev');
+
+    // 4 Real Slides (Tips 1 to 4)
+    todayTips.forEach((tip, idx) => {
+      slidesHtml += createSlideCardHtml(tip, idx, false, null);
     });
-    viewport.innerHTML = slidesHtml;
+
+    // Append clone of first slide (Tip 1) for seamless continuous rightward loop
+    slidesHtml += createSlideCardHtml(todayTips[0], 0, true, 'next');
+
+    viewport.innerHTML = `<div class="carousel-track" id="carousel-track">${slidesHtml}</div>`;
+    currentTrackIndex = currentTipSlide + 1;
+    const track = document.getElementById('carousel-track');
+    if (track) {
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${currentTrackIndex * 100}%)`;
+    }
 
     // Build 4 Indicator Dots
     if (dotsContainer) {
@@ -1503,13 +1849,13 @@
 
     if (btnPrev) {
       btnPrev.addEventListener('click', () => {
-        prevTipSlide();
+        prevTipSlide(true);
       });
     }
 
     if (btnNext) {
       btnNext.addEventListener('click', () => {
-        nextTipSlide();
+        nextTipSlide(true);
       });
     }
 
@@ -1518,7 +1864,7 @@
         const dot = e.target.closest('.carousel-dot');
         if (dot) {
           const index = parseInt(dot.getAttribute('data-slide-index'), 10);
-          if (!isNaN(index)) goToTipSlide(index);
+          if (!isNaN(index)) goToTipSlide(index, true);
         }
       });
     }
@@ -1564,10 +1910,10 @@
       carouselContainer.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') {
           e.preventDefault();
-          prevTipSlide();
+          prevTipSlide(true);
         } else if (e.key === 'ArrowRight') {
           e.preventDefault();
-          nextTipSlide();
+          nextTipSlide(true);
         }
       });
 
@@ -1583,9 +1929,9 @@
           touchEndX = e.changedTouches[0].clientX;
           const delta = touchEndX - touchStartX;
           if (delta < -45) {
-            nextTipSlide(); // Swiped left -> next slide
+            nextTipSlide(true); // Swiped left -> next slide
           } else if (delta > 45) {
-            prevTipSlide(); // Swiped right -> prev slide
+            prevTipSlide(true); // Swiped right -> prev slide
           }
         }
       }, { passive: true });
@@ -1621,21 +1967,134 @@
 
     if (btnDateToday) {
       btnDateToday.addEventListener('click', () => {
-        changeSelectedDate(getLocalDateString());
+        changeSelectedDate(getLocalDateString(), true);
       });
     }
 
     if (btnFutureReturn) {
       btnFutureReturn.addEventListener('click', () => {
-        changeSelectedDate(getLocalDateString());
+        changeSelectedDate(getLocalDateString(), true);
       });
     }
 
     if (btnPastReturn) {
       btnPastReturn.addEventListener('click', () => {
-        changeSelectedDate(getLocalDateString());
+        changeSelectedDate(getLocalDateString(), true);
       });
     }
+
+    // I. Integrated Calendar Popup Event Listeners
+    const calBadge = document.getElementById('date-display-badge');
+    const btnCalToggle = document.getElementById('btn-calendar-toggle');
+    const calPrevMonth = document.getElementById('cal-prev-month');
+    const calNextMonth = document.getElementById('cal-next-month');
+    const calDaysGrid = document.getElementById('cal-days-grid');
+    const calJumpToday = document.getElementById('cal-jump-today');
+    const calCloseBtn = document.getElementById('cal-close-btn');
+    const calPopup = document.getElementById('eco-calendar-popup');
+
+    if (calBadge) {
+      calBadge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleCalendarPopup();
+      });
+      calBadge.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleCalendarPopup();
+        }
+      });
+    }
+
+    if (btnCalToggle) {
+      btnCalToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleCalendarPopup();
+      });
+      btnCalToggle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleCalendarPopup();
+        }
+      });
+    }
+
+    if (checklistDatePicker) {
+      checklistDatePicker.addEventListener('click', () => {
+        openCalendarPopup();
+      });
+    }
+
+    if (calPrevMonth) {
+      calPrevMonth.addEventListener('click', (e) => {
+        e.stopPropagation();
+        calViewMonth--;
+        if (calViewMonth < 0) {
+          calViewMonth = 11;
+          calViewYear--;
+        }
+        renderCalendarPopup();
+      });
+    }
+
+    if (calNextMonth) {
+      calNextMonth.addEventListener('click', (e) => {
+        e.stopPropagation();
+        calViewMonth++;
+        if (calViewMonth > 11) {
+          calViewMonth = 0;
+          calViewYear++;
+        }
+        renderCalendarPopup();
+      });
+    }
+
+    if (calDaysGrid) {
+      calDaysGrid.addEventListener('click', (e) => {
+        const dayBtn = e.target.closest('[data-cal-date]');
+        if (dayBtn) {
+          e.stopPropagation();
+          const targetDate = dayBtn.getAttribute('data-cal-date');
+          if (targetDate) {
+            changeSelectedDate(targetDate);
+            closeCalendarPopup();
+          }
+        }
+      });
+    }
+
+    if (calJumpToday) {
+      calJumpToday.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const todayStr = getLocalDateString();
+        const parts = todayStr.split('-');
+        calViewYear = parseInt(parts[0], 10);
+        calViewMonth = parseInt(parts[1], 10) - 1;
+        changeSelectedDate(todayStr, true);
+        closeCalendarPopup();
+      });
+    }
+
+    if (calCloseBtn) {
+      calCloseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeCalendarPopup();
+      });
+    }
+
+    // Close calendar on click outside or Escape
+    document.addEventListener('click', (e) => {
+      if (isCalPopupOpen && calPopup && !calPopup.contains(e.target) && (!calBadge || !calBadge.contains(e.target)) && (!btnCalToggle || !btnCalToggle.contains(e.target))) {
+        closeCalendarPopup();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isCalPopupOpen) {
+        closeCalendarPopup();
+        if (calBadge) calBadge.focus();
+      }
+    });
 
     // Start auto-slide rotation
     startCarouselAutoTimer();
@@ -1644,17 +2103,23 @@
   // -------------------------------------------------------------------------
   // 10. Initialization Lifecycle
   // -------------------------------------------------------------------------
+  function initHub() {
+    stopCarouselAutoTimer();
+    loadHubState();
+    renderAll();
+    setupEventListeners();
+  }
+
   if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
-      loadHubState();
-      renderAll();
-      setupEventListeners();
-    });
+    document.addEventListener('DOMContentLoaded', initHub);
   }
 
   // Expose state and API for unit testing & debugging
   if (typeof window !== 'undefined') {
     window.EcoHabits = {
+      init: initHub,
+      cleanUp: stopCarouselAutoTimer,
+      stopTimer: stopCarouselAutoTimer,
       getState: () => JSON.parse(JSON.stringify(hubState)),
       toggleHabit: toggleHabitCompletion,
       addCustomHabit,
@@ -1680,6 +2145,10 @@
       stopAutoTimer: stopCarouselAutoTimer,
       isReducedMotion: isReducedMotionPreferred,
       reloadState: loadHubState,
+      openCalendar: openCalendarPopup,
+      closeCalendar: closeCalendarPopup,
+      renderCalendar: renderCalendarPopup,
+      isCalendarOpen: () => isCalPopupOpen,
       _setHabits: (h) => { hubState.habits = h; },
       _setCompletions: (c) => { hubState.completions = c; },
       _setDailySelections: (s) => { hubState.dailySelections = s; }

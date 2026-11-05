@@ -47,14 +47,14 @@
 }
 
 .calc-mode-card:focus-visible {
-  border-color: var(--border-focus);
-  box-shadow: var(--glow-lime);
+  border-color: rgba(110, 231, 183, 0.35);
+  outline: 1px solid rgba(110, 231, 183, 0.35);
+  outline-offset: 1px;
 }
 
 .calc-mode-card.active {
-  border-color: var(--action-emerald);
-  background: rgba(16, 185, 129, 0.08);
-  box-shadow: var(--glow-emerald);
+  border-color: rgba(110, 231, 183, 0.25);
+  background: #14382c;
 }
 
 .calc-mode-header {
@@ -307,7 +307,7 @@
   padding: 2.5rem;
   box-shadow: var(--shadow-card);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 2rem;
 }
 
@@ -374,8 +374,7 @@
 }
 
 .input-group:focus-within {
-  border-color: var(--border-focus);
-  box-shadow: var(--glow-lime);
+  border-color: rgba(110, 231, 183, 0.35);
 }
 
 .input-group.has-error {
@@ -411,27 +410,50 @@
 }
 
 .select-control {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--bg-surface, #0a2119);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237e998c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 14px 14px;
+  border: 1px solid rgba(110, 231, 183, 0.12);
   border-radius: var(--radius-md);
   color: var(--text-ivory);
   font-family: var(--font-body);
   font-size: 0.95rem;
-  padding: 0.85rem 1.15rem;
+  padding: 0.85rem 2.5rem 0.85rem 1.15rem;
   width: 100%;
   outline: none;
   cursor: pointer;
+  color-scheme: dark;
   transition: all var(--transition-fast);
 }
 
-.select-control:focus {
-  border-color: var(--border-focus);
-  box-shadow: var(--glow-lime);
+.select-control:hover {
+  background-color: #123328;
+  border-color: rgba(110, 231, 183, 0.22);
+}
+
+.select-control:focus,
+.select-control:focus-visible {
+  border-color: rgba(110, 231, 183, 0.35);
+  outline: 1px solid rgba(110, 231, 183, 0.35);
+  outline-offset: 1px;
 }
 
 .select-control option {
-  background: var(--card-surface);
-  color: var(--text-ivory);
+  background-color: #0a2119 !important;
+  color: #fbf8ee !important;
+  padding: 0.65rem 1rem;
+}
+
+.select-control option:checked,
+.select-control option:hover,
+.select-control option:focus {
+  background-color: #163b2f !important;
+  color: #fbf8ee !important;
 }
 
 /* Interactive Option Grid (Radio Cards) */
@@ -469,9 +491,8 @@
 
 .option-card.selected,
 .option-card:has(input[type="radio"]:checked) {
-  border-color: var(--action-emerald);
-  background: rgba(16, 185, 129, 0.08);
-  box-shadow: var(--glow-emerald);
+  border-color: rgba(110, 231, 183, 0.25);
+  background: #14382c;
 }
 
 .option-header {

@@ -406,108 +406,259 @@
     });
   }
 
-  function renderHistoryChart(records) {
-    const canvas = document.getElementById('historyChart');
-    const container = document.getElementById('history-chart-wrapper');
-    const fallback = document.getElementById('history-fallback-wrapper');
-
-    if (!canvas || typeof Chart === 'undefined') {
-      if (container) container.style.display = 'none';
-      if (fallback) fallback.style.display = 'block';
-      return;
+  function destroyHistoryChart() {
+    if (historyChartInstance) {
+      try {
+        historyChartInstance.destroy();
+      } catch (e) {}
+      historyChartInstance = null;
     }
+  }
 
-    if (container) container.style.display = 'block';
-    if (fallback) fallback.style.display = 'none';
+  function renderSvgHistoryChart(container, records) {
+    if (!container || !records || records.length === 0) return;
 
-    const labels = records.map(r => formatDisplayDate(r.timestamp));
-    const dataPoints = records.map(r => {
+    const width = 760;
+    const height = 280;
+    const padLeft = 60;
+    const padRight = 40;
+    const padTop = 35;
+    const padBottom = 45;
+    const chartW = width - padLeft - padRight;
+    const chartH = height - padTop - padBottom;
+
+    const values = records.map(r => {
       if (typeof r.annualTonnes === 'number') return r.annualTonnes;
       if (typeof r.annualKg === 'number') return Math.round((r.annualKg / 1000) * 100) / 100;
       return 0;
     });
 
-    if (historyChartInstance) {
-      historyChartInstance.data.labels = labels;
-      historyChartInstance.data.datasets[0].data = dataPoints;
-      historyChartInstance.update();
-      return;
+    const maxVal = Math.max(...values, 0.5);
+    const yMax = Math.ceil(maxVal * 1.25 * 10) / 10;
+    const ySteps = 4;
+
+    // Grid lines & Y labels
+    let gridHtml = '';
+    for (let i = 0; i <= ySteps; i++) {
+      const val = (yMax * (ySteps - i)) / ySteps;
+      const y = padTop + (chartH * i) / ySteps;
+      gridHtml += `
+        <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="rgba(110, 231, 183, 0.08)" stroke-width="1" stroke-dasharray="${i === ySteps ? 'none' : '4,4'}" />
+        <text x="${padLeft - 10}" y="${y + 4}" fill="#7e998c" font-size="11" font-family="'Plus Jakarta Sans', sans-serif" text-anchor="end">${val.toFixed(1)} t</text>
+      `;
     }
 
-    try {
-      const ctx = canvas.getContext('2d');
-      historyChartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Annual Footprint (tonnes CO₂e)',
-            data: dataPoints,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.3,
-            pointBackgroundColor: '#a3e635',
-            pointBorderColor: '#061610',
-            pointBorderWidth: 2,
-            pointRadius: records.length === 1 ? 8 : 5,
-            pointHoverRadius: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            },
-            tooltip: {
-              backgroundColor: '#061610',
-              borderColor: '#245443',
-              borderWidth: 1,
-              titleColor: '#fbf8ee',
-              bodyColor: '#a3e635',
-              padding: 12,
-              cornerRadius: 8,
-              callbacks: {
-                label: function (context) {
-                  return ` ${context.parsed.y.toFixed(2)} tonnes CO₂e / year`;
+    // Coordinates
+    const points = records.map((r, i) => {
+      const val = values[i];
+      const x = records.length === 1
+        ? padLeft + chartW / 2
+        : padLeft + (chartW * i) / (records.length - 1);
+      const y = padTop + chartH - (val / yMax) * chartH;
+      const label = formatDisplayDate(r.timestamp);
+      return { x, y, val, label, mode: r.mode || r.calculationMode || 'estimated' };
+    });
+
+    // X-axis date labels
+    let xLabelsHtml = '';
+    points.forEach(pt => {
+      xLabelsHtml += `
+        <text x="${pt.x}" y="${height - 15}" fill="#7e998c" font-size="11" font-family="'Plus Jakarta Sans', sans-serif" text-anchor="middle">${pt.label}</text>
+      `;
+    });
+
+    // Paths
+    let pathD = '';
+    let areaD = '';
+    if (points.length === 1) {
+      pathD = `M ${padLeft} ${points[0].y} L ${width - padRight} ${points[0].y}`;
+      areaD = `M ${padLeft} ${points[0].y} L ${width - padRight} ${points[0].y} L ${width - padRight} ${padTop + chartH} L ${padLeft} ${padTop + chartH} Z`;
+    } else {
+      pathD = `M ${points[0].x} ${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const cpX1 = prev.x + (curr.x - prev.x) * 0.45;
+        const cpY1 = prev.y;
+        const cpX2 = curr.x - (curr.x - prev.x) * 0.45;
+        const cpY2 = curr.y;
+        pathD += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${curr.x} ${curr.y}`;
+      }
+      areaD = `${pathD} L ${points[points.length - 1].x} ${padTop + chartH} L ${points[0].x} ${padTop + chartH} Z`;
+    }
+
+    // Data dots
+    let dotsHtml = '';
+    points.forEach(pt => {
+      const r = records.length === 1 ? 8 : 6;
+      dotsHtml += `
+        <g class="svg-chart-point" tabindex="0" role="graphics-symbol" aria-label="${pt.val.toFixed(2)} tonnes on ${pt.label}">
+          <circle cx="${pt.x}" cy="${pt.y}" r="${r + 4}" fill="rgba(163, 230, 53, 0.2)" class="point-glow" />
+          <circle cx="${pt.x}" cy="${pt.y}" r="${r}" fill="#a3e635" stroke="#061610" stroke-width="2.5" />
+          <title>${pt.val.toFixed(2)} tonnes CO₂e (${pt.label})</title>
+        </g>
+      `;
+    });
+
+    // Baseline badge
+    let baselineBadge = '';
+    if (records.length === 1) {
+      const pt = points[0];
+      baselineBadge = `
+        <rect x="${pt.x - 70}" y="${pt.y - 32}" width="140" height="22" rx="4" fill="#061610" stroke="#10b981" stroke-width="1" />
+        <text x="${pt.x}" y="${pt.y - 17}" fill="#a3e635" font-size="11" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif" text-anchor="middle">Baseline: ${pt.val.toFixed(2)} t CO₂e</text>
+      `;
+    }
+
+    const svg = `
+      <svg viewBox="0 0 ${width} ${height}" class="history-svg-chart" role="img" aria-label="Historical Carbon Footprint Trend Chart" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="svgTrendAreaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10b981" stop-opacity="0.22" />
+            <stop offset="100%" stop-color="#10b981" stop-opacity="0.0" />
+          </linearGradient>
+        </defs>
+        <g class="svg-grid">${gridHtml}</g>
+        <path d="${areaD}" fill="url(#svgTrendAreaGrad)" />
+        <path d="${pathD}" fill="none" stroke="#10b981" stroke-width="${records.length === 1 ? '2' : '3'}" stroke-linecap="round" stroke-linejoin="round" ${records.length === 1 ? 'stroke-dasharray="4,4"' : ''} />
+        ${baselineBadge}
+        <g class="svg-dots">${dotsHtml}</g>
+        <g class="svg-x-labels">${xLabelsHtml}</g>
+      </svg>
+    `;
+
+    container.innerHTML = svg;
+  }
+
+  function renderHistoryChart(records) {
+    const root = getDashboardContainer();
+    if (!root) return;
+
+    const q = (id) => (root.querySelector ? root.querySelector('#' + id) : document.getElementById(id));
+    const container = q('history-chart-wrapper');
+    const fallback = q('history-fallback-wrapper');
+
+    if (!container) return;
+
+    const hasChartJs = typeof Chart !== 'undefined';
+
+    if (hasChartJs) {
+      let canvas = container.querySelector('canvas#historyChart');
+      if (!canvas) {
+        container.innerHTML = '<canvas id="historyChart" aria-label="Historical Carbon Footprint Chart"></canvas>';
+        canvas = container.querySelector('canvas#historyChart');
+      }
+
+      // Destroy previous chart if canvas changed or detached
+      if (historyChartInstance && (historyChartInstance.canvas !== canvas || !historyChartInstance.canvas.isConnected)) {
+        destroyHistoryChart();
+      }
+
+      if (canvas) {
+        const existingChart = Chart.getChart(canvas);
+        if (existingChart) {
+          try { existingChart.destroy(); } catch (e) {}
+        }
+      }
+
+      container.style.display = 'block';
+      if (fallback) fallback.style.display = 'none';
+
+      const labels = records.map(r => formatDisplayDate(r.timestamp));
+      const dataPoints = records.map(r => {
+        if (typeof r.annualTonnes === 'number') return r.annualTonnes;
+        if (typeof r.annualKg === 'number') return Math.round((r.annualKg / 1000) * 100) / 100;
+        return 0;
+      });
+
+      if (historyChartInstance && historyChartInstance.canvas === canvas) {
+        historyChartInstance.data.labels = labels;
+        historyChartInstance.data.datasets[0].data = dataPoints;
+        historyChartInstance.update();
+        return;
+      }
+
+      try {
+        const ctx = canvas.getContext('2d');
+        historyChartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Annual Footprint (tonnes CO₂e)',
+              data: dataPoints,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.3,
+              pointBackgroundColor: '#a3e635',
+              pointBorderColor: '#061610',
+              pointBorderWidth: 2,
+              pointRadius: records.length === 1 ? 8 : 5,
+              pointHoverRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: '#061610',
+                borderColor: '#245443',
+                borderWidth: 1,
+                titleColor: '#fbf8ee',
+                bodyColor: '#a3e635',
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: {
+                  label: function (context) {
+                    return ` ${context.parsed.y.toFixed(2)} tonnes CO₂e / year`;
+                  }
                 }
               }
-            }
-          },
-          scales: {
-            x: {
-              grid: {
-                color: 'rgba(110, 231, 183, 0.08)'
-              },
-              ticks: {
-                color: '#7e998c',
-                font: { family: 'Plus Jakarta Sans', size: 12 }
-              }
             },
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: 'rgba(110, 231, 183, 0.08)'
+            scales: {
+              x: {
+                offset: records.length === 1,
+                grid: {
+                  color: 'rgba(110, 231, 183, 0.08)'
+                },
+                ticks: {
+                  color: '#7e998c',
+                  font: { family: 'Plus Jakarta Sans', size: 12 }
+                }
               },
-              ticks: {
-                color: '#7e998c',
-                font: { family: 'Plus Jakarta Sans', size: 12 },
-                callback: function (val) {
-                  return `${val} t`;
+              y: {
+                beginAtZero: true,
+                suggestedMax: Math.max(...dataPoints, 1) * 1.25,
+                grid: {
+                  color: 'rgba(110, 231, 183, 0.08)'
+                },
+                ticks: {
+                  color: '#7e998c',
+                  font: { family: 'Plus Jakarta Sans', size: 12 },
+                  callback: function (val) {
+                    return `${val} t`;
+                  }
                 }
               }
             }
           }
-        }
-      });
-    } catch (e) {
-      console.warn('[EcoDashboard] Chart.js initialization error, using fallback table:', e);
-      if (container) container.style.display = 'none';
-      if (fallback) fallback.style.display = 'block';
+        });
+        return;
+      } catch (e) {
+        console.warn('[EcoDashboard] Chart.js initialization error, falling back to SVG chart:', e);
+      }
     }
+
+    // Fallback: If Chart.js is unavailable or throws, render standalone Dark Botanical SVG Trend Chart
+    container.style.display = 'block';
+    renderSvgHistoryChart(container, records);
+    if (fallback) fallback.style.display = 'block';
   }
 
   // ---------------------------------------------------------------------------
@@ -593,49 +744,62 @@
   // 8. DOM Caching & Init Lifecycle
   // ---------------------------------------------------------------------------
 
+  function getDashboardContainer() {
+    return (typeof document !== 'undefined')
+      ? (document.getElementById('incoming-page-view') || document.getElementById('current-page-view') || document)
+      : null;
+  }
+
   function cacheDomElements() {
+    const root = getDashboardContainer();
+    if (!root) return;
+
+    const q = (id) => (root.querySelector ? root.querySelector('#' + id) : document.getElementById(id));
+
     // Footprint section
-    elements.footprintContent = document.getElementById('footprint-content');
-    elements.footprintEmptyState = document.getElementById('footprint-empty-state');
-    elements.footprintAnnualTonnes = document.getElementById('dash-footprint-tonnes');
-    elements.footprintMonthlyKg = document.getElementById('dash-footprint-monthly');
-    elements.footprintModeBadge = document.getElementById('dash-mode-badge');
-    elements.footprintDate = document.getElementById('dash-calc-date');
+    elements.footprintContent = q('footprint-content');
+    elements.footprintEmptyState = q('footprint-empty-state');
+    elements.footprintAnnualTonnes = q('dash-footprint-tonnes');
+    elements.footprintMonthlyKg = q('dash-footprint-monthly');
+    elements.footprintModeBadge = q('dash-mode-badge');
+    elements.footprintDate = q('dash-calc-date');
 
     // Category breakdown
-    elements.breakdownTransportKg = document.getElementById('dash-trans-kg');
-    elements.breakdownTransportPct = document.getElementById('dash-trans-pct');
-    elements.breakdownTransportBar = document.getElementById('dash-trans-bar');
+    elements.breakdownTransportKg = q('dash-trans-kg');
+    elements.breakdownTransportPct = q('dash-trans-pct');
+    elements.breakdownTransportBar = q('dash-trans-bar');
 
-    elements.breakdownEnergyKg = document.getElementById('dash-energy-kg');
-    elements.breakdownEnergyPct = document.getElementById('dash-energy-pct');
-    elements.breakdownEnergyBar = document.getElementById('dash-energy-bar');
-    elements.subcatElectricityVal = document.getElementById('dash-subcat-elec');
-    elements.subcatLpgVal = document.getElementById('dash-subcat-lpg');
+    elements.breakdownEnergyKg = q('dash-energy-kg');
+    elements.breakdownEnergyPct = q('dash-energy-pct');
+    elements.breakdownEnergyBar = q('dash-energy-bar');
+    elements.subcatElectricityVal = q('dash-subcat-elec');
+    elements.subcatLpgVal = q('dash-subcat-lpg');
 
-    elements.breakdownWasteKg = document.getElementById('dash-waste-kg');
-    elements.breakdownWastePct = document.getElementById('dash-waste-pct');
-    elements.breakdownWasteBar = document.getElementById('dash-waste-bar');
+    elements.breakdownWasteKg = q('dash-waste-kg');
+    elements.breakdownWastePct = q('dash-waste-pct');
+    elements.breakdownWasteBar = q('dash-waste-bar');
 
     // Habits section
-    elements.habitsContent = document.getElementById('habits-content');
-    elements.habitsEmptyState = document.getElementById('habits-empty-state');
-    elements.habitTodayCount = document.getElementById('dash-habit-today-count');
-    elements.habitTodayPct = document.getElementById('dash-habit-today-pct');
-    elements.habitTodayBar = document.getElementById('dash-habit-today-bar');
-    elements.habitCurrentStreak = document.getElementById('dash-habit-current-streak');
-    elements.habitLongestStreak = document.getElementById('dash-habit-longest-streak');
-    elements.habitTotalCompletions = document.getElementById('dash-habit-total-completions');
-    elements.habitTotalRegistered = document.getElementById('dash-habit-total-registered');
+    elements.habitsContent = q('habits-content');
+    elements.habitsEmptyState = q('habits-empty-state');
+    elements.habitTodayCount = q('dash-habit-today-count');
+    elements.habitTodayPct = q('dash-habit-today-pct');
+    elements.habitTodayBar = q('dash-habit-today-bar');
+    elements.habitCurrentStreak = q('dash-habit-current-streak');
+    elements.habitLongestStreak = q('dash-habit-longest-streak');
+    elements.habitTotalCompletions = q('dash-habit-total-completions');
+    elements.habitTotalRegistered = q('dash-habit-total-registered');
 
     // History section
-    elements.historyContent = document.getElementById('history-content');
-    elements.historyEmptyState = document.getElementById('history-empty-state');
-    elements.historySingleNote = document.getElementById('history-single-note');
-    elements.historyFallbackBody = document.getElementById('history-fallback-body');
+    elements.historyContent = q('history-content');
+    elements.historyEmptyState = q('history-empty-state');
+    elements.historySingleNote = q('history-single-note');
+    elements.historyFallbackBody = q('history-fallback-body');
+    elements.historyChartWrapper = q('history-chart-wrapper');
+    elements.historyFallbackWrapper = q('history-fallback-wrapper');
 
     // Activity feed
-    elements.activityList = document.getElementById('dash-activity-list');
+    elements.activityList = q('dash-activity-list');
   }
 
   function renderAll() {
@@ -670,6 +834,7 @@
       renderHabits: renderHabitsSection,
       renderHistory: renderHistorySection,
       renderActivity: renderRecentActivity,
+      destroyChart: destroyHistoryChart,
       syncHistoryFromFootprint,
       getFootprintData: () => footprintData,
       getHabitsData: () => habitsData,

@@ -3,11 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="view-transition" content="same-origin">
   <title>EcoTrack | Sustainable Intelligence & Carbon Analytics</title>
   <meta name="description" content="A lightweight, privacy-focused environmental sustainability web application to track personal carbon emissions and cultivate lasting green habits.">
   
   <!-- Design System CSS -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/calculator.css">
+  <link rel="stylesheet" href="css/habits.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  
+  <!-- Chart.js CDN for visual analytics with graceful offline fallback -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   
   <!-- Favicon / Brand SVG icon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'><path d='M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z'/></svg>">
@@ -528,10 +535,10 @@
         <div class="footer-col">
           <h4>Resources</h4>
           <div class="footer-links">
-            <a href="tips.html#transport">Clean Commuting</a>
-            <a href="tips.html#energy">Energy Conservation</a>
-            <a href="tips.html#diet">Plant-Rich Diet</a>
-            <a href="tips.html#waste">Zero-Waste Guide</a>
+            <a href="habits.html#tips">Clean Commuting</a>
+            <a href="habits.html#tips">Energy Conservation</a>
+            <a href="habits.html#tips">Water Conservation</a>
+            <a href="habits.html#tips">Zero-Waste Guide</a>
           </div>
         </div>
 
@@ -558,7 +565,14 @@
     </div>
   </footer>
 
-  <!-- Core Scripts -->
+  <!-- Core Application Scripts -->
+  <script src="js/storage.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/custom-select.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/habits.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/page-views.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

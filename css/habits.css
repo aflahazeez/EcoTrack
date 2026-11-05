@@ -310,23 +310,22 @@ input[type="text"],
   width: 100%;
   height: 44px;
   min-height: 44px;
-  background-color: var(--card-surface, #0c2b20) !important;
+  background-color: var(--bg-surface, #0a2119) !important;
   color: var(--text-ivory, #fbf8ee) !important;
   font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.4;
   padding: 0.65rem 1.25rem;
-  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border: 1px solid rgba(110, 231, 183, 0.12) !important;
   border-radius: var(--radius-pill, 9999px) !important;
   outline: none !important;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: none !important;
   transition: border-color var(--transition-fast, 0.2s ease),
-              background-color var(--transition-fast, 0.2s ease),
-              box-shadow var(--transition-fast, 0.2s ease);
+              background-color var(--transition-fast, 0.2s ease);
 }
 
 .hub-form-control:hover,
@@ -335,9 +334,9 @@ input[type="text"].hub-form-control:hover,
 input[type="text"].form-control:hover,
 input[type="text"]:hover,
 #input-custom-habit-title:hover {
-  background-color: var(--card-surface-hover, #10382a) !important;
-  border-color: var(--action-emerald, #10b981) !important;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+  background-color: #123328 !important;
+  border-color: rgba(110, 231, 183, 0.22) !important;
+  box-shadow: none !important;
 }
 
 .hub-form-control:focus,
@@ -352,11 +351,11 @@ input[type="text"]:focus,
 input[type="text"]:focus-visible,
 #input-custom-habit-title:focus,
 #input-custom-habit-title:focus-visible {
-  background-color: var(--card-surface-hover, #10382a) !important;
-  border-color: var(--border-focus, #a3e635) !important;
-  outline: 2px solid var(--border-focus, #a3e635) !important;
+  background-color: #123328 !important;
+  border-color: rgba(110, 231, 183, 0.35) !important;
+  outline: 1px solid rgba(110, 231, 183, 0.35) !important;
   outline-offset: 1px;
-  box-shadow: var(--glow-lime, 0 0 14px rgba(163, 230, 53, 0.35)) !important;
+  box-shadow: none !important;
 }
 
 /* Placeholder Styling for Dark Botanical Theme */
@@ -364,7 +363,7 @@ input[type="text"]:focus-visible,
 .form-control::placeholder,
 input[type="text"]::placeholder,
 #input-custom-habit-title::placeholder {
-  color: var(--accent-sage, #6ee7b7);
+  color: var(--text-muted, #7e998c);
   opacity: 0.65;
   font-family: var(--font-body);
   font-size: 0.8125rem;
@@ -375,7 +374,7 @@ input[type="text"]::placeholder,
 .form-control::-webkit-input-placeholder,
 input[type="text"]::-webkit-input-placeholder,
 #input-custom-habit-title::-webkit-input-placeholder {
-  color: var(--accent-sage, #6ee7b7);
+  color: var(--text-muted, #7e998c);
   opacity: 0.65;
   font-size: 0.8125rem;
 }
@@ -384,7 +383,7 @@ input[type="text"]::-webkit-input-placeholder,
 .form-control::-moz-placeholder,
 input[type="text"]::-moz-placeholder,
 #input-custom-habit-title::-moz-placeholder {
-  color: var(--accent-sage, #6ee7b7);
+  color: var(--text-muted, #7e998c);
   opacity: 0.65;
   font-size: 0.8125rem;
 }
@@ -393,7 +392,7 @@ input[type="text"]::-moz-placeholder,
 .form-control:-ms-input-placeholder,
 input[type="text"]:-ms-input-placeholder,
 #input-custom-habit-title:-ms-input-placeholder {
-  color: var(--accent-sage, #6ee7b7);
+  color: var(--text-muted, #7e998c);
   opacity: 0.65;
   font-size: 0.8125rem;
 }
@@ -404,7 +403,7 @@ input[type="text"]:-ms-input-placeholder,
 .hub-form-control:-webkit-autofill:focus,
 #input-custom-habit-title:-webkit-autofill {
   -webkit-text-fill-color: var(--text-ivory, #fbf8ee) !important;
-  -webkit-box-shadow: 0 0 0px 1000px #0c2b20 inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0a2119 inset !important;
   transition: background-color 5000s ease-in-out 0s;
   caret-color: var(--text-ivory);
 }
@@ -416,31 +415,31 @@ textarea {
   box-sizing: border-box !important;
   width: 100%;
   min-height: 88px;
-  background-color: var(--card-surface, #0c2b20) !important;
+  background-color: var(--bg-surface, #0a2119) !important;
   color: var(--text-ivory, #fbf8ee) !important;
   font-family: var(--font-body);
   font-size: 0.875rem;
   padding: 0.75rem 1.15rem;
-  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border: 1px solid rgba(110, 231, 183, 0.12) !important;
   border-radius: var(--radius-md, 12px) !important;
   outline: none !important;
   resize: vertical;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 textarea.hub-form-control:focus,
 textarea.form-control:focus,
 textarea:focus {
-  border-color: var(--border-focus) !important;
-  outline: 2px solid var(--border-focus) !important;
-  box-shadow: var(--glow-lime) !important;
+  border-color: rgba(110, 231, 183, 0.35) !important;
+  outline: 1px solid rgba(110, 231, 183, 0.35) !important;
+  box-shadow: none !important;
 }
 
 /* Native Checkbox Support */
 input[type="checkbox"].hub-checkbox,
 input[type="checkbox"].form-checkbox,
 input[type="checkbox"] {
-  accent-color: var(--action-emerald, #10b981);
+  accent-color: #1b4d3e;
   cursor: pointer;
   vertical-align: middle;
 }
@@ -462,25 +461,25 @@ select.form-control,
   box-sizing: border-box !important;
   width: 100%;
   height: 44px;
-  background-color: var(--card-surface, #0c2b20) !important;
-  color: var(--text-ivory, #fbf8ee) !important;
+  background-color: #0a2119 !important;
+  color: #fbf8ee !important;
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.6rem 2.25rem 0.6rem 1.15rem;
-  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border: 1px solid rgba(110, 231, 183, 0.12) !important;
   border-radius: var(--radius-pill) !important;
   outline: none !important;
   cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236ee7b7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237e998c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.85rem center;
   background-size: 14px 14px;
-  transition: all var(--transition-fast);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* Compact 38px toolbar filter */
@@ -494,9 +493,9 @@ select.form-control,
 select.hub-form-control:hover,
 select.form-control:hover,
 #select-custom-habit-cat:hover {
-  background-color: var(--card-surface-hover) !important;
-  border-color: var(--action-emerald) !important;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+  background-color: #123328 !important;
+  border-color: rgba(110, 231, 183, 0.25) !important;
+  box-shadow: none !important;
 }
 
 .eco-select:focus,
@@ -509,10 +508,11 @@ select.form-control:focus,
 select.form-control:focus-visible,
 #select-custom-habit-cat:focus,
 #select-custom-habit-cat:focus-visible {
-  border-color: var(--border-focus) !important;
-  outline: 2px solid var(--border-focus) !important;
+  background-color: #0a2119 !important;
+  border-color: rgba(110, 231, 183, 0.4) !important;
+  outline: 2px solid rgba(110, 231, 183, 0.25) !important;
   outline-offset: 1px;
-  box-shadow: var(--glow-lime) !important;
+  box-shadow: none !important;
 }
 
 .eco-select option,
@@ -520,11 +520,11 @@ select.form-control:focus-visible,
 select.hub-form-control option,
 select.form-control option,
 #select-custom-habit-cat option {
-  background-color: #0b241c;
+  background-color: #0a2119;
   color: #fbf8ee;
   padding: 0.65rem 1rem;
   font-size: 0.875rem;
-  border-bottom: 1px solid rgba(110, 231, 183, 0.1);
+  border-bottom: 1px solid rgba(110, 231, 183, 0.08);
 }
 
 .eco-select option:hover,
@@ -537,63 +537,71 @@ select.form-control option:hover,
 select.form-control option:checked,
 #select-custom-habit-cat option:hover,
 #select-custom-habit-cat option:checked {
-  background-color: #14382c;
-  color: var(--accent-lime);
+  background-color: #163b2f;
+  color: #fbf8ee;
 }
 
 /* Date Input Control (Dark Botanical Native Style) */
-.eco-date-input {
+.eco-date-input,
+.eco-date-trigger-btn {
   height: 38px;
-  background-color: var(--card-surface);
-  color: var(--text-ivory);
+  background-color: #0a2119;
+  color: #d4ded8;
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.4rem 0.95rem;
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  border: 1px solid rgba(110, 231, 183, 0.12);
   border-radius: var(--radius-pill);
   outline: none;
   cursor: pointer;
   color-scheme: dark;
-  transition: all var(--transition-fast);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.eco-date-input:hover {
-  background-color: var(--card-surface-hover);
-  border-color: var(--action-emerald);
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+.eco-date-input:hover,
+.eco-date-trigger-btn:hover {
+  background-color: #123328;
+  border-color: rgba(110, 231, 183, 0.25);
+  color: #fbf8ee;
+  box-shadow: none;
 }
 
 .eco-date-input:focus,
-.eco-date-input:focus-visible {
-  border-color: var(--border-focus);
-  outline: 2px solid var(--border-focus);
+.eco-date-input:focus-visible,
+.eco-date-trigger-btn:focus,
+.eco-date-trigger-btn:focus-visible {
+  border-color: rgba(110, 231, 183, 0.4);
+  outline: 2px solid rgba(110, 231, 183, 0.25);
   outline-offset: 1px;
-  box-shadow: var(--glow-lime);
+  box-shadow: none;
 }
 
 .eco-date-input::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  filter: invert(0.8) sepia(50%) saturate(300%) hue-rotate(90deg) brightness(1.1);
-  opacity: 0.85;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  filter: invert(0.65) sepia(20%) saturate(200%) hue-rotate(100deg) brightness(0.95);
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
 }
 
 .eco-date-input::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
-  transform: scale(1.1);
 }
 
 /* Date Navigation Toolbar in Checklist Header */
 .checklist-date-nav {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.85rem 1.25rem;
-  background: rgba(6, 22, 16, 0.65);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: #0a2119;
+  border: 1px solid rgba(110, 231, 183, 0.12);
   border-radius: var(--radius-lg);
   margin-bottom: 1.75rem;
   flex-wrap: wrap;
@@ -610,29 +618,27 @@ select.form-control option:checked,
   width: 38px;
   height: 38px;
   border-radius: var(--radius-pill);
-  background: var(--card-surface);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  color: var(--accent-sage);
+  background: #0f2c22;
+  border: 1px solid rgba(110, 231, 183, 0.12);
+  color: #7e998c;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
   flex-shrink: 0;
 }
 
 .eco-nav-btn:hover {
-  background: var(--card-surface-hover);
-  border-color: var(--action-emerald);
-  color: var(--accent-lime);
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
-  transform: scale(1.05);
+  background: #14382c;
+  border-color: rgba(110, 231, 183, 0.25);
+  color: #fbf8ee;
+  box-shadow: none;
 }
 
 .eco-nav-btn:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid rgba(110, 231, 183, 0.3);
   outline-offset: 1px;
-  box-shadow: var(--glow-lime);
 }
 
 .date-display-badge {
@@ -640,18 +646,25 @@ select.form-control option:checked,
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 1.15rem;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: #0f2c22;
+  border: 1px solid rgba(110, 231, 183, 0.12);
   border-radius: var(--radius-pill);
   font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--text-ivory);
+  font-weight: 600;
+  color: #fbf8ee;
   letter-spacing: 0.01em;
   user-select: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.date-display-badge:hover {
+  background: #14382c;
+  border-color: rgba(110, 231, 183, 0.25);
 }
 
 .date-display-badge svg {
-  color: var(--action-emerald);
+  color: #7e998c;
 }
 
 .date-picker-wrap {
@@ -666,27 +679,26 @@ select.form-control option:checked,
   border-radius: var(--radius-pill);
   font-weight: 600;
   font-size: 0.8125rem;
-  background: var(--card-surface);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  color: var(--accent-sage);
+  background: #0f2c22;
+  border: 1px solid rgba(110, 231, 183, 0.12);
+  color: #7e998c;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .eco-today-btn:hover {
-  background: var(--card-surface-hover);
-  border-color: var(--accent-lime);
-  color: var(--accent-lime);
-  box-shadow: 0 0 10px rgba(163, 230, 53, 0.25);
+  background: #14382c;
+  border-color: rgba(110, 231, 183, 0.25);
+  color: #fbf8ee;
+  box-shadow: none;
 }
 
 .eco-today-btn:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid rgba(110, 231, 183, 0.3);
   outline-offset: 1px;
-  box-shadow: var(--glow-lime);
 }
 
 /* Date Status Banner */
@@ -695,18 +707,174 @@ select.form-control option:checked,
   align-items: center;
   gap: 0.65rem;
   padding: 0.75rem 1.25rem;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: #0a2119;
+  border: 1px solid rgba(110, 231, 183, 0.12);
   border-radius: var(--radius-md);
-  color: var(--accent-sage);
+  color: #7e998c;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 1.5rem;
 }
 
 .date-status-banner svg {
-  color: var(--action-emerald);
+  color: #7e998c;
   flex-shrink: 0;
+}
+
+/* Subtle Integrated Calendar Popup */
+.eco-calendar-popup {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 1.25rem;
+  z-index: 60;
+  width: 290px;
+  background: #0a2119;
+  border: 1px solid rgba(110, 231, 183, 0.15);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+  color: #fbf8ee;
+  user-select: none;
+}
+
+.eco-calendar-popup.is-open {
+  display: block;
+  animation: ecoCalFadeIn 140ms ease-out forwards;
+}
+
+@keyframes ecoCalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cal-month-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fbf8ee;
+  letter-spacing: 0.01em;
+}
+
+.cal-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #7e998c;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.cal-nav-btn:hover {
+  background: #123328;
+  color: #fbf8ee;
+  border-color: rgba(110, 231, 183, 0.12);
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.72rem;
+  color: #7e998c;
+  margin-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #fbf8ee;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  padding: 0;
+}
+
+.cal-day:hover {
+  background: #123328;
+  color: #fbf8ee;
+}
+
+.cal-day.other-month {
+  color: rgba(126, 153, 140, 0.35);
+}
+
+.cal-day.is-today {
+  border-color: rgba(110, 231, 183, 0.28);
+}
+
+.cal-day.selected {
+  background: #184235 !important;
+  color: #fbf8ee !important;
+  font-weight: 700;
+  border-color: rgba(110, 231, 183, 0.3) !important;
+}
+
+.cal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(110, 231, 183, 0.08);
+}
+
+.cal-footer-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #7e998c;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.cal-footer-btn:hover {
+  color: #fbf8ee;
+  background: #123328;
+}
+
+@media (max-width: 640px) {
+  .eco-calendar-popup {
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: 310px;
+    margin: 0 auto;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -925,6 +1093,9 @@ select.form-control option:checked,
   border-radius: var(--radius-md);
   padding: 1.5rem;
   margin-top: 1rem;
+  position: relative;
+  overflow: visible;
+  z-index: 10;
 }
 
 .add-custom-card h3 {
@@ -1047,23 +1218,40 @@ select.form-control option:checked,
 .carousel-slide {
   display: none;
   opacity: 0;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.35s ease;
 }
 
 .carousel-slide.active {
   display: block;
   opacity: 1;
-  animation: tipSlideFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes tipSlideFade {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+/* Horizontal Sliding Track */
+.carousel-track {
+  display: flex;
+  width: 100%;
+  transition: transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.carousel-track .carousel-slide {
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+}
+
+.carousel-track .carousel-slide.active {
+  display: block;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track {
+    transition: none !important;
   }
 }
 

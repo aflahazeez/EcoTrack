@@ -722,6 +722,9 @@
     if (elements.estLpgSize && inputs.lpgSize) elements.estLpgSize.value = inputs.lpgSize;
     if (elements.estWasteGen && inputs.wasteGen) elements.estWasteGen.value = inputs.wasteGen;
     if (elements.estWastePractice && inputs.wastePractice) elements.estWastePractice.value = inputs.wastePractice;
+    if (typeof window !== 'undefined' && typeof window.initCustomSelects === 'function') {
+      window.initCustomSelects();
+    }
   }
 
   function populatePreciseUI(inputs) {
@@ -762,6 +765,9 @@
       handleWasteFrequencyChange();
     }
     if (elements.wastePractice && inputs.wastePractice !== undefined) elements.wastePractice.value = inputs.wastePractice;
+    if (typeof window !== 'undefined' && typeof window.initCustomSelects === 'function') {
+      window.initCustomSelects();
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -1471,9 +1477,9 @@
     }
 
     if (savedData && savedData.originalInputs) {
-      if (savedData.calculationMode) {
-        setCalculationMode(savedData.calculationMode);
-      }
+      // Manual (Estimated) Mode is always selected by default on fresh visits to the Calculator
+      setCalculationMode('estimated');
+
       if (savedData.calculationMode === 'estimated') {
         populateEstimatedUI(savedData.originalInputs);
       } else {
@@ -1483,6 +1489,9 @@
       renderResults(savedData);
 
       if (window.location.hash === '#results') {
+        if (savedData.calculationMode) {
+          setCalculationMode(savedData.calculationMode);
+        }
         goToStep(4, true);
       } else {
         goToStep(1, true);
@@ -1490,6 +1499,10 @@
     } else {
       setCalculationMode('estimated');
       goToStep(1, true);
+    }
+
+    if (typeof window !== 'undefined' && typeof window.initCustomSelects === 'function') {
+      window.initCustomSelects();
     }
   }
 
@@ -1505,6 +1518,7 @@
   // Expose on window for automated testing and dashboard compatibility
   if (typeof window !== 'undefined') {
     window.EcoCalculator = {
+      init: init,
       setMode: setCalculationMode,
       getMode: () => activeMode,
       goToStep: goToStep,
