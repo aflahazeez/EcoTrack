@@ -17,7 +17,6 @@ EcoTrack incorporates open-source software libraries, web typography, vector ico
    - [Lucide Icons (ISC License)](#lucide-icons)
    - [Google Material Design Icons (Apache License 2.0)](#google-material-design-icons)
    - [Apache License 2.0 Full Text](#apache-license-version-20)
-   - [GitHub Mark / Octicons (MIT License)](#github-mark--octicons)
 4. [Environmental Data Sources & Accounting Disclosures](#4-environmental-data-sources--accounting-disclosures)
    - [Central Electricity Authority (CEA) of India](#central-electricity-authority-cea-of-india)
    - [IPCC Guidelines for National Greenhouse Gas Inventories](#ipcc-guidelines)
@@ -423,37 +422,6 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
       of your accepting any such warranty or additional liability.
 
    END OF TERMS AND CONDITIONS
-```
-
-### GitHub Mark / Octicons
-- **Owner / Creator:** GitHub, Inc.
-- **Source:** GitHub Octicons ([https://primer.style/octicons/](https://primer.style/octicons/) / [https://github.com/primer/octicons](https://github.com/primer/octicons))
-- **Copyright:** Copyright (c) 2024 GitHub Inc.
-- **License:** MIT License (Octicons SVGs and fonts) and GitHub Logo Guidelines
-- **Current Location in EcoTrack:** Present in the active HTML source code within the footer badge (`.foss-badge`) across `index.html`, `calculator.html`, and `dashboard.html`. *(Note: This icon is documented here accurately while present in the codebase; it is scheduled for replacement with a text link in a subsequent Phase 7 task).*
-
-```text
-The MIT License (MIT)
-
-Copyright (c) 2024 GitHub Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 ```
 
 ---

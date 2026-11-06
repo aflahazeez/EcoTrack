@@ -871,22 +871,26 @@ img, svg {
   margin-bottom: 1.25rem;
 }
 
-.foss-badge {
+.footer-github-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.775rem;
   color: var(--accent-sage);
-  background: rgba(110, 231, 183, 0.08);
-  border: 1px solid rgba(110, 231, 183, 0.16);
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color var(--transition-fast), padding-left var(--transition-fast);
 }
 
-.foss-badge svg {
-  width: 14px;
-  height: 14px;
-  fill: currentColor;
+.footer-github-link svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--text-ivory);
+  flex-shrink: 0;
+}
+
+.footer-github-link:hover {
+  color: var(--accent-lime);
+  padding-left: 3px;
 }
 
 .footer-col h4 {
