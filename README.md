@@ -5,7 +5,7 @@
 
 EcoTrack is a lightweight environmental sustainability web application designed to help individuals understand their annual carbon footprint and cultivate long-term green habits.
 
-The application runs on client-side web technologies with **zero backend dependencies**, storing user data as browser-local storage via the browser's `localStorage`.
+The application runs on client-side web technologies with **zero backend dependencies**, storing user data using **browser-based storage** via the browser's `localStorage`.
 
 ---
 
@@ -14,7 +14,7 @@ The application runs on client-side web technologies with **zero backend depende
 - [Core Pages Architecture](#-core-pages-architecture)
 - [Feature Status: Implemented vs. Planned](#-feature-status-implemented-vs-planned)
 - [Technology Stack](#-technology-stack)
-- [Browser-Local Data Storage](#-browser-local-data-storage)
+- [Browser-Based Data Storage](#-browser-based-data-storage)
 - [Documented Emission Factors & Methodology](#-documented-emission-factors--methodology)
 - [Project Structure](#-project-structure)
 - [Local Setup Instructions](#-local-setup-instructions)
@@ -35,7 +35,7 @@ EcoTrack is designed around a five-page multi-page architecture:
 
 2. **Carbon Calculator (`calculator.html`)**  
    *Current Status: Completed (Phase 3).*  
-   Interactive multi-step carbon footprint assessment engine featuring dual calculation modes (Estimated and Precise Mode), three audited categories (Transportation, Household Energy [combining Electricity and LPG], and Household Waste), verified emission factors (CEA busbar generation and IPCC stoichiometric combustion), Chart.js doughnut chart with CSS fallback progress bars, and browser-local persistence.
+   Interactive multi-step carbon footprint assessment engine featuring dual calculation modes (Estimated and Precise Mode), three audited categories (Transportation, Household Energy [combining Electricity and LPG], and Household Waste), verified emission factors (CEA busbar generation and IPCC stoichiometric combustion), Chart.js doughnut chart with CSS fallback progress bars, and browser-based persistence.
 
 3. **Habit Tracker & Sustainable Living Hub (`habits.html`)**  
    *Current Status: Completed (Phase 4).*  
@@ -55,7 +55,7 @@ EcoTrack is designed around a five-page multi-page architecture:
 
 To maintain transparency, the platform's features are categorized into currently functioning foundation modules and upcoming phase deliverables:
 
-### Implemented (Phases 1–5)
+### Implemented (Phases 1–6 & Phase 7 Tasks 1–5)
 - **Dark Botanical Visual Identity:** Custom CSS design system using deep forest backgrounds (`#061610`), dark green surfaces (`#0F2C22`), emerald action buttons (`#10B981`), lime/sage data accents (`#A3E635`, `#6EE7B7`), and warm ivory text (`#FBF8EE`).
 - **Atmospheric Backgrounds:** Multi-layered radial gradient mesh avoiding flat, empty dark voids.
 - **Consistent Shared Navigation:** Uniform desktop header and responsive mobile drawer navigation across all five pages.
@@ -93,11 +93,19 @@ To maintain transparency, the platform's features are categorized into currently
   - **Historical Footprint Trend Chart:** Activated `STORAGE_KEYS.HISTORY` (`ecotrack_history_log`) recording chronological snapshots upon calculation completion without mutating `STORAGE_KEYS.FOOTPRINT`. Includes defensive duplicate prevention, single-point baseline mode with guidance note, and multi-point line chart via Chart.js with pure-CSS fallback table.
   - **Recent Activity Feed:** Chronological timeline summarizing latest footprint assessments and recorded habit completion days.
   - **Independent Empty States:** Friendly, non-blocking empty states with actionable buttons when either footprint or habit progress has not yet been logged.
-- **Defensive Storage Engine (`js/storage.js`):** Centralized LocalStorage wrapper with corrupted JSON error handling, storage availability detection, and an in-memory session fallback (`_memoryFallback`) for restricted environments.
+- **Continuous Horizontal Sliding Navigation (Phase 6):** Seamless horizontal page-slider viewport engine (`.page-slider-viewport`, `.page-view-panel`) with cubic-bezier easing (`450ms`) animating forward and backward transitions across all five pages without browser reloads.
+- **Client-Side History & Hash Router (Phase 6 & 7):** Comprehensive client-side navigation engine supporting `pushState` and `file://` protocol hash routing, automatic forward/backward direction calculation, initial page refresh resolution without flash-to-home, and guarded `popstate` history stack traversal.
+- **Mobile Responsive Form Controls (Phase 6):** Fine-tuned flexbox and CSS grid alignments ensuring buttons, dropdowns, date picker bars, and cards adapt cleanly without clipping on narrow viewports (320px–390px).
+- **Category-Filtered Eco Tips Navigation (Phase 7):** Direct mapping from footer resource links to targeted carousel categories (`#tips-transportation`, `#tips-energy`, `#tips-water`, `#tips-waste`) with single-card category filtering, custom navigation controls (`showTipCategory`, `clearTipCategory`), and seamless restoration of daily rotation.
+- **Footer Standardization & Official GitHub Attribution (Phase 7):** Standardized 4-column footer across all pages with normalized MIT License notice, category resource links, Browser-Based Storage architecture pill, and official GitHub mark link (`View on GitHub`).
+- **Comprehensive Third-Party Notices (Phase 7):** Cataloged open-source software licenses and institutional data citations in `THIRD_PARTY_NOTICES.md`.
+- **Defensive Storage Engine (`js/storage.js`):** Centralized Web Storage manager with corrupted JSON error handling, storage availability detection, and an in-memory session fallback (`_memoryFallback`) for restricted environments.
 - **Traceable Emission Factors (`js/data.js`):** Centralized CEA, IPCC, and empirical factors with detailed source citations, boundary definitions, and uncertainty disclosures.
 
 ### Planned for Upcoming Phases
-- [ ] **Phase 6: Knowledge Hub Deep Guides & Search** (Expanded searchable articles, in-depth sustainability guides, and downloadable reference checklists).
+- [ ] **Knowledge Hub Deep Guides & Search** (Expanded searchable articles, in-depth sustainability guides, and downloadable reference checklists).
+- [ ] **Progressive Web App (PWA) Offline Installation** (Service worker and web application manifest for installable desktop/mobile experience).
+- [ ] **Data Export & Import** (Portable `.json` / `.csv` backup and restoration of footprint logs and habit progress).
 
 ---
 
@@ -112,9 +120,9 @@ To maintain transparency, the platform's features are categorized into currently
 
 ---
 
-## 💾 Browser-Local Data Storage
+## 💾 Browser-Based Data Storage
 
-EcoTrack operates entirely client-side without external databases, server-side APIs, or cloud user accounts. User metrics and habit records are stored as browser-local data using the browser's Web Storage API (`localStorage`) managed through `js/storage.js`:
+EcoTrack operates entirely client-side without external databases, server-side APIs, or cloud user accounts. User metrics and habit records are stored using browser-based storage via the browser's Web Storage API (`localStorage`) managed through `js/storage.js`:
 
 - **Strict Key Isolation:**
   - `STORAGE_KEYS.FOOTPRINT` (`ecotrack_footprint_data`): Stores the user's latest annual and monthly carbon calculations, mode selection (`estimated` vs `precise`), category breakdowns, and raw inputs.
@@ -163,26 +171,43 @@ The emission factors and benchmarks configured in `js/data.js` are documented wi
 ```text
 Ecotrack/
 │
-├── index.html              # Home page (Current: Design-System Preview)
-├── calculator.html         # Carbon footprint assessment wizard shell
-├── habits.html             # Daily eco-habits & streak tracker shell
-├── tips.html               # Knowledge hub & actionable tips shell
-├── dashboard.html          # Personal analytics & impact dashboard shell
-├── README.md               # Project documentation
+├── index.html                  # Home page: Landing experience with mission, core pillars & climate benchmarks
+├── calculator.html             # Carbon Calculator: Dual-mode footprint assessment wizard
+├── habits.html                 # Sustainable Living Hub: Daily habit checklist & Eco Tips carousel
+├── tips.html                   # Knowledge Hub: Navigation redirect bridge to habits.html#tips
+├── dashboard.html              # Impact Dashboard: Personal impact analytics, charts & activity feed
+├── README.md                   # Comprehensive project documentation & methodology
+├── THIRD_PARTY_NOTICES.md      # Third-party software notices, licenses, and attributions
 ├── LICENSE                 # MIT License (2026 Aflah Azeez)
 ├── .gitignore              # Git exclusions for OS, editor, dependencies, and temp files
 │
 ├── css/
-│   ├── style.css           # Core design system tokens, typography, header, footer, & cards
-│   ├── calculator.css      # Calculator wizard steps & custom slider styling
-│   └── habits.css          # Streak counter & habit checklist styles
+│   ├── style.css               # Core Dark Botanical design system, typography, header, footer & cards
+│   ├── calculator.css          # Calculator wizard steps, mode cards, custom sliders & dropdown styling
+│   ├── habits.css              # Habit checklist, streak badges, date picker & carousel styling
+│   └── dashboard.css           # Impact dashboard layout, metric cards & Chart.js responsive wrappers
 │
 ├── js/
-│   ├── main.js             # Mobile drawer navigation, active link synchronization, & a11y
-│   ├── storage.js          # Defensive LocalStorage manager with in-memory fallback
-│   ├── data.js             # Documented emission factors, citations, and benchmarks
-│   ├── calculator.js       # Carbon calculation engine stub
-│   └── habits.js           # Habit tracking & streak calculation stub
+│   ├── main.js                 # Slider navigation engine, drawer menu, router & history management
+│   ├── storage.js              # Defensive Web Storage manager with corrupted JSON recovery & fallback
+│   ├── data.js                 # Documented emission factors, citations, benchmarks & tips catalog
+│   ├── calculator.js           # Dual-mode carbon calculation engine & history snapshot recorder
+│   ├── habits.js               # Daily 5-habit rotation, streak engine, date navigation & tips carousel
+│   ├── dashboard.js            # Personal analytics engine, Chart.js trend charts & activity feed
+│   ├── custom-select.js        # Dark Botanical accessible custom dropdown select component
+│   └── page-views.js           # Pre-compiled HTML page templates for horizontal slider transitions
+│
+├── scripts/
+│   └── build_page_views.js     # Build utility compiling HTML pages into js/page-views.js
+│
+├── scratch/
+│   ├── test_calculator_suite.js             # Numerical calculation & emission factor tests (43 checks)
+│   ├── test_habits_suite.js                 # Daily habits, streaks & checklist tests (100 checks)
+│   ├── test_dashboard_suite.js              # Personal analytics & history snapshot tests (111 checks)
+│   ├── test_slider_navigation.js            # Horizontal sliding transition & direction tests (76 checks)
+│   ├── test_browser_integration.js          # DOM schema & accounting disclosure audit (105 checks)
+│   ├── test_category_navigation.js          # Category resource links & tips filtering tests (104 checks)
+│   └── test_browser_history_regression.js   # Browser history traversal & popstate regression tests (35 checks)
 │
 └── assets/
     └── icons/
@@ -257,8 +282,20 @@ Then visit `http://localhost:8000` in your web browser.
   - Responsive Chart.js historical trend line chart with single-baseline explanation mode and pure-CSS fallback table.
   - Recent activity timeline tracking verified calculation events and recorded habit completion days.
   - Independent, friendly empty states with direct navigation links.
-- **Phase 6: Knowledge Hub Deep Guides (Planned)**
-  - Searchable in-depth sustainability articles, regional guides, and filterable impact indexes.
+- **Phase 6: Integration, Horizontal Sliding Navigation, and UI Refinements (Completed)**
+  - Seamless horizontal sliding transition engine across all five views (`index.html`, `calculator.html`, `habits.html`, `tips.html`, `dashboard.html`).
+  - Pre-compiled page-views template registry (`js/page-views.js`) for instant client-side view swapping.
+  - History stack engine supporting pushState and `file://` hash navigation with automatic forward/backward direction calculation.
+  - Initial load and refresh route resolver eliminating flash-to-home behavior.
+  - Mobile responsiveness fixes: unclipped habit cards, proportional button widths, and custom dropdown alignment on viewports from 320px to 390px.
+  - Comprehensive automated headless browser verification.
+- **Phase 7: Final Polish, Documentation Audit, and Category Navigation (In Progress)**
+  - **Task 1 (Licensing & Attributions - Completed):** Authored `THIRD_PARTY_NOTICES.md` documenting Chart.js (MIT), Plus Jakarta Sans (OFL), Outfit (OFL), Lucide/Feather icons (ISC/MIT), and CEA/IPCC institutional references.
+  - **Task 2 (Build Tooling - Completed):** Relocated page-view compilation script to `scripts/build_page_views.js` with environment-independent path resolution.
+  - **Task 3 (Footer Standardization - Completed):** Standardized footer layout, column structure, and MIT license notice across all five HTML pages.
+  - **Task 4 (GitHub Brand Integration - Completed):** Replaced legacy badge with official GitHub mark and accessible "View on GitHub" repository link.
+  - **Task 5 (Category-Specific Navigation & Carousel Filtering - Completed):** Connected footer resource links directly to the Eco Tips carousel (`#tips-transportation`, `#tips-energy`, `#tips-water`, `#tips-waste`), implemented category filtering API (`showTipCategory`, `clearTipCategory`, `getActiveTipCategory`), synchronized Browser-Based Storage architecture wording across all pages, and eliminated history stack mutations during browser Back/Forward traversal.
+  - **Automated Verification:** Expanded test coverage to 7 regression suites with 574 tests passing with zero failures.
 
 ---
 

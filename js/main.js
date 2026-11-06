@@ -164,12 +164,32 @@ function initPageSlider() {
   let navIndex = 0;
   let isProgrammaticNav = false;
 
+  const TIP_CATEGORY_MAP = {
+    'transportation': 'Transportation',
+    'energy': 'Energy',
+    'water': 'Water',
+    'waste': 'Waste'
+  };
+
+  // Helper: extracts category name from category tips hash
+  function extractTipCategory(hash) {
+    if (!hash) return null;
+    const clean = hash.replace(/^#/, '');
+    const match = clean.match(/^(?:habits[_-])?tips[_-](transportation|energy|water|waste)$/i);
+    if (match) {
+      const slug = match[1].toLowerCase();
+      return TIP_CATEGORY_MAP[slug] || null;
+    }
+    return null;
+  }
+
   // Helper: converts file + anchor into hash slug
   function fileToHash(file, hash) {
     const base = file.replace('.html', '');
     if (hash && hash.startsWith('#')) {
       const anchor = hash.substring(1);
       if (base === 'habits' && anchor === 'tips') return 'tips';
+      if (base === 'habits' && anchor.startsWith('tips-')) return anchor;
       if (base === 'habits' && anchor === 'checklist') return 'habits_checklist';
       return base + '_' + anchor;
     }
@@ -179,33 +199,41 @@ function initPageSlider() {
   // Helper: parses hash slug into target file and anchor
   function parseHash(rawHash) {
     const clean = (rawHash || '').replace(/^#/, '');
-    if (!clean) return { file: initialFile, hash: '' };
+    if (!clean) return { file: initialFile, hash: '', category: null };
+
+    // Check category tip slugs: e.g. tips-transportation, habits_tips-transportation, tips_transportation
+    const catMatch = clean.match(/^(?:habits[_-])?tips[_-](transportation|energy|water|waste)$/i);
+    if (catMatch) {
+      const slug = catMatch[1].toLowerCase();
+      const categoryName = TIP_CATEGORY_MAP[slug];
+      return { file: 'habits.html', hash: '#tips-' + slug, category: categoryName };
+    }
 
     const parts = clean.split('_');
     const base = parts[0];
     const anchor = parts[1] ? '#' + parts[1] : '';
 
     if (base === 'tips') {
-      return { file: 'habits.html', hash: '#tips' };
+      return { file: 'habits.html', hash: '#tips', category: null };
     }
 
     if (base === 'checklist') {
-      return { file: 'habits.html', hash: '#checklist' };
+      return { file: 'habits.html', hash: '#checklist', category: null };
     }
 
     if (base === 'habits' && parts[1] === 'tips') {
-      return { file: 'habits.html', hash: '#tips' };
+      return { file: 'habits.html', hash: '#tips', category: null };
     }
 
     if (base === 'habits' && parts[1] === 'checklist') {
-      return { file: 'habits.html', hash: '#checklist' };
+      return { file: 'habits.html', hash: '#checklist', category: null };
     }
 
     const file = base.endsWith('.html') ? base : (base + '.html');
     if (PAGE_ORDER[file] !== undefined) {
-      return { file, hash: anchor };
+      return { file, hash: anchor, category: null };
     }
-    return { file: initialFile, hash: '' };
+    return { file: initialFile, hash: '', category: null };
   }
 
   // Handle direct initial load with hash or target page
@@ -219,7 +247,8 @@ function initPageSlider() {
   }
 
   // Highlight active link initially
-  highlightActiveNavLink(targetOnLoad ? (targetOnLoad.hash === '#tips' ? 'tips.html' : targetOnLoad.file) : currentPage, targetOnLoad ? targetOnLoad.hash : window.location.hash);
+  const initialNavDest = targetOnLoad ? ((targetOnLoad.hash === '#tips' || targetOnLoad.category) ? 'tips.html' : targetOnLoad.file) : currentPage;
+  highlightActiveNavLink(initialNavDest, targetOnLoad ? targetOnLoad.hash : window.location.hash);
 
   // Mount existing main content & footer into the slider viewport
   const main = document.querySelector('.main-content');
@@ -244,12 +273,15 @@ function initPageSlider() {
       if (main.parentNode) main.parentNode.removeChild(main);
       if (footer && footer.parentNode) footer.parentNode.removeChild(footer);
 
-      document.title = window.ECO_VIEWS[targetOnLoad.file].title;
+      document.title = (targetOnLoad.category || targetOnLoad.hash === '#tips') ? 'Eco Tips & Knowledge | EcoTrack' : window.ECO_VIEWS[targetOnLoad.file].title;
       if (typeof window.ECO_VIEWS[targetOnLoad.file].init === 'function') {
         window.ECO_VIEWS[targetOnLoad.file].init();
       }
       if (typeof window.initCustomSelects === 'function') {
         window.initCustomSelects(currentPanel);
+      }
+      if (targetOnLoad.file === 'habits.html' && targetOnLoad.category && window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+        window.EcoHabits.showTipCategory(targetOnLoad.category);
       }
 
       if (typeof document !== 'undefined') {
@@ -264,8 +296,14 @@ function initPageSlider() {
       if (footer && footer.parentNode) {
         currentPanel.appendChild(footer);
       }
+      if (targetOnLoad && targetOnLoad.file === 'habits.html' && targetOnLoad.category && window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+        window.EcoHabits.showTipCategory(targetOnLoad.category);
+      }
       if (typeof document !== 'undefined') {
         document.documentElement.classList.remove('eco-route-resolving');
+      }
+      if (targetOnLoad && targetOnLoad.hash) {
+        setTimeout(() => scrollToTargetHash(targetOnLoad.hash), 60);
       }
     }
   }
@@ -277,7 +315,10 @@ function initPageSlider() {
   function scrollToTargetHash(hash) {
     if (!hash) return;
     const targetId = hash.replace('#', '');
-    const targetEl = document.getElementById(targetId);
+    let targetEl = document.getElementById(targetId);
+    if (!targetEl && targetId.startsWith('tips-')) {
+      targetEl = document.getElementById('tips');
+    }
     if (targetEl) {
       targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -341,23 +382,41 @@ function initPageSlider() {
       window.EcoDashboard.destroyChart();
     }
 
+    const category = extractTipCategory(targetHash);
+
     // Same-page navigation check
     if (targetFile === currentPage) {
-      if (targetHash === '#tips') {
+      if (forcedBack === null) {
+        navIndex++;
+      }
+      if (category) {
+        if (window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+          window.EcoHabits.showTipCategory(category);
+        }
+        highlightActiveNavLink('tips.html', targetHash);
+        if (forcedBack === null) updateHistoryState(currentPage, targetHash);
+        scrollToTargetHash('#tips');
+      } else if (targetHash === '#tips') {
+        if (window.EcoHabits && typeof window.EcoHabits.clearTipCategory === 'function') {
+          window.EcoHabits.clearTipCategory();
+        }
         highlightActiveNavLink('tips.html', '#tips');
-        updateHistoryState(currentPage, '#tips');
+        if (forcedBack === null) updateHistoryState(currentPage, '#tips');
         scrollToTargetHash('#tips');
       } else if (targetHash === '#checklist') {
         highlightActiveNavLink('habits.html', '');
-        updateHistoryState(currentPage, '#checklist');
+        if (forcedBack === null) updateHistoryState(currentPage, '#checklist');
         scrollToTargetHash('#checklist');
       } else if (targetHash) {
         highlightActiveNavLink(currentPage, targetHash);
-        updateHistoryState(currentPage, targetHash);
+        if (forcedBack === null) updateHistoryState(currentPage, targetHash);
         scrollToTargetHash(targetHash);
       } else {
+        if (currentPage === 'habits.html' && window.EcoHabits && typeof window.EcoHabits.clearTipCategory === 'function') {
+          window.EcoHabits.clearTipCategory();
+        }
         highlightActiveNavLink(currentPage, '');
-        updateHistoryState(currentPage, '');
+        if (forcedBack === null) updateHistoryState(currentPage, '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
       return;
@@ -375,16 +434,17 @@ function initPageSlider() {
 
     // Determine slide direction: Forward = Left (-100%), Backward = Right (+100%)
     let isForward = true;
+    const isTipsNav = targetHash === '#tips' || Boolean(category);
     if (typeof forcedBack === 'boolean') {
       isForward = !forcedBack;
     } else {
       // Normal user link navigation: push to navigation history stack
       navHistory = navHistory.slice(0, navIndex + 1);
-      navHistory.push(targetHash === '#tips' ? 'tips.html' : targetFile);
+      navHistory.push(isTipsNav ? 'tips.html' : targetFile);
       navIndex = navHistory.length - 1;
 
       const curKey = (currentPage === 'habits.html' && window.location.hash.includes('tips')) ? 'tips.html' : currentPage;
-      const tgtKey = targetHash === '#tips' ? 'tips.html' : targetFile;
+      const tgtKey = isTipsNav ? 'tips.html' : targetFile;
       const curIdx = PAGE_ORDER[curKey] !== undefined ? PAGE_ORDER[curKey] : 0;
       const tgtIdx = PAGE_ORDER[tgtKey] !== undefined ? PAGE_ORDER[tgtKey] : 0;
       isForward = tgtIdx >= curIdx;
@@ -398,9 +458,16 @@ function initPageSlider() {
       if (typeof window.ECO_VIEWS[targetFile].init === 'function') {
         window.ECO_VIEWS[targetFile].init();
       }
-      document.title = (targetHash === '#tips') ? 'Eco Tips & Knowledge | EcoTrack' : window.ECO_VIEWS[targetFile].title;
+      if (targetFile === 'habits.html') {
+        if (category && window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+          window.EcoHabits.showTipCategory(category);
+        } else if (!category && window.EcoHabits && typeof window.EcoHabits.clearTipCategory === 'function') {
+          window.EcoHabits.clearTipCategory();
+        }
+      }
+      document.title = isTipsNav ? 'Eco Tips & Knowledge | EcoTrack' : window.ECO_VIEWS[targetFile].title;
       currentPage = targetFile;
-      highlightActiveNavLink(targetHash === '#tips' ? 'tips.html' : targetFile, targetHash);
+      highlightActiveNavLink(isTipsNav ? 'tips.html' : targetFile, targetHash);
       if (forcedBack === null) updateHistoryState(targetFile, targetHash);
 
       if (targetHash) {
@@ -434,7 +501,7 @@ function initPageSlider() {
 
     // If navigating to Eco Tips, align incoming view so tips section is visible smoothly without jumping
     let tipsOffset = 0;
-    if (targetHash === '#tips') {
+    if (targetHash === '#tips' || isTipsNav) {
       const tipsElem = incomingView.querySelector('#tips');
       if (tipsElem) {
         tipsOffset = tipsElem.offsetTop;
@@ -455,14 +522,21 @@ function initPageSlider() {
     if (typeof window.initCustomSelects === 'function') {
       window.initCustomSelects(incomingView);
     }
+    if (targetFile === 'habits.html') {
+      if (category && window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+        window.EcoHabits.showTipCategory(category);
+      } else if (!category && window.EcoHabits && typeof window.EcoHabits.clearTipCategory === 'function') {
+        window.EcoHabits.clearTipCategory();
+      }
+    }
 
     // Set viewport minimum height to accommodate largest view during motion
     const incHeight = incomingView.offsetHeight;
     viewport.style.minHeight = Math.max(curHeight, incHeight) + 'px';
 
     // Synchronize UI indicators immediately
-    document.title = (targetHash === '#tips') ? 'Eco Tips & Knowledge | EcoTrack' : window.ECO_VIEWS[targetFile].title;
-    highlightActiveNavLink(targetHash === '#tips' ? 'tips.html' : targetFile, targetHash);
+    document.title = isTipsNav ? 'Eco Tips & Knowledge | EcoTrack' : window.ECO_VIEWS[targetFile].title;
+    highlightActiveNavLink(isTipsNav ? 'tips.html' : targetFile, targetHash);
     if (forcedBack === null) updateHistoryState(targetFile, targetHash);
 
     // Force browser layout flush before animating
@@ -500,8 +574,11 @@ function initPageSlider() {
       if (targetFile === 'dashboard.html' && window.EcoDashboard && typeof window.EcoDashboard.init === 'function') {
         window.EcoDashboard.init();
       }
+      if (targetFile === 'habits.html' && category && window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+        window.EcoHabits.showTipCategory(category, false);
+      }
 
-      if (targetHash === '#tips' && tipsOffset > 0) {
+      if ((targetHash === '#tips' || isTipsNav) && tipsOffset > 0) {
         window.scrollTo(0, Math.max(0, tipsOffset - 24));
       } else if (targetHash) {
         scrollToTargetHash(targetHash);
@@ -524,16 +601,32 @@ function initPageSlider() {
     // Handle same-page anchor links (e.g. #checklist, #tips, #main-content)
     if (rawHref.startsWith('#')) {
       const targetId = rawHref.substring(1);
-      const targetEl = document.getElementById(targetId);
+      const category = extractTipCategory(rawHref);
+      let targetEl = document.getElementById(targetId);
+      if (!targetEl && category) {
+        targetEl = document.getElementById('tips');
+      }
       if (targetEl) {
         e.preventDefault();
         targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        if (targetId === 'tips') {
+        if (category) {
+          if (window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+            window.EcoHabits.showTipCategory(category);
+          }
+          highlightActiveNavLink('tips.html', rawHref);
+          navIndex++;
+          updateHistoryState(currentPage, rawHref);
+        } else if (targetId === 'tips') {
+          if (window.EcoHabits && typeof window.EcoHabits.clearTipCategory === 'function') {
+            window.EcoHabits.clearTipCategory();
+          }
           highlightActiveNavLink('tips.html', '#tips');
+          navIndex++;
           updateHistoryState(currentPage, '#tips');
         } else if (targetId === 'checklist') {
           highlightActiveNavLink('habits.html', '');
+          navIndex++;
           updateHistoryState(currentPage, '#checklist');
         }
       }
@@ -591,7 +684,17 @@ function initPageSlider() {
     if (!targetFile || !window.ECO_VIEWS || !window.ECO_VIEWS[targetFile]) return;
 
     if (targetFile === currentPage) {
-      if (targetHash === '#tips') {
+      const category = extractTipCategory(targetHash);
+      if (category) {
+        if (window.EcoHabits && typeof window.EcoHabits.showTipCategory === 'function') {
+          window.EcoHabits.showTipCategory(category);
+        }
+        highlightActiveNavLink('tips.html', targetHash);
+        scrollToTargetHash(targetHash);
+      } else if (targetHash === '#tips') {
+        if (window.EcoHabits && typeof window.EcoHabits.clearTipCategory === 'function') {
+          window.EcoHabits.clearTipCategory();
+        }
         highlightActiveNavLink('tips.html', '#tips');
         scrollToTargetHash('#tips');
       } else if (targetHash === '#checklist') {
@@ -601,6 +704,9 @@ function initPageSlider() {
         highlightActiveNavLink(currentPage, targetHash);
         scrollToTargetHash(targetHash);
       } else {
+        if (currentPage === 'habits.html' && window.EcoHabits && typeof window.EcoHabits.clearTipCategory === 'function') {
+          window.EcoHabits.clearTipCategory();
+        }
         highlightActiveNavLink(currentPage, '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -609,7 +715,8 @@ function initPageSlider() {
 
     // Determine direction from navigation history stack traversal
     let isBack = false;
-    const historyTarget = (targetHash === '#tips') ? 'tips.html' : targetFile;
+    const isTipsNav = targetHash === '#tips' || Boolean(extractTipCategory(targetHash));
+    const historyTarget = isTipsNav ? 'tips.html' : targetFile;
     if (navIndex > 0 && (navHistory[navIndex - 1] === targetFile || navHistory[navIndex - 1] === historyTarget)) {
       isBack = true;
       navIndex--;
@@ -618,7 +725,7 @@ function initPageSlider() {
       navIndex++;
     } else {
       const curKey = (currentPage === 'habits.html' && window.location.hash.includes('tips')) ? 'tips.html' : currentPage;
-      const tgtKey = targetHash === '#tips' ? 'tips.html' : targetFile;
+      const tgtKey = isTipsNav ? 'tips.html' : targetFile;
       const curIdx = PAGE_ORDER[curKey] !== undefined ? PAGE_ORDER[curKey] : 0;
       const tgtIdx = PAGE_ORDER[tgtKey] !== undefined ? PAGE_ORDER[tgtKey] : 0;
       isForward = tgtIdx >= curIdx;

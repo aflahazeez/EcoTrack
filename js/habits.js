@@ -119,6 +119,7 @@
   let isCarouselFocused = false;
   let touchStartX = 0;
   let touchEndX = 0;
+  let activeTipCategory = null; // null for daily rotating tips, or 'Transportation' | 'Energy' | 'Water' | 'Waste'
 
   // -------------------------------------------------------------------------
   // 3. Helper Functions: Dates & Seeded PRNG
@@ -1281,6 +1282,53 @@
     if (statusText) statusText.textContent = text;
   }
 
+  const TIP_CATEGORY_MAP = {
+    'transportation': 'Transportation',
+    'energy': 'Energy',
+    'water': 'Water',
+    'waste': 'Waste',
+    'sustainable lifestyle': 'Sustainable Lifestyle'
+  };
+
+  /**
+   * Sets the carousel to display tips for a specific category
+   * @param {string} categoryName - Category name (e.g. 'Transportation', 'Energy', 'Water', 'Waste')
+   * @param {boolean} [resetSlide=true] - Whether to reset to the first tip (slide 0)
+   */
+  function showTipCategory(categoryName, resetSlide = true) {
+    if (!categoryName) {
+      clearTipCategory();
+      return;
+    }
+    const normalized = TIP_CATEGORY_MAP[categoryName.toLowerCase()] || categoryName;
+    activeTipCategory = normalized;
+    if (resetSlide) {
+      currentTipSlide = 0;
+      currentTrackIndex = 1;
+    }
+    renderEcoTipsCarousel();
+    startCarouselAutoTimer();
+  }
+
+  /**
+   * Clears the category filter and restores default daily 4-tip rotation
+   */
+  function clearTipCategory() {
+    activeTipCategory = null;
+    currentTipSlide = 0;
+    currentTrackIndex = 1;
+    renderEcoTipsCarousel();
+    startCarouselAutoTimer();
+  }
+
+  /**
+   * Returns the currently active tip category filter (or null)
+   * @returns {string|null}
+   */
+  function getActiveTipCategory() {
+    return activeTipCategory;
+  }
+
   // -------------------------------------------------------------------------
   // 8. UI Rendering & DOM Synchronization
   // -------------------------------------------------------------------------
@@ -1608,10 +1656,19 @@
     const dotsContainer = document.getElementById('carousel-dots');
     if (!viewport) return;
 
-    const todayStr = getLocalDateString();
-    const todayTips = getTodaySelectedTips(todayStr);
+    let displayTips = [];
+    if (activeTipCategory) {
+      const allTips = (typeof ECO_DATA !== 'undefined' && Array.isArray(ECO_DATA.ecoTips))
+        ? ECO_DATA.ecoTips
+        : [];
+      displayTips = allTips.filter(t => (t.category || '').toLowerCase() === activeTipCategory.toLowerCase());
+    }
+    if (!displayTips || displayTips.length === 0) {
+      const todayStr = getLocalDateString();
+      displayTips = getTodaySelectedTips(todayStr);
+    }
 
-    if (todayTips.length === 0) {
+    if (displayTips.length === 0) {
       viewport.innerHTML = '<p style="text-align:center; padding:2rem; color:var(--text-muted);">No eco tips available today.</p>';
       return;
     }
@@ -1630,12 +1687,12 @@
       return `
         <div class="carousel-slide ${isActive ? 'active' : ''}" 
              data-slide-index="${idx}" 
-             ${isClone ? `data-clone="${cloneType}" aria-hidden="true"` : `role="group" aria-roledescription="slide" aria-label="Tip ${idx + 1} of ${todayTips.length}" aria-hidden="${isActive ? 'false' : 'true'}"`}>
+             ${isClone ? `data-clone="${cloneType}" aria-hidden="true"` : `role="group" aria-roledescription="slide" aria-label="Tip ${idx + 1} of ${displayTips.length}" aria-hidden="${isActive ? 'false' : 'true'}"`}>
           <div class="tip-carousel-card">
             <div class="tip-carousel-header">
               <div class="tip-header-meta">
                 <span class="category-tag ${catClass}">${escapeHtml(tip.category)}</span>
-                <span class="tip-slide-badge">Tip ${idx + 1} of ${todayTips.length}</span>
+                <span class="tip-slide-badge">Tip ${idx + 1} of ${displayTips.length}</span>
               </div>
               <span class="tip-impact-badge ${isHighImpact ? 'high' : 'moderate'}">
                 ${escapeHtml(tip.impact || 'Practical Action')}
@@ -1681,15 +1738,15 @@
 
     let slidesHtml = '';
     // Prepend clone of last slide (Tip 4) for seamless continuous leftward loop
-    slidesHtml += createSlideCardHtml(todayTips[todayTips.length - 1], todayTips.length - 1, true, 'prev');
+    slidesHtml += createSlideCardHtml(displayTips[displayTips.length - 1], displayTips.length - 1, true, 'prev');
 
     // 4 Real Slides (Tips 1 to 4)
-    todayTips.forEach((tip, idx) => {
+    displayTips.forEach((tip, idx) => {
       slidesHtml += createSlideCardHtml(tip, idx, false, null);
     });
 
     // Append clone of first slide (Tip 1) for seamless continuous rightward loop
-    slidesHtml += createSlideCardHtml(todayTips[0], 0, true, 'next');
+    slidesHtml += createSlideCardHtml(displayTips[0], 0, true, 'next');
 
     viewport.innerHTML = `<div class="carousel-track" id="carousel-track">${slidesHtml}</div>`;
     currentTrackIndex = currentTipSlide + 1;
@@ -1702,7 +1759,7 @@
     // Build 4 Indicator Dots
     if (dotsContainer) {
       let dotsHtml = '';
-      for (let i = 0; i < todayTips.length; i++) {
+      for (let i = 0; i < displayTips.length; i++) {
         const isActive = i === currentTipSlide;
         dotsHtml += `
           <button type="button" 
@@ -1715,6 +1772,8 @@
       }
       dotsContainer.innerHTML = dotsHtml;
     }
+
+    updateSlideAccessibility(currentTipSlide);
   }
 
   /**
@@ -2141,6 +2200,9 @@
       nextTipSlide,
       prevTipSlide,
       getCurrentTipSlide: () => currentTipSlide,
+      showTipCategory,
+      clearTipCategory,
+      getActiveTipCategory,
       startAutoTimer: startCarouselAutoTimer,
       stopAutoTimer: stopCarouselAutoTimer,
       isReducedMotion: isReducedMotionPreferred,
