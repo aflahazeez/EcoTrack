@@ -55,7 +55,7 @@ EcoTrack is designed around a five-page multi-page architecture:
 
 To maintain transparency, the platform's features are categorized into currently functioning foundation modules and upcoming phase deliverables:
 
-### Implemented (Phases 1–6 & Phase 7 Tasks 1–5)
+### Implemented (Phases 1–7)
 - **Dark Botanical Visual Identity:** Custom CSS design system using deep forest backgrounds (`#061610`), dark green surfaces (`#0F2C22`), emerald action buttons (`#10B981`), lime/sage data accents (`#A3E635`, `#6EE7B7`), and warm ivory text (`#FBF8EE`).
 - **Atmospheric Backgrounds:** Multi-layered radial gradient mesh avoiding flat, empty dark voids.
 - **Consistent Shared Navigation:** Uniform desktop header and responsive mobile drawer navigation across all five pages.
@@ -289,7 +289,7 @@ Then visit `http://localhost:8000` in your web browser.
   - Initial load and refresh route resolver eliminating flash-to-home behavior.
   - Mobile responsiveness fixes: unclipped habit cards, proportional button widths, and custom dropdown alignment on viewports from 320px to 390px.
   - Comprehensive automated headless browser verification.
-- **Phase 7: Final Polish, Documentation Audit, and Category Navigation (In Progress)**
+- **Phase 7: Final Polish, Documentation Audit, and Category Navigation (Completed)**
   - **Task 1 (Licensing & Attributions - Completed):** Authored `THIRD_PARTY_NOTICES.md` documenting Chart.js (MIT), Plus Jakarta Sans (OFL), Outfit (OFL), Lucide/Feather icons (ISC/MIT), and CEA/IPCC institutional references.
   - **Task 2 (Build Tooling - Completed):** Relocated page-view compilation script to `scripts/build_page_views.js` with environment-independent path resolution.
   - **Task 3 (Footer Standardization - Completed):** Standardized footer layout, column structure, and MIT license notice across all five HTML pages.
