@@ -43,3 +43,25 @@ tmp/
 # Scratch & Verification Scripts
 test-*.js
 test-*.html
+
+# Generated EcoTrack Audit Evidence (preserve locally, exclude from Git)
+calculator_deep_audit/
+final_audit_report/
+final_submission_audit/
+final_submission_audit_iteration2/
+final_submission_audit_iteration3/
+final_submission_audit_final/
+
+# Temporary CDP and audit debugging scripts
+scratch/quick_cdp_test.js
+scratch/run_calculator_deep_audit.js
+scratch/run_live_audit_suite.js
+scratch/test_cdp_connection.js
+scratch/test_cdp_helper.js
+scratch/test_cdp_live_test.js
+
+# Superseded environmental factor reviews (preserve locally, exclude from Git)
+environmental_factor_review/EMISSION_FACTOR_SOURCE_REVIEW.md
+environmental_factor_review/CORRECTED_VEHICLE_FACTOR_REVIEW.md
+environmental_factor_review/FINAL_VEHICLE_FACTOR_VERIFICATION.md
+environmental_factor_review/FINAL_VEHICLE_FACTOR_VERIFICATION_CORRECTED.md

@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const AUDIT_DIR_NAME = process.env.AUDIT_DIR || 'final_submission_audit_iteration2';
+const AUDIT_DIR_NAME = process.env.AUDIT_DIR || 'final_submission_audit_final';
 const REPORT_DIR = path.resolve(__dirname, '..', '..', AUDIT_DIR_NAME);
 const SCREENSHOT_DIR = path.join(REPORT_DIR, 'screenshots');
 const CSV_PATH = path.join(REPORT_DIR, 'calculator_audit_results.csv');
@@ -155,7 +155,7 @@ class AuditReporter {
     // 4. Screenshots index
     if (this.results.screenshots.length > 0) {
       md += `## 📸 4. High-Resolution Visual Evidence Index\n\n`;
-      md += `All screenshots are preserved in \`final_submission_audit/screenshots/\`:\n\n`;
+      md += `All screenshots are preserved in \`${AUDIT_DIR_NAME}/screenshots/\`:\n\n`;
       this.results.screenshots.forEach(s => {
         md += `- **${s.caption}** (\`${s.viewport}\`): [\`${s.filename}\`](screenshots/${s.filename})\n`;
       });
