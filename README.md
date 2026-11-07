@@ -3,7 +3,7 @@
 > **Sustainable Intelligence & Carbon Analytics Platform**  
 > Developed for **TERRACODE 2026**, organized by the **FOSS Club, MEA Engineering College**.
 
-EcoTrack is a lightweight environmental sustainability web application designed to help individuals understand their annual carbon footprint and cultivate long-term green habits.
+EcoTrack is an interactive carbon-footprint awareness and reduction platform that helps people understand their environmental impact through carbon calculations, emission tracking, sustainable lifestyle recommendations, and educational resources, encouraging individuals to make more informed and environmentally responsible choices.
 
 The application runs on client-side web technologies with **zero backend dependencies**, storing user data using **browser-based storage** via the browser's `localStorage`.
 
